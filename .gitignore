@@ -1,5 +1,5 @@
 # Project files
-data/source_monsters.json
+data/*
 
 
 #Byte-compiled / optimized / DLL files
