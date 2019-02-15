@@ -1,7 +1,9 @@
 import json
 
-from core.settings import BASE_DIR
-from simulator.src.effect import StunEffect, DOTEffect
+from settings import BASE_DIR
+
+from effects.dot_effect import DOTEffect
+from effects.stun_effect import StunEffect
 
 EFFECT_MAPPING = {
     "DOT Effect": DOTEffect,

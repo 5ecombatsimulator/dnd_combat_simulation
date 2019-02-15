@@ -1,8 +1,10 @@
-from .action_manager import ActionManager
-from ..combatant import Combatant
-from ..utils import capitalize
 import json
-from ..settings import BASE_DIR
+
+from data_managers.action_manager import ActionManager
+from actors.combatant import Combatant
+from utils.string import capitalize
+
+from settings import BASE_DIR
 
 
 class CombatantManager:

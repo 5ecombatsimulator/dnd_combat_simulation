@@ -1,4 +1,4 @@
-from simulator.src.debug.logger import Logger
+from debug.logger import Logger
 
 
 class Heuristic:

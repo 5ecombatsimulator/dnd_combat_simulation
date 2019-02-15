@@ -1,7 +1,7 @@
 from copy import deepcopy
 
-from simulator.src.utils import d20
-from simulator.src.debug.logger import Logger
+from utils.dice import d20
+from debug.logger import Logger
 
 
 class Simulator:

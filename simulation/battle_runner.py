@@ -112,6 +112,6 @@ class BattleRunner:
 
 if __name__ == "__main__":
     br = BattleRunner()
-    br.run_simulator(["Marshall", "Johnny", "Max"],
+    br.run_simulator(["Aboleth"],
                      ["Goblin"]*10,
                      200)

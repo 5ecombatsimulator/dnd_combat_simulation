@@ -1,7 +1,4 @@
 from random import randint
-from core.settings import BASE_DIR
-import json
-import math
 
 
 def calc_roll(dice):

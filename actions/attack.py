@@ -1,5 +1,6 @@
 from actions.action import Action
 from utils.file import write_json_to_file
+from utils.dice import load_dice
 
 
 class Attack(Action):
