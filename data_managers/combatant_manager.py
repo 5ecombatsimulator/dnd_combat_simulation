@@ -1,5 +1,3 @@
-from copy import deepcopy
-
 from actors.models import Combatant
 from utils.string import capitalize
 from simulation.heuristics.heuristic_container import HeuristicContainer

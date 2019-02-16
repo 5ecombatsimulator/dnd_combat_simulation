@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'actors',
     'dice',
     'effects',
+    'simulation',
     'polymorphic',
 ]
 
