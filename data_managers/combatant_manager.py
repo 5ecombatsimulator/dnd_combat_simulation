@@ -13,7 +13,7 @@ class CombatantManager:
         self.action_manager = ActionManager()
 
     def load_combatants(self):
-        with open(BASE_DIR + '/data/combatants.json', 'r') as f:
+        with open(BASE_DIR + '/json_data/combatants.json', 'r') as f:
             self.combatant_info = json.load(f)
 
     def create_combatant(self, combatant_name, hp, ac,
@@ -75,10 +75,10 @@ class CombatantManager:
                                'be found.'.format(combatant_name))
 
         combatant_actions = []
-        for action_name in info['actions']:
+        for action_name in info['actions_temp']:
             combatant_actions.append(self.action_manager.load_action(action_name))
 
-        build_combatant_info = {k: v for k, v in info.items() if k != 'actions'}
+        build_combatant_info = {k: v for k, v in info.items() if k != 'actions_temp'}
 
         return Combatant(actions=combatant_actions, **build_combatant_info)
 

@@ -14,3 +14,19 @@ NECROTIC = 'necrotic'
 THUNDER = 'thunder'
 POISON = 'poison'
 FORCE = 'force'
+
+DAMAGE_TYPE_CHOICES = (
+    ("piercing", "piercing"),
+    ("slashing", "slashing"),
+    ("bludgeoning", "bludgeoning"),
+    ("fire", "fire"),
+    ("lightning", "lightning"),
+    ("radiant", "radiant"),
+    ("cold", "cold"),
+    ("psychic", "psychic"),
+    ("acid", "acid"),
+    ("necrotic", "necrotic"),
+    ("thunder", "thunder"),
+    ("poison", "poison"),
+    ("force", "force")
+)

@@ -2,8 +2,8 @@ import json
 
 from settings import BASE_DIR
 
-from effects.dot_effect import DOTEffect
-from effects.stun_effect import StunEffect
+from effects_temp.dot_effect import DOTEffect
+from effects_temp.stun_effect import StunEffect
 
 EFFECT_MAPPING = {
     "DOT Effect": DOTEffect,
@@ -13,7 +13,7 @@ EFFECT_MAPPING = {
 
 class EffectManager:
     def __init__(self):
-        with open(BASE_DIR + '/data/effects.json', 'r') as f:
+        with open(BASE_DIR + '/json_data/effects_temp.json', 'r') as f:
             self.effect_data = json.load(f)
 
     def load_effect(self, effect_name):

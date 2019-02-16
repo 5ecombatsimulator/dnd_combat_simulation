@@ -2,10 +2,8 @@ import json
 
 from settings import BASE_DIR
 
-from actions.physical_attacks import PhysicalSingleAttack
-from actions.heal import Heal
-from actions.combo_attack import ComboAttack
-from actions.spell_attacks import SpellSave, SpellSingleAttack
+from actions.models import PhysicalSingleAttack, \
+    SpellSave, SpellSingleAttack, ComboAttack, Heal
 
 from data_managers.effect_manager import EffectManager
 
@@ -21,7 +19,7 @@ ACTION_MAPPING = {"Combo Attack": ComboAttack,
 
 class ActionManager:
     def __init__(self):
-        with open(BASE_DIR + '/data/actions.json', 'r') as f:
+        with open(BASE_DIR + '/json_data/actions_temp.json', 'r') as f:
             self.action_info = json.load(f)
         self.effect_manager = EffectManager()
 
@@ -33,7 +31,7 @@ class ActionManager:
                                "could not be found.".format(action_name))
 
         build_action_info = {k: v for k, v in info.items()
-                             if k not in ['effects', 'action_type']}
+                             if k not in ['effects_temp', 'action_type']}
 
         if info['action_type'] == "Combo Attack":
             if info['action_type'] == "Combo Attack":
@@ -43,18 +41,18 @@ class ActionManager:
             return ACTION_MAPPING['Combo Attack'](**build_action_info)
         else:
             action_effects = []
-            for effect_name in info['effects']:
+            for effect_name in info['effects_temp']:
                 action_effects.append(
                     self.effect_manager.load_effect(effect_name))
             return ACTION_MAPPING[info['action_type']](effects=action_effects,
                                                        **build_action_info)
 
     def get_all_actions(self):
-        """ Get a list of all actions with attributes for frontend
+        """ Get a list of all actions_temp with attributes for frontend
 
         Returns:
-           JSON-dictionary of all actions with the following attributes:
-            label: name of the actions
+           JSON-dictionary of all actions_temp with the following attributes:
+            label: name of the actions_temp
             expectedDamage: the damage expected from the action
         """
         return_info = []

@@ -1,43 +1,51 @@
+from django.db import models
 from simulation.heuristics.heuristic_container import HeuristicContainer
-from utils.file import write_json_to_file
+
+from actions.models import Action
+from effects.models import Effect
 
 
-class Combatant:
-    def __init__(self, name, hp, ac, proficiency, saves, actions,
-                 heuristics=HeuristicContainer(), applied_effects=None,
-                 cr=None):
-        """
+class Combatant(models.Model):
+    name = models.CharField(max_length=64, unique=True)
+    # Maximum value of 32767 on PositiveSmallIntegerField, seems like plenty
+    max_hp = models.PositiveSmallIntegerField()
+    ac = models.PositiveSmallIntegerField()
+    proficiency = models.PositiveSmallIntegerField()
+    str_save = models.PositiveSmallIntegerField()
+    dex_save = models.PositiveSmallIntegerField()
+    con_save = models.PositiveSmallIntegerField()
+    wis_save = models.PositiveSmallIntegerField()
+    int_save = models.PositiveSmallIntegerField()
+    cha_save = models.PositiveSmallIntegerField()
+    cr = models.PositiveSmallIntegerField()
 
-        Args:
-            name: string for the name of the character
-            hp: integer for the number of hitpoints
-            ac: integer for the armor class
-            proficiency: integer denoting the proficiency, mostly useful for
-                characters that are added
-            saves: a dictionary of saves with each key being a 3-letter stat
-                code: STR, DEX, CON, WIS, INT, CHA
-            actions: a list of action objects defined in actions_temp.py
-            heuristics: A list of strings that define heuristics for the creature
-            applied_effects: A list of effect objects as defined in effects_temp.py
-            cr: The challenge rating of the creature or None for a character
-        """
-        self.name = name
-        self.max_hp = hp
-        self.hp = hp
-        self.ac = ac
-        self.proficiency = proficiency
-        self.saves = saves
+    actions = models.ManyToManyField(Action, through='CombatantAction')
+    innate_effects = models.ManyToManyField(Effect, through='CombatantInnateEffect')
+
+    def ready_for_battle(self, heuristics=HeuristicContainer(),
+                         applied_effects=[]):
+        self.hp = self.max_hp
+        self.saves = {
+            "STR": self.str_save,
+            "DEX": self.dex_save,
+            "CON": self.con_save,
+            "WIS": self.wis_save,
+            "INT": self.int_save,
+            "CHA": self.cha_save
+        }
+        # TODO: Deal with the following Many to many fields
         self.attacks = sorted([a for a in actions if a.action_type == "Attack"],
                               key=lambda x: x.calc_expected_damage(),
                               reverse=True)
         self.heals = sorted([a for a in actions if a.action_type == "Heal"],
-                            key=lambda x: sum([num_dice * (max_roll/2.0+0.5)
-                                               for num_dice, max_roll in x.dice.items()]),
+                            key=lambda x: sum([num_dice * (max_roll / 2.0 + 0.5)
+                                               for num_dice, max_roll in
+                                               x.dice.items()]),
                             reverse=True)
         self.num_actions_available = 1  # All creatures start with 1 available action
         self.heuristics = heuristics
-        self.applied_effects = applied_effects if applied_effects else []
-        self.cr = cr
+        # TODO: deal with combining many to many field
+        self.applied_effects = self.innate_effects + applied_effects
 
     @staticmethod
     def choose_action(action_set):
@@ -116,18 +124,12 @@ class Combatant:
                 damage = 0
         self.hp -= damage
 
-    def jsonify(self, write_to_file=True):
-        """ Turn a creature object into JSON """
-        combatant_info = {
-            "name": self.name,
-            "hp": self.max_hp,
-            "ac": self.ac,
-            "proficiency": self.proficiency,
-            "saves": self.saves,
-            "actions_temp": [a.name for a in self.attacks] + [h.name for h in self.heals],
-            "applied_effects": self.applied_effects,
-            "cr": self.cr
-        }
-        if write_to_file:
-            write_json_to_file('combatants.json', combatant_info)
-        return combatant_info
+
+class CombatantAction(models.Model):
+    combatant = models.ForeignKey(Combatant, on_delete=models.CASCADE)
+    action = models.ForeignKey(Action, on_delete=models.CASCADE)
+
+
+class CombatantInnateEffect(models.Model):
+    combatant = models.ForeignKey(Combatant, on_delete=models.CASCADE)
+    effect = models.ForeignKey(Effect, on_delete=models.CASCADE)
