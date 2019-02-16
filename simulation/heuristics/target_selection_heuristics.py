@@ -1,5 +1,5 @@
 import random
-from simulation.heuristics import Heuristic
+from simulation.heuristics.heuristic import Heuristic
 
 
 # Heuristic types-------------------------

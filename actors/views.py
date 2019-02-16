@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from django.http import JsonResponse
 
-# Create your views here.
+from actors.models import Combatant
+
+
+def get_combatants(request):
+    all_combatants = Combatant.objects.all()
+    return JsonResponse([c.jsonify() for c in all_combatants], safe=False)

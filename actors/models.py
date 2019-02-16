@@ -38,14 +38,7 @@ class Combatant(models.Model):
     def ready_for_battle(self, heuristics=HeuristicContainer(),
                          applied_effects=[]):
         self.hp = self.max_hp
-        self.saves = {
-            "STR": self.str_save,
-            "DEX": self.dex_save,
-            "CON": self.con_save,
-            "WIS": self.wis_save,
-            "INT": self.int_save,
-            "CHA": self.cha_save
-        }
+        self.saves = self._convert_saves_to_dict()
         print(self.actions.all())
         self.attacks = sorted([a.instantiate() for a in self.actions.all()
                                if a.action_type == "Attack"],
@@ -59,6 +52,16 @@ class Combatant(models.Model):
         self.heuristics = heuristics
         # TODO: deal with combining many to many field
         self.applied_effects = list(self.innate_effects.all()) + applied_effects
+
+    def _convert_saves_to_dict(self):
+        return {
+            "STR": self.str_save,
+            "DEX": self.dex_save,
+            "CON": self.con_save,
+            "WIS": self.wis_save,
+            "INT": self.int_save,
+            "CHA": self.cha_save
+        }
 
     @staticmethod
     def choose_action(action_set):
@@ -136,6 +139,20 @@ class Combatant(models.Model):
             if e.effect_type == "Type Immunity" and e.name == attack_type:
                 damage = 0
         self.hp -= damage
+
+    def jsonify(self):
+        """ Turn a creature object into JSON """
+        combatant_info = {
+            "name": self.name,
+            "hp": self.max_hp,
+            "ac": self.ac,
+            "proficiency": self.proficiency,
+            "saves": self._convert_saves_to_dict(),
+            "actions": [a.name for a in self.actions.all()],
+            "innate_effects": self.innate_effects.all(),
+            "cr": self.cr
+        }
+        return combatant_info
 
 
 class CombatantAction(models.Model):

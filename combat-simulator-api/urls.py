@@ -1,4 +1,4 @@
-"""api URL Configuration
+"""combat-simulator-api URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.11/topics/http/urls/
@@ -14,8 +14,16 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url
+from django.urls import path
 from django.contrib import admin
+
+from actors.views import get_combatants
+from simulation.views import get_simulation_results
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    path('combatants', get_combatants),
+    path('simulate', get_simulation_results),
+    # path('actions', get_all_actions),
+    # path('createCombatant', create_combatant)
 ]
