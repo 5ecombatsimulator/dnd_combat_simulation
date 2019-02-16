@@ -74,8 +74,12 @@ class BattleRunner:
             attack_selection=heuristic_mapping[attack_heuristic](),
             heal_selection=heuristic_mapping[heal_heuristic]())
 
-        team1 = [self.cm.load_combatant(name) for name in team1_names]
-        team2 = [self.cm.load_combatant(name) for name in team2_names]
+        # Add the name prefix so that combatants with the same name on
+        # either side can be differentiated
+        team1 = [self.cm.load_combatant(
+            name, "t1_{}".format(i)) for i, name in enumerate(team1_names)]
+        team2 = [self.cm.load_combatant(
+            name, "t2_{}".format(i)) for i, name in enumerate(team2_names)]
 
         self.res.number_of_rounds = []
         self.res.number_of_player_deaths = []

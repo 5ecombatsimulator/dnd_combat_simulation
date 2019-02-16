@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'actions',
     'actors',
     'dice',
-    'effects'
+    'effects',
+    'polymorphic',
 ]
 
 MIDDLEWARE = [

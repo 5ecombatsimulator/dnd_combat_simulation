@@ -1,20 +1,18 @@
-import json
+from copy import deepcopy
 
-from data_managers.action_manager import ActionManager
-from actors.combatant import Combatant
+from actors.models import Combatant
 from utils.string import capitalize
-
-from settings import BASE_DIR
+from simulation.heuristics.heuristic_container import HeuristicContainer
 
 
 class CombatantManager:
-    def __init__(self):
-        self.load_combatants()
-        self.action_manager = ActionManager()
+    def __init__(self, heuristics=HeuristicContainer()):
+        self.heuristics = heuristics
 
     def load_combatants(self):
-        with open(BASE_DIR + '/json_data/combatants.json', 'r') as f:
-            self.combatant_info = json.load(f)
+        # with open(BASE_DIR + '/json_data/combatants.json', 'r') as f:
+        #     self.combatant_info = json.load(f)
+        return Combatant.objects.all()
 
     def create_combatant(self, combatant_name, hp, ac,
                          proficiency_bonus, saves, actions):
@@ -66,21 +64,20 @@ class CombatantManager:
         combatant.jsonify(write_to_file=True)
         return True, "Success!"
 
-    def load_combatant(self, combatant_name):
+    def load_combatant(self, combatant_name, name_suffix=""):
         """ Loads a previously saved combatant given a name """
+
         try:
-            info = self.combatant_info[combatant_name]
-        except KeyError:
+            combatant = Combatant.objects.get(name=combatant_name)
+        except Combatant.DoesNotExist:
             raise RuntimeError('Creature with name {0} could not '
                                'be found.'.format(combatant_name))
 
-        combatant_actions = []
-        for action_name in info['actions_temp']:
-            combatant_actions.append(self.action_manager.load_action(action_name))
+        combatant.ready_for_battle(heuristics=self.heuristics)
+        if name_suffix:
+            combatant.name += "_" + name_suffix
 
-        build_combatant_info = {k: v for k, v in info.items() if k != 'actions_temp'}
-
-        return Combatant(actions=combatant_actions, **build_combatant_info)
+        return combatant
 
     def get_all_combatants(self, reload=False):
         """ Gets a list of all of the combatants in a JSON dictionary
@@ -88,8 +85,7 @@ class CombatantManager:
         Used to populate the combatants on the front-end
 
         """
-        if reload:
-            self.load_combatants()
+        # TODO: Update this method
 
         return_info = []
         for c_info in self.combatant_info.values():

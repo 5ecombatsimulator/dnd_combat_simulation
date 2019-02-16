@@ -17,10 +17,23 @@ class Combatant(models.Model):
     wis_save = models.PositiveSmallIntegerField()
     int_save = models.PositiveSmallIntegerField()
     cha_save = models.PositiveSmallIntegerField()
-    cr = models.PositiveSmallIntegerField()
+    cr = models.FloatField()
 
     actions = models.ManyToManyField(Action, through='CombatantAction')
     innate_effects = models.ManyToManyField(Effect, through='CombatantInnateEffect')
+
+    def __str__(self):
+        return "{}".format(self.name)
+
+    def __eq__(self, other):
+        """
+        Redefined such that instantiations of the DB objects are not equal if
+        they have the same name. This lets us use changed names as a signal
+        that, for example, two "Goblin"s can fight one another
+        """
+        if "name" not in other.__dict__:
+            return False
+        return self.name == other.name
 
     def ready_for_battle(self, heuristics=HeuristicContainer(),
                          applied_effects=[]):
@@ -33,19 +46,19 @@ class Combatant(models.Model):
             "INT": self.int_save,
             "CHA": self.cha_save
         }
-        # TODO: Deal with the following Many to many fields
-        self.attacks = sorted([a for a in actions if a.action_type == "Attack"],
-                              key=lambda x: x.calc_expected_damage(),
-                              reverse=True)
-        self.heals = sorted([a for a in actions if a.action_type == "Heal"],
-                            key=lambda x: sum([num_dice * (max_roll / 2.0 + 0.5)
-                                               for num_dice, max_roll in
-                                               x.dice.items()]),
-                            reverse=True)
+        print(self.actions.all())
+        self.attacks = sorted([a.instantiate() for a in self.actions.all()
+                               if a.action_type == "Attack"],
+                                key=lambda x: x.calc_expected_damage(),
+                                reverse=True)
+        self.heals = sorted([a.instantiate() for a in self.actions.all()
+                             if a.action_type == "Heal"],
+                                key=lambda x: x.calc_expected_heal(),
+                                reverse=True)
         self.num_actions_available = 1  # All creatures start with 1 available action
         self.heuristics = heuristics
         # TODO: deal with combining many to many field
-        self.applied_effects = self.innate_effects + applied_effects
+        self.applied_effects = list(self.innate_effects.all()) + applied_effects
 
     @staticmethod
     def choose_action(action_set):
@@ -86,7 +99,7 @@ class Combatant(models.Model):
             if enemies:
                 target = self._choose_target(enemies,
                                              heuristic.attack_selection)
-                if attack.aoe:
+                if attack.is_aoe:
                     enemies = [e for e in enemies if e != target]
                 attack.do_damage(self, target)
                 attack.apply_effects(target)

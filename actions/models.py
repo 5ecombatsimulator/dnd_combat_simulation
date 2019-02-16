@@ -1,4 +1,5 @@
 from django.db import models
+from polymorphic.models import PolymorphicModel
 
 from random import random
 from math import ceil
@@ -12,11 +13,11 @@ from effects.models import Effect
 from utils.dice import d20, calc_roll
 
 
-class Action(models.Model):
+class Action(PolymorphicModel):
     name = models.CharField(max_length=128, unique=True)
     action_type = models.CharField(max_length=32)
     recharge_percentile = models.FloatField(default=0.0)
-    stat_bones = models.CharField(
+    stat_bonus = models.CharField(
         choices=STAT_CHOICES, max_length=12, null=True)
     effects = models.ManyToManyField(Effect, through="ActionToEffect")
 
@@ -24,6 +25,7 @@ class Action(models.Model):
         self.ready = True
         self.logger = Logger()
         self.num_available = num_available
+        return self
 
     def try_recharge(self):
         percentile = random()
@@ -36,19 +38,21 @@ class ActionToEffect(models.Model):
     effect = models.ForeignKey(Effect, on_delete=models.CASCADE)
 
 
-class Attack(Action):
-    action_type = "Attack"
-    multi_attack = models.SmallIntegerField()
+class SingleAttack(Action):
+    multi_attack = models.SmallIntegerField(default=1)
     is_aoe = models.BooleanField(default=False)
-
-
-class SingleAttack(Attack):
     damage_type = models.CharField(choices=DAMAGE_TYPE_CHOICES, max_length=32)
     save_stat = models.CharField(choices=STAT_CHOICES, null=True, max_length=16)
     save_dc = models.SmallIntegerField(null=True)
     damage_dice = models.ManyToManyField(Dice, through='SingleAttackDice')
-    bonus_to_hit = models.SmallIntegerField()
-    bonus_to_damage = models.SmallIntegerField()
+    bonus_to_hit = models.SmallIntegerField(default=0)
+    bonus_to_damage = models.SmallIntegerField(default=0)
+
+    def instantiate(self, num_available=-1):
+        self.dice = dict(SingleAttackDice.objects.filter(
+            attack=self).values_list(
+            'dice__num_sides', 'num_dice'))
+        return super().instantiate(num_available=num_available)
 
     def do_damage(self, attacker, target):
         """ Called to test whether an attack hits and then applies the damage.
@@ -59,8 +63,11 @@ class SingleAttack(Attack):
         raise NotImplementedError("do_damage is not implemented on this class!")
 
     def calc_expected_damage(self):
-        return self.multi_attack * sum([n_dice * (max_roll / 2.0 + 0.5) for
-                                        n_dice, max_roll in self.damage_dice.all()])
+        return self.multi_attack * sum([
+            n_dice * (max_roll / 2.0 + 0.5) for n_dice, max_roll in
+            SingleAttackDice.objects.filter(attack=self).values_list(
+                'dice__num_sides', 'num_dice'
+            )])
 
     def apply_effects(self, target):
         # TODO: Handle effects_temp
@@ -83,13 +90,15 @@ class SingleAttackEffect(models.Model):
 
 
 class PhysicalSingleAttack(SingleAttack):
-    action_type = "Single target physical attack"
+    def save(self, *args, **kwargs):
+        self.action_type = "Attack"
+        super().save(*args, **kwargs)
 
     def do_damage(self, attacker, target):
         damage = 0
         hit_check = d20() + attacker.saves[self.stat_bonus] + self.bonus_to_hit + attacker.proficiency
         if hit_check >= target.ac:
-            damage = calc_roll(self.damage_dice) + attacker.saves[self.stat_bonus] + self.bonus_to_damage
+            damage = calc_roll(self.dice) + attacker.saves[self.stat_bonus] + self.bonus_to_damage
 
         target.take_damage(damage, self.damage_type)
         self.log_attack(attacker, target, damage)
@@ -102,7 +111,9 @@ class SpellSingleAttack(SingleAttack):
     A saving throw is a d20 + relevant stat bonus compared to spell DC
     """
 
-    action_type = "Single target spell attack"
+    def save(self, *args, **kwargs):
+        self.action_type = "Attack"
+        super().save(*args, **kwargs)
 
     def do_damage(self, attacker, target):
         damage = 0
@@ -111,11 +122,11 @@ class SpellSingleAttack(SingleAttack):
                            attacker.saves[self.stat_bonus] if self.stat_bonus else 0
             hit_check = d20() + attack_bonus + self.bonus_to_hit
             if hit_check >= attacker.ac:
-                damage = calc_roll(self.damage_dice) + self.bonus_to_damage
+                damage = calc_roll(self.dice) + self.bonus_to_damage
         else:
             save_check = d20() + target.saves[self.save_stat]
             if save_check <= self.save_dc:
-                damage = calc_roll(self.damage_dice) + self.bonus_to_damage
+                damage = calc_roll(self.dice) + self.bonus_to_damage
 
         target.take_damage(damage, self.damage_type)
         self.log_attack(attacker, target, damage)
@@ -127,11 +138,13 @@ class SpellSave(SingleAttack):
     as much on a successful save.
     """
 
-    action_type = "Spell attack requiring save"
+    def save(self, *args, **kwargs):
+        self.action_type = "Attack"
+        super().save(*args, **kwargs)
 
     def do_damage(self, attacker, target):
         save_check = d20() + target.saves[self.save_stat]
-        damage = calc_roll(self.damage_dice)
+        damage = calc_roll(self.dice)
         if save_check > self.save_dc:
             damage = ceil(damage / 2.0)
 
@@ -141,9 +154,18 @@ class SpellSave(SingleAttack):
 
 
 class Heal(Action):
-    action_type = "Heal"
     heal_dice = models.ManyToManyField(Dice, through='HealDice')
     num_targets = models.SmallIntegerField()
+
+    def save(self, *args, **kwargs):
+        self.action_type = "Heal"
+        super().save(*args, **kwargs)
+
+    def instantiate(self, num_available=-1):
+        self.dice = dict(HealDice.objects.filter(
+            heal=self).values_list(
+            'dice__num_sides', 'num_dice'))
+        return super().instantiate(num_available=num_available)
 
     def log_heal(self, healed, new_health, healer):
         self.logger.log_action("{0} healed from {1} to {2} ({3})".format(
@@ -156,6 +178,13 @@ class Heal(Action):
         self.log_heal(healed, new_health, healer)
         healed.hp = new_health
 
+    def calc_expected_heal(self):
+        return self.num_targets * sum([
+            n_dice * (max_roll / 2.0 + 0.5) for n_dice, max_roll in
+            HealDice.objects.filter(attack=self).values_list(
+                'dice__num_sides', 'num_dice'
+            )])
+
 
 class HealDice(models.Model):
     heal = models.ForeignKey(Heal, on_delete=models.CASCADE)
@@ -166,7 +195,10 @@ class HealDice(models.Model):
 class ComboAttack(models.Model):
     attacks = models.ManyToManyField(SingleAttack, through="ComboAttackComponents")
     recharge_percentile = models.FloatField(default=0.0)
-    action_type = "Combo attack"
+
+    def save(self, *args, **kwargs):
+        self.action_type = "Attack"
+        super().save(*args, **kwargs)
 
     def instantiate(self, num_available=-1):
         self.ready = True

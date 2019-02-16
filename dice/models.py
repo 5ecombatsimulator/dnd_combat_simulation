@@ -8,3 +8,6 @@ class Dice(models.Model):
 
     def roll(self):
         return randint(1, self.num_sides)
+
+    def __str__(self):
+        return "D{}".format(self.num_sides)
