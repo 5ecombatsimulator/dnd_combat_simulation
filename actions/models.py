@@ -25,6 +25,7 @@ class Action(PolymorphicModel):
         self.ready = True
         self.logger = Logger()
         self.num_available = num_available
+        self.instantiated_effects = list(self.effects.all())
         return self
 
     def try_recharge(self):
@@ -70,8 +71,7 @@ class SingleAttack(Action):
             )])
 
     def apply_effects(self, target):
-        # TODO: Handle effects_temp
-        [effect.apply(target) for effect in self.effects.all()]
+        [effect.apply(target) for effect in self.instantiated_effects]
 
     def log_attack(self, attacker, target, damage):
         self.logger.log_action("{0} took {1} damage from {2} ({3})".format(

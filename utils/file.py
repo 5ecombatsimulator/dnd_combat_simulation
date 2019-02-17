@@ -1,6 +1,6 @@
 import json
 
-from settings import BASE_DIR
+from simulation.settings import BASE_DIR
 
 
 def write_json_to_file(f_name, obj_to_write):

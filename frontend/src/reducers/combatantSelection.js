@@ -2,10 +2,10 @@ import { combineReducers } from 'redux'
 import * as t from '../actions'
 import {setterReducer} from '../common'
 
-const team1Combatants = setterReducer([], t.SET_TEAM1_COMBATANTS)
-const team2Combatants = setterReducer([], t.SET_TEAM2_COMBATANTS)
-const counter = setterReducer(0, t.INCREMENT_COUNTER)
-const allCombatants = setterReducer([], t.SET_ALL_COMBATANTS)
+const team1Combatants = setterReducer([], t.SET_TEAM1_COMBATANTS);
+const team2Combatants = setterReducer([], t.SET_TEAM2_COMBATANTS);
+const counter = setterReducer(0, t.INCREMENT_COUNTER);
+const allCombatants = setterReducer([], t.SET_ALL_COMBATANTS);
 
 const simulationResults = setterReducer(
   {"avg_num_rounds": "-",
@@ -23,6 +23,6 @@ const reducer = combineReducers({
   team2Combatants,
   counter,
   simulationResults
-})
+});
 
 export {reducer as default}

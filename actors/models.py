@@ -143,6 +143,8 @@ class Combatant(models.Model):
     def jsonify(self):
         """ Turn a creature object into JSON """
         combatant_info = {
+            "label": self.name,  # This is for the frontend
+            "value": self.name,  # This is for the frontend
             "name": self.name,
             "hp": self.max_hp,
             "ac": self.ac,

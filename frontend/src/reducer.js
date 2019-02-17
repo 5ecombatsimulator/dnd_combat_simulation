@@ -12,7 +12,7 @@ const initialState = {
     {value: 'orc', label: 'Orc'}
   ],
   counter: 0,
-}
+};
 
 function combatantHandler(state, action) {
   if (typeof state === 'undefined') {
@@ -30,10 +30,10 @@ function combatantHandler(state, action) {
     case INCREMENT_COUNTER:
       return Object.assign({}, state, {
         counter: state.counter + 1
-      })
+      });
     default:
       return state
   }
 }
 
-export default combatantHandler;
+export {combatantHandler as default}

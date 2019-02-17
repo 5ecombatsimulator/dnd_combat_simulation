@@ -1,5 +1,7 @@
-import axios from 'axios'
+import axios from 'axios';
+// import * as Cookies from "js-cookie";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
+
 
 const argsToForm = (args) => {
   let data = new FormData()
@@ -12,7 +14,8 @@ const argsToForm = (args) => {
 }
 
 const http = (url, method, args, returnData=true) => {
-  let data = args ? argsToForm(args) : undefined
+  let data = args ? argsToForm(args) : undefined;
+  // TODO: Deal with the CSRF token?
   return axios({
     method: method,
     url: url,

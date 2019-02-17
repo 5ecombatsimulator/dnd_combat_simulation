@@ -10,5 +10,5 @@ BASE_PROJECT_DIR = os.path.dirname(os.path.realpath(__file__))
 NUM_TRIALS = 10
 
 # debug_constants.py for debug constants and what they represent
-VERBOSITY = DebugConstants.ACTION
+VERBOSITY = DebugConstants.NONE
 

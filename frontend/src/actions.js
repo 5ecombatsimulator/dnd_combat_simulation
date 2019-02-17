@@ -73,12 +73,11 @@ function updateCombatantSet(counter, oldSet, newSet) {
 
 function addCombatantToSet(combatant, counter, set) {
 
-  let updatedSet = set.concat({
+  return set.concat({
     value: combatant.value + "_" + counter.toString(),
     label: combatant.label
   });
 
-  return updatedSet
 }
 
 export const getAllCombatants = get(SimulatorSource.getCombatants, setAllCombatants)

@@ -5,6 +5,6 @@ import combatantCreationReducer from './combatantCreation'
 const reducer = combineReducers({
   combatantSelectionReducer,
   combatantCreationReducer
-})
+});
 
 export {reducer as default}

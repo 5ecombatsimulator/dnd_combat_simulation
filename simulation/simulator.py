@@ -12,9 +12,6 @@ class Simulator:
         :param pcs: A list of creatures that represent the PCs
         :param enemies: A list of creatures that represent the enemies in the battle
         """
-        print("EQUAL:", pcs[0] == enemies[0])
-        print("PCS[0]", pcs[0])
-        print("ENEN[0]", enemies[0])
         self.pcs = deepcopy(pcs)
         self.enemies = deepcopy(enemies)
         self.battle_order = None

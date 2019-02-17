@@ -13,7 +13,7 @@ const CombatantScreen = ({team1Combatants, team2Combatants, allCombatants, team1
       <div className="section">
         <Select
           closeOnSelect={false}
-          multi={true}
+          isMulti
           onChange={team1Update}
           options={allCombatants}
           placeholder="Choose your combatants!"
@@ -25,7 +25,7 @@ const CombatantScreen = ({team1Combatants, team2Combatants, allCombatants, team1
       <div className="section">
         <Select
           closeOnSelect={false}
-          multi={true}
+          isMulti
           onChange={team2Update}
           options={allCombatants}
           placeholder="Choose your combatants!"
