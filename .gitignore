@@ -111,6 +111,14 @@ venv.bak/
 
 # node modules
 node_modules/
+*/node_modules/
+
+# package lock
+*/yarn.lock
+
+# Notebooks
+*.ipynb
+.ipynb_checkpoints/
 
 # do not include webpack stats
 webpack-stats.dev.json
