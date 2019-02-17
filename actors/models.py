@@ -149,7 +149,7 @@ class Combatant(models.Model):
             "proficiency": self.proficiency,
             "saves": self._convert_saves_to_dict(),
             "actions": [a.name for a in self.actions.all()],
-            "innate_effects": self.innate_effects.all(),
+            "innate_effects": [e.name for e in self.innate_effects.all()],
             "cr": self.cr
         }
         return combatant_info
