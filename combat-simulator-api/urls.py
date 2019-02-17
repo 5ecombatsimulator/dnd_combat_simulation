@@ -17,7 +17,8 @@ from django.conf.urls import url
 from django.urls import path
 from django.contrib import admin
 
-from actors.views import get_combatants
+from actors.views import get_combatants, create_combatant
+from actions.views import get_all_actions
 from simulation.views import get_simulation_results
 from .views import FrontendAppView
 
@@ -25,7 +26,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     path('combatants', get_combatants),
     path('simulate', get_simulation_results),
-    # path('actions', get_all_actions),
-    # path('createCombatant', create_combatant)
+    path('actions', get_all_actions),
+    path('createCombatant', create_combatant),
     url(r'^', FrontendAppView.as_view())
 ]

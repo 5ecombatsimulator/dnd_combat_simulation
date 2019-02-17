@@ -33,6 +33,15 @@ class Action(PolymorphicModel):
         if percentile >= self.recharge_percentile:
             self.ready = True
 
+    def jsonify(self, current_info={}):
+        default_info = {
+            "label": self.name,
+            "value": self.name,
+            "name": self.name,
+            "actionEffects": [e.name for e in self.effects.all()],
+        }
+        return dict(**current_info, **default_info)
+
 
 class ActionToEffect(models.Model):
     action = models.ForeignKey(Action, on_delete=models.CASCADE)
@@ -76,6 +85,12 @@ class SingleAttack(Action):
     def log_attack(self, attacker, target, damage):
         self.logger.log_action("{0} took {1} damage from {2} ({3})".format(
             target.name, damage, self.name, attacker.name))
+
+    def jsonify(self, current_info={}):
+        attack_info = {
+            "expDamage": self.calc_expected_damage()
+        }
+        return super().jsonify(attack_info)
 
 
 class SingleAttackDice(models.Model):
@@ -185,6 +200,12 @@ class Heal(Action):
                 'dice__num_sides', 'num_dice'
             )])
 
+    def jsonify(self, current_info={}):
+        attack_info = {
+            "expHeal": self.calc_expected_heal()
+        }
+        return super().jsonify(attack_info)
+
 
 class HealDice(models.Model):
     heal = models.ForeignKey(Heal, on_delete=models.CASCADE)
@@ -192,12 +213,13 @@ class HealDice(models.Model):
     num_dice = models.SmallIntegerField()
 
 
-class ComboAttack(models.Model):
+class ComboAttack(Action):
     attacks = models.ManyToManyField(SingleAttack, through="ComboAttackComponents")
-    recharge_percentile = models.FloatField(default=0.0)
 
     def save(self, *args, **kwargs):
         self.action_type = "Attack"
+        # Enforce that Combo attacks have no stat bonus
+        kwargs['stat_bonus'] = None
         super().save(*args, **kwargs)
 
     def instantiate(self, num_available=-1):
@@ -218,6 +240,12 @@ class ComboAttack(models.Model):
     def apply_effects(self, target):
         for attack in self.attacks.all():
             attack.apply_effects(target)
+
+    def jsonify(self, current_info={}):
+        attack_info = {
+            "expDamage": self.calc_expected_damage()
+        }
+        return super().jsonify(attack_info)
 
 
 class ComboAttackComponents(models.Model):

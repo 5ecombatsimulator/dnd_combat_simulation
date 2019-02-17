@@ -47,7 +47,7 @@ const CombatantCreation = ({allActions, combatantActions, updateCombatantActions
       <div className="section">
         <Select
           closeOnSelect={false}
-          multi={true}
+          isMulti
           onChange={updateCombatantActions}
           options={allActions}
           placeholder="Add your combatant actions"
@@ -58,6 +58,7 @@ const CombatantCreation = ({allActions, combatantActions, updateCombatantActions
       </div>
     </Grid>
     <button className="button" onClick={createCombatant} type="button">Create Combatant</button>
+    <h5 style={{color:cr.combatantCreationMsg === "Success" ? "#007f00" : "#e50000"}}>{cr.combatantCreationMsg}</h5>
   </div>
 )
 

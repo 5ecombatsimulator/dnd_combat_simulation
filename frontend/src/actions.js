@@ -5,43 +5,45 @@ import {setterAction} from './common'
 import SimulatorSource from './sources/simulatorSource'
 
 /* Action types */
-export const SET_TEAM1_COMBATANTS = 'SET_TEAM1_COMBATANTS'
-export const SET_TEAM2_COMBATANTS = 'SET_TEAM2_COMBATANTS'
-export const INCREMENT_COUNTER = 'INCREMENT_COUNTER'
-export const SET_ALL_COMBATANTS = 'SET_ALL_COMBATANTS'
-export const SET_SIMULATION_RESULTS = 'SET_SIMULATION_RESULTS'
-export const SET_ALL_ACTIONS = 'SET_ALL_ACTIONS'
-export const SET_COMBATANT_ACTIONS = 'SET_COMBATANT_ACTIONS'
+export const SET_TEAM1_COMBATANTS = 'SET_TEAM1_COMBATANTS';
+export const SET_TEAM2_COMBATANTS = 'SET_TEAM2_COMBATANTS';
+export const INCREMENT_COUNTER = 'INCREMENT_COUNTER';
+export const SET_ALL_COMBATANTS = 'SET_ALL_COMBATANTS';
+export const SET_SIMULATION_RESULTS = 'SET_SIMULATION_RESULTS';
+export const SET_ALL_ACTIONS = 'SET_ALL_ACTIONS';
+export const SET_COMBATANT_ACTIONS = 'SET_COMBATANT_ACTIONS';
+export const SET_COMBATANT_MSG = 'SET_COMBATANT_MSG';
+;
+export const SET_COMBATANT_NAME = 'SET_COMBATANT_NAME';
+export const SET_COMBATANT_HP = 'SET_COMBATANT_HP';
+export const SET_COMBATANT_AC = 'SET_COMBATANT_AC';
+export const SET_COMBATANT_PROFICIENCY = 'SET_COMBATANT_PROFICIENCY';
+export const SET_COMBATANT_STRENGTH = 'SET_COMBATANT_STRENGTH';
+export const SET_COMBATANT_DEXTERITY = 'SET_COMBATANT_DEXTERITY';
+export const SET_COMBATANT_CONSTITUTION = 'SET_COMBATANT_CONSTITUTION';
+export const SET_COMBATANT_WISDOM = 'SET_COMBATANT_WISDOM';
+export const SET_COMBATANT_INTELLIGENCE = 'SET_COMBATANT_INTELLIGENCE';
+export const SET_COMBATANT_CHARISMA = 'SET_COMBATANT_CHARISMA';
+;
+export const setAllCombatants = setterAction(SET_ALL_COMBATANTS);
+export const setAllActions = setterAction(SET_ALL_ACTIONS);
+export const setT1Combatants = setterAction(SET_TEAM1_COMBATANTS);
+export const setT2Combatants = setterAction(SET_TEAM2_COMBATANTS);
+export const setCounter = setterAction(INCREMENT_COUNTER);
+export const setSimulationResults = setterAction(SET_SIMULATION_RESULTS);
+export const setCombatantActions = setterAction(SET_COMBATANT_ACTIONS);
+export const setCombatantCreationMsg = setterAction(SET_COMBATANT_MSG);
 
-export const SET_COMBATANT_NAME = 'SET_COMBATANT_NAME'
-export const SET_COMBATANT_HP = 'SET_COMBATANT_HP'
-export const SET_COMBATANT_AC = 'SET_COMBATANT_AC'
-export const SET_COMBATANT_PROFICIENCY = 'SET_COMBATANT_PROFICIENCY'
-export const SET_COMBATANT_STRENGTH = 'SET_COMBATANT_STRENGTH'
-export const SET_COMBATANT_DEXTERITY = 'SET_COMBATANT_DEXTERITY'
-export const SET_COMBATANT_CONSTITUTION = 'SET_COMBATANT_CONSTITUTION'
-export const SET_COMBATANT_WISDOM = 'SET_COMBATANT_WISDOM'
-export const SET_COMBATANT_INTELLIGENCE = 'SET_COMBATANT_INTELLIGENCE'
-export const SET_COMBATANT_CHARISMA = 'SET_COMBATANT_CHARISMA'
-
-export const setAllCombatants = setterAction(SET_ALL_COMBATANTS)
-export const setAllActions = setterAction(SET_ALL_ACTIONS)
-export const setT1Combatants = setterAction(SET_TEAM1_COMBATANTS)
-export const setT2Combatants = setterAction(SET_TEAM2_COMBATANTS)
-export const setCounter = setterAction(INCREMENT_COUNTER)
-export const setSimulationResults = setterAction(SET_SIMULATION_RESULTS)
-export const setCombatantActions = setterAction(SET_COMBATANT_ACTIONS)
-
-export const setCombatantName = setterAction(SET_COMBATANT_NAME)
-export const setCombatantHP = setterAction(SET_COMBATANT_HP)
-export const setCombatantAC = setterAction(SET_COMBATANT_AC)
-export const setCombatantProficiency = setterAction(SET_COMBATANT_PROFICIENCY)
-export const setCombatantStrength = setterAction(SET_COMBATANT_STRENGTH)
-export const setCombatantDexterity = setterAction(SET_COMBATANT_DEXTERITY)
-export const setCombatantConstitution = setterAction(SET_COMBATANT_CONSTITUTION)
-export const setCombatantWisdom = setterAction(SET_COMBATANT_WISDOM)
-export const setCombatantIntelligence = setterAction(SET_COMBATANT_INTELLIGENCE)
-export const setCombatantCharisma = setterAction(SET_COMBATANT_CHARISMA)
+export const setCombatantName = setterAction(SET_COMBATANT_NAME);
+export const setCombatantHP = setterAction(SET_COMBATANT_HP);
+export const setCombatantAC = setterAction(SET_COMBATANT_AC);
+export const setCombatantProficiency = setterAction(SET_COMBATANT_PROFICIENCY);
+export const setCombatantStrength = setterAction(SET_COMBATANT_STRENGTH);
+export const setCombatantDexterity = setterAction(SET_COMBATANT_DEXTERITY);
+export const setCombatantConstitution = setterAction(SET_COMBATANT_CONSTITUTION);
+export const setCombatantWisdom = setterAction(SET_COMBATANT_WISDOM);
+export const setCombatantIntelligence = setterAction(SET_COMBATANT_INTELLIGENCE);
+export const setCombatantCharisma = setterAction(SET_COMBATANT_CHARISMA);
 
 const get = (sourceFunc, action, key) => (...args) => (dispatch) => {
   sourceFunc(...args).then((res) => {
@@ -157,7 +159,10 @@ export const createCombatant = () => (dispatch, getState) => {
     combatantCreationReducer.combatantCharisma,
     combatantActions.map((a) => a.value).join(',')
   ).then(({data}) => {
-    dispatch(setAllCombatants(data))
+    if (data.combatants) {
+      dispatch(setAllCombatants(data.combatants))
+    }
+    dispatch(setCombatantCreationMsg(data.msg))
   })
 }
 

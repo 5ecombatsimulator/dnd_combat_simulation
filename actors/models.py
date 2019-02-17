@@ -1,4 +1,6 @@
-from django.db import models
+from math import floor
+
+from django.db import models, transaction
 from simulation.heuristics.heuristic_container import HeuristicContainer
 
 from actions.models import Action
@@ -35,11 +37,92 @@ class Combatant(models.Model):
             return False
         return self.name == other.name
 
+    @staticmethod
+    @transaction.atomic
+    def create(**kwargs):
+        """ Create a combatant; handles error checking on the attributes
+
+        Keyword Args:
+             name (str): name of combatant
+             hp (int): the amount of max hp of the combatant
+             ac (int): the armor class of combatant, must be >= 1
+             proficiency (int): the proficiency bonus. Must be <= 10
+             str_save (int)
+             dex_save (int)
+             con_save (int)
+             wis_save (int)
+             int_save (int)
+             cha_save (int)
+             cr (int): the creature rating of the creature
+             actions (list): a list of action names that the creature can take
+
+        Returns:
+            msg (str): "Success" if the combatant was created otherwise the
+                error that caused failure
+        """
+        save_range = set(range(1, 31, 1))
+        if not kwargs['name']:
+            return "Combatant needs a name"
+        elif Combatant.objects.filter(name=kwargs['name']).exists():
+            return "Combatant needs a unique name"
+        elif int(kwargs['hp']) < 1:
+            return "Combatant HP must be greater than 1"
+        elif int(kwargs['ac']) < 1:
+            return "Combatant AC must be greater than 1"
+        elif int(kwargs['proficiency']) < 1:
+            return "Combatant proficiency must be greater than 1"
+        elif {int(kwargs['strength']), int(kwargs['dexterity']),
+              int(kwargs['constitution']), int(kwargs['wisdom']),
+              int(kwargs['intelligence']), int(kwargs['charisma'])}.difference(
+            save_range):
+            return "All combatant stats must be between 1 and 30"
+        elif 'cr' in kwargs and int(kwargs['cr']) > 30 or int(kwargs['cr']) < 0:
+            return "Combatant challenge rating must be between 0 and 30"
+        elif not kwargs['actions'].split(","):
+            return "Combatant must have at least 1 action to take"
+        c = Combatant(
+            name=kwargs['name'],
+            max_hp=int(kwargs['hp']),
+            ac=int(kwargs['ac']),
+            proficiency=int(kwargs['proficiency']),
+            str_save=floor((int(kwargs['strength']) - 10) / 2),
+            dex_save=floor((int(kwargs['dexterity']) - 10) / 2),
+            con_save=floor((int(kwargs['constitution']) - 10) / 2),
+            wis_save=floor((int(kwargs['wisdom']) - 10) / 2),
+            int_save=floor((int(kwargs['intelligence']) - 10) / 2),
+            cha_save=floor((int(kwargs['charisma']) - 10) / 2),
+            cr=int(kwargs['cr']) if 'cr' in kwargs else 1
+        )
+        c.save()
+        cas = []
+        for action_name in kwargs['actions'].split(','):
+            try:
+                action = Action.objects.get(name=action_name)
+            except Action.DoesNotExist:
+                return "Could not find action with name {}".format(action_name)
+            cas.append(CombatantAction(combatant=c, action=action))
+        CombatantAction.objects.bulk_create(cas)
+        return "Success"
+
+    @staticmethod
+    def load_combatant(name, name_suffix, should_ready=False):
+        try:
+            combatant = Combatant.objects.get(name=name)
+        except Combatant.DoesNotExist:
+            raise RuntimeError("Combatant with name {} does not exist".format(
+                name))
+
+        combatant.ready_for_battle()
+
+        if name_suffix:
+            combatant.name += "_" + name_suffix
+
+        return combatant
+
     def ready_for_battle(self, heuristics=HeuristicContainer(),
                          applied_effects=[]):
         self.hp = self.max_hp
         self.saves = self._convert_saves_to_dict()
-        print(self.actions.all())
         self.attacks = sorted([a.instantiate() for a in self.actions.all()
                                if a.action_type == "Attack"],
                                 key=lambda x: x.calc_expected_damage(),

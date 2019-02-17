@@ -1,3 +1,7 @@
-from django.shortcuts import render
+from django.http import JsonResponse
 
-# Create your views here.
+from actions.models import Action
+
+
+def get_all_actions(request):
+    return JsonResponse([a.jsonify() for a in Action.objects.all()], safe=False)

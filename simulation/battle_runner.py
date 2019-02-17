@@ -3,8 +3,7 @@ import numpy as np
 from simulation.heuristics import target_selection_heuristics, \
     heuristic_container
 from simulation.simulator import Simulator
-
-from data_managers.combatant_manager import CombatantManager
+from actors.models import Combatant
 
 heuristic_mapping = dict([(name, cls) for name, cls
                           in target_selection_heuristics.__dict__.items()
@@ -59,10 +58,8 @@ class ResultContainer:
         }
 
 
-
 class BattleRunner:
     def __init__(self):
-        self.cm = CombatantManager()
         self.num_sims = 0
         self.res = ResultContainer()
 
@@ -76,10 +73,12 @@ class BattleRunner:
 
         # Add the name prefix so that combatants with the same name on
         # either side can be differentiated
-        team1 = [self.cm.load_combatant(
-            name, "t1_{}".format(i)) for i, name in enumerate(team1_names)]
-        team2 = [self.cm.load_combatant(
-            name, "t2_{}".format(i)) for i, name in enumerate(team2_names)]
+        team1 = [Combatant.load_combatant(
+            name, "t1_{}".format(i), should_ready=True)
+            for i, name in enumerate(team1_names)]
+        team2 = [Combatant.load_combatant(
+            name, "t2_{}".format(i), should_ready=True)
+            for i, name in enumerate(team2_names)]
 
         self.res.number_of_rounds = []
         self.res.number_of_player_deaths = []
