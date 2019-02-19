@@ -1,9 +1,10 @@
-from math import floor
+from math import floor, ceil
 
 from django.db import models, transaction
 from simulation.heuristics.heuristic_container import HeuristicContainer
 
-from actions.models import Action
+from actions.models import Action, SingleAttack, ComboAttack
+from actions.aoe_choices import AOE_PERCENT_HIT_MAP
 from effects.models import Effect
 
 
@@ -20,6 +21,10 @@ class Combatant(models.Model):
     int_save = models.PositiveSmallIntegerField()
     cha_save = models.PositiveSmallIntegerField()
     cr = models.FloatField()
+    num_legendary_actions = models.SmallIntegerField(default=0)
+    combatant_type = models.CharField(max_length=128, null=True)
+    size = models.CharField(max_length=32, null=True)
+    speed = models.PositiveSmallIntegerField(null=True)
 
     actions = models.ManyToManyField(Action, through='CombatantAction')
     innate_effects = models.ManyToManyField(Effect, through='CombatantInnateEffect')
@@ -105,14 +110,15 @@ class Combatant(models.Model):
         return "Success"
 
     @staticmethod
-    def load_combatant(name, name_suffix, should_ready=False):
+    def load_combatant(name, name_suffix="", should_ready=False, num_enemies=1):
         try:
             combatant = Combatant.objects.get(name=name)
         except Combatant.DoesNotExist:
             raise RuntimeError("Combatant with name {} does not exist".format(
                 name))
 
-        combatant.ready_for_battle()
+        if should_ready:
+            combatant.ready_for_battle(num_enemies=num_enemies)
 
         if name_suffix:
             combatant.name += "_" + name_suffix
@@ -120,17 +126,23 @@ class Combatant(models.Model):
         return combatant
 
     def ready_for_battle(self, heuristics=HeuristicContainer(),
-                         applied_effects=[]):
+                         applied_effects=[], num_enemies=1):
         self.hp = self.max_hp
         self.saves = self._convert_saves_to_dict()
-        self.attacks = sorted([a.instantiate() for a in self.actions.all()
-                               if a.action_type == "Attack"],
-                                key=lambda x: x.calc_expected_damage(),
-                                reverse=True)
-        self.heals = sorted([a.instantiate() for a in self.actions.all()
-                             if a.action_type == "Heal"],
-                                key=lambda x: x.calc_expected_heal(),
-                                reverse=True)
+        self.attacks = sorted([
+            a.instantiate() for a in self.actions.all()
+            if a.action_type == "Attack" and not a.is_legendary],
+            key=lambda x: x.calc_expected_damage(num_enemies), reverse=True)
+        self.heals = sorted([
+            a.instantiate() for a in self.actions.all()
+            if a.action_type == "Heal"],
+            key=lambda x: x.calc_expected_heal(), reverse=True)
+        self.legendary_actions = sorted([
+            a.instantiate() for a in self.actions.all()
+            if a.action_type == "Attack" and a.is_legendary],
+            key=lambda x: x.calc_expected_damage(num_enemies),
+            reverse=True)
+        self.legendary_actions_left = self.num_legendary_actions
         self.num_actions_available = 1  # All creatures start with 1 available action
         self.heuristics = heuristics
         # TODO: deal with combining many to many field
@@ -160,6 +172,7 @@ class Combatant(models.Model):
         if self.applied_effects is not None and len(self.applied_effects) > 0:
             for effect in self.applied_effects:
                 effect.on_turn_start(self)
+        self.legendary_actions_left = self.num_legendary_actions
 
     def on_turn_end(self):
         if self.applied_effects is not None and len(self.applied_effects) > 0:
@@ -175,32 +188,64 @@ class Combatant(models.Model):
             return
         while self.num_actions_available > 0:
             self.num_actions_available -= 1
-            self._try_heal(allies, heuristic)
-            self._try_attack(enemies, heuristic)
+            did_heal = self._try_heal(allies, heuristic)
+            if not did_heal:
+                self._try_attack(enemies, heuristic)
         self.on_turn_end()
 
-    def _try_attack(self, enemies, heuristic):
-        attack = self.choose_action(self.attacks)
-        for _ in range(attack.multi_attack):
-            if enemies:
-                target = self._choose_target(enemies,
-                                             heuristic.attack_selection)
-                if attack.is_aoe:
-                    enemies = [e for e in enemies if e != target]
-                attack.do_damage(self, target)
-                attack.apply_effects(target)
+    def try_legendary_action(self, enemies, heuristic):
+        possible_actions = [a for a in self.legendary_actions
+                            if a.legendary_action_cost <= self.legendary_actions_left]
+        if not possible_actions:
+            return
+        # The actions should be ordered by most damage, so select the first one
+        self._try_attack(enemies, heuristic, attack=possible_actions[0])
+        self.legendary_actions_left -= possible_actions[0].legendary_action_cost
+
+    def make_attack(self, targets, attack_heuristic, attack_to_use):
+        target = self._choose_target(targets, attack_heuristic)
+        targets_left = targets
+        if attack_to_use.is_aoe:
+            targets_left = [e for e in targets if e != target]
+        attack_to_use.do_damage(self, target)
+        attack_to_use.apply_effects(target)
+        return [e for e in targets_left if e.hp > 0]
+
+    def _try_attack(self, enemies, heuristic, attack=None):
+        if attack is None:
+            attack = Combatant.choose_action(self.attacks)
+
+        if not enemies:
+            return
+
+        if isinstance(attack, SingleAttack):
+            num_targets_hit = AOE_PERCENT_HIT_MAP[attack.aoe_type](
+                len(enemies)) if attack.aoe_type else 1
+            for _ in range(num_targets_hit):
+                if not enemies:
+                    break
+                enemies = self.make_attack(
+                    enemies, heuristic.attack_selection, attack)
+        elif isinstance(attack, ComboAttack):
+            for single_attack in attack.instantiated_attacks:
+                self._try_attack(
+                    enemies, heuristic, attack=single_attack)
+        attack.ready = False
 
     def _try_heal(self, allies, heuristic):
         heal_target = self._check_heal_need(allies, heuristic.heal_selection)
         available_heals = [h for h in self.heals if h.num_available > 0]
+        healed = False
         if len(available_heals) > 0 and heal_target:
-            heal = self.choose_action(self.heals)
+            heal = Combatant.choose_action(self.heals)
             for _ in range(heal.num_targets):
                 if heal_target is not None:
                     heal.do_heal(self, heal_target)
                     allies = [a for a in allies if a != heal_target]
                     heal_target = self._check_heal_need(
                         allies, heuristic.heal_selection)
+                    healed = True
+        return healed
 
     def _choose_target(self, enemies, heuristic):
         if self.heuristics.attack_selection:

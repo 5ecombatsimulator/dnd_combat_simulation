@@ -120,6 +120,12 @@ node_modules/
 *.ipynb
 .ipynb_checkpoints/
 
+# Benchmarking
+*.prof
+
+# XML data
+*.xml
+
 # do not include webpack stats
 webpack-stats.dev.json
 webpack-stats.prod.json

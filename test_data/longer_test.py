@@ -6,4 +6,6 @@ django.setup()
 from simulation.battle_runner import BattleRunner
 
 br = BattleRunner()
-br.run_simulator(["Goblin", "Goblin"], ["Goblin"], 100)
+def run_sim():
+    br.run_simulator(["Adult Black Dragon"], ["Goblin"] * 150, 10)
+    print(br.print_results())

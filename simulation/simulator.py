@@ -14,7 +14,16 @@ class Simulator:
         """
         self.pcs = deepcopy(pcs)
         self.enemies = deepcopy(enemies)
+        self.legendary_action_users = [
+            combatant for combatant in self.pcs + self.enemies if combatant.legendary_actions]
         self.battle_order = None
+
+        for pc in self.pcs:
+            pc.enemies = self.enemies
+            pc.allies = [x for x in self.pcs if x is not pc]
+        for enemy in self.enemies:
+            enemy.enemies = self.pcs
+            enemy.allies = [x for x in self.enemies if x is not enemy]
 
     def log_deaths(self, dead, alignment):
         self.logger.log_death("{0} dead: {1}".format(alignment, ", ".join(dead)))
@@ -47,6 +56,9 @@ class Simulator:
             if not enemies:
                 break
             creature.take_turn(allies, enemies, heuristic)
+            for legendary_action_user in self.legendary_action_users:
+                legendary_action_user.try_legendary_action(
+                    legendary_action_user.enemies, heuristic)
 
         dead_enemies = [c.name for c in self.enemies if c.hp <= 0]
         dead_pcs = [c.name for c in self.pcs if c.hp <= 0]

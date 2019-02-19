@@ -7,6 +7,7 @@ from math import ceil
 from debug.logger import Logger
 from actions.damage_types import DAMAGE_TYPE_CHOICES
 from actions.stat_choices import STAT_CHOICES
+from actions.aoe_choices import AOE_CHOICES, AOE_PERCENT_HIT_MAP
 
 from dice.models import Dice
 from effects.models import Effect
@@ -19,7 +20,17 @@ class Action(PolymorphicModel):
     recharge_percentile = models.FloatField(default=0.0)
     stat_bonus = models.CharField(
         choices=STAT_CHOICES, max_length=12, null=True)
+    is_legendary = models.BooleanField(default=False)
+    legendary_action_cost = models.PositiveSmallIntegerField(default=0)
     effects = models.ManyToManyField(Effect, through="ActionToEffect")
+
+    def save(self, *args, **kwargs):
+        if self.is_legendary and self.legendary_action_cost == 0:
+            raise RuntimeError("An action cannot be legendary and have 0 legendary cost")
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
 
     def instantiate(self, num_available=-1):
         self.ready = True
@@ -49,14 +60,27 @@ class ActionToEffect(models.Model):
 
 
 class SingleAttack(Action):
+    """
+    Notes:
+        multi_attack: an example of this is scorching ray, which does the same
+            attack 3 times. Could model as a ComboAttack, but this leaves
+            another option.
+        is_aoe and aoe_type: Must co-exist. The save() definition checks this
+    """
     multi_attack = models.SmallIntegerField(default=1)
     is_aoe = models.BooleanField(default=False)
+    aoe_type = models.CharField(choices=AOE_CHOICES, max_length=64, null=True)
     damage_type = models.CharField(choices=DAMAGE_TYPE_CHOICES, max_length=32)
     save_stat = models.CharField(choices=STAT_CHOICES, null=True, max_length=16)
     save_dc = models.SmallIntegerField(null=True)
     damage_dice = models.ManyToManyField(Dice, through='SingleAttackDice')
     bonus_to_hit = models.SmallIntegerField(default=0)
     bonus_to_damage = models.SmallIntegerField(default=0)
+
+    def save(self, *args, **kwargs):
+        if self.is_aoe and self.aoe_type is None:
+            raise RuntimeError("Cannot have an aoe attack without an aoe type")
+        super().save(*args, **kwargs)
 
     def instantiate(self, num_available=-1):
         self.dice = dict(SingleAttackDice.objects.filter(
@@ -72,18 +96,26 @@ class SingleAttack(Action):
         """
         raise NotImplementedError("do_damage is not implemented on this class!")
 
-    def calc_expected_damage(self):
-        return self.multi_attack * sum([
+    def calc_expected_damage(self, num_enemies=1):
+        expected_enemies_hit = self.calc_expected_enemies_hit(num_enemies)
+        return expected_enemies_hit * sum([
             n_dice * (max_roll / 2.0 + 0.5) for n_dice, max_roll in
             SingleAttackDice.objects.filter(attack=self).values_list(
                 'dice__num_sides', 'num_dice'
             )])
 
+    def calc_expected_enemies_hit(self, num_enemies):
+        num_targets_hit = self.multi_attack
+        if self.is_aoe:
+            num_targets_hit = AOE_PERCENT_HIT_MAP[self.aoe_type](num_enemies)
+        return num_targets_hit
+
     def apply_effects(self, target):
         [effect.apply(target) for effect in self.instantiated_effects]
 
     def log_attack(self, attacker, target, damage):
-        self.logger.log_action("{0} took {1} damage from {2} ({3})".format(
+        self.logger.log_action("{0}{1} took {2} damage from {3} ({4})".format(
+            "Legendary action - " if self.is_legendary else "",
             target.name, damage, self.name, attacker.name))
 
     def jsonify(self, current_info={}):
@@ -218,27 +250,27 @@ class ComboAttack(Action):
 
     def save(self, *args, **kwargs):
         self.action_type = "Attack"
-        # Enforce that Combo attacks have no stat bonus
-        kwargs['stat_bonus'] = None
         super().save(*args, **kwargs)
 
     def instantiate(self, num_available=-1):
         self.ready = True
         self.logger = Logger()
         self.num_available = num_available
+        self.instantiated_attacks = [a.instantiate() for a in self.attacks.all()]
+        return self
 
-    def calc_expected_damage(self):
+    def calc_expected_damage(self, num_enemies=1):
         total_expected_damage = 0
-        for attack in self.attacks.all():
-            total_expected_damage += attack.calc_expected_damage()
+        for attack in self.instantiated_attacks:
+            total_expected_damage += attack.calc_expected_damage(num_enemies)
         return total_expected_damage
 
     def do_damage(self, attacker, target):
-        for attack in self.attacks.all():
+        for attack in self.instantiated_attacks:
             attack.do_damage(attacker, target)
 
     def apply_effects(self, target):
-        for attack in self.attacks.all():
+        for attack in self.instantiated_attacks:
             attack.apply_effects(target)
 
     def jsonify(self, current_info={}):

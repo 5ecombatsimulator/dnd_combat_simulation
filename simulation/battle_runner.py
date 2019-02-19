@@ -73,11 +73,19 @@ class BattleRunner:
 
         # Add the name prefix so that combatants with the same name on
         # either side can be differentiated
-        team1 = [Combatant.load_combatant(
-            name, "t1_{}".format(i), should_ready=True)
+        team1 = [
+            Combatant.load_combatant(
+                name,
+                name_suffix="t1_{}".format(i),
+                should_ready=True,
+                num_enemies=len(team2_names))
             for i, name in enumerate(team1_names)]
-        team2 = [Combatant.load_combatant(
-            name, "t2_{}".format(i), should_ready=True)
+        team2 = [
+            Combatant.load_combatant(
+                name,
+                name_suffix="t2_{}".format(i),
+                should_ready=True,
+                num_enemies=len(team1_names))
             for i, name in enumerate(team2_names)]
 
         self.res.number_of_rounds = []
@@ -115,6 +123,6 @@ class BattleRunner:
 
 if __name__ == "__main__":
     br = BattleRunner()
-    br.run_simulator(["Aboleth"],
+    br.run_simulator(["Adult Black Dragon"],
                      ["Goblin"]*10,
                      200)
