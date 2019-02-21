@@ -79,7 +79,7 @@ def parse_attack(attack_element, saves):
     which_stat = [x for x in saves.items()
                   if len(x) > 1 and 'save' in x[0]
                   and bonus_damage
-                  and x[1] == bonus_damage[0]]
+                  and x[1] == int(bonus_damage[0])]
     stat_for_bonus = which_stat[0][0][:3].upper() if which_stat else "STR"
     recharge_percentile = find_recharge_percentile(name)
 
@@ -422,14 +422,13 @@ def parse_file(file_name):
         parse_creature(entry)
 
 # For testing purposes
-# file_name = "Monster Manual Bestiary.xml"
-# tree = ET.parse("/Users/andrewdumit/Desktop/DnD/combat_simulator_v2/combat-simulator-api/xml_data/data/" + file_name)
-# root = tree.getroot()
-# mon1 = [x for x in root if [e for e in x if e.text == 'Orc War Chief']][0]
-# monster_attrs, action_elements, legendary_elements = parse_stats(
-#         mon1)
-# monster_attrs['num_legendary_actions'] = 3 if legendary_elements else 0
-# monster_attrs['proficiency'] = proficiency_mapping[monster_attrs['cr']]
-# combatant = Combatant(**monster_attrs)
-# a1 = action_elements[1]
-# a = action_elements[3]
+file_name = "Monster Manual Bestiary.xml"
+tree = ET.parse("/Users/andrewdumit/Desktop/DnD/combat_simulator_v2/combat-simulator-api/xml_data/data/" + file_name)
+root = tree.getroot()
+mon1 = [x for x in root if [e for e in x if e.text == 'Goblin']][0]
+monster_attrs, action_elements, legendary_elements = parse_stats(
+        mon1)
+monster_attrs['num_legendary_actions'] = 3 if legendary_elements else 0
+monster_attrs['proficiency'] = proficiency_mapping[monster_attrs['cr']]
+combatant = Combatant(**monster_attrs)
+a1 = action_elements[0]
