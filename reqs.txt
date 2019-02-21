@@ -1,0 +1,7 @@
+Django==2.1.7
+django-cors-headers==2.4.0
+django-extensions==2.1.5
+django-polymorphic==2.0.3
+django-webpack-loader==0.6.0
+numpy==1.16.1
+snakeviz==1.0.0
