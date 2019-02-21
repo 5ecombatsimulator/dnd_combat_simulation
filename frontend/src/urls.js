@@ -4,7 +4,9 @@ const postUrls = {
   getCombatants: '/combatants',
   getActions: '/actions',
   runSimulation: '/simulate',
-  createCombatant: '/createCombatant'
+  createCombatant: '/createCombatant',
+  saveBattle: '/saveBattle',
+  loadBattle: '/loadBattle',
 }
 
 export default postUrls

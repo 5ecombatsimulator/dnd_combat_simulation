@@ -143,9 +143,13 @@ class PhysicalSingleAttack(SingleAttack):
 
     def do_damage(self, attacker, target):
         damage = 0
-        hit_check = d20() + attacker.saves[self.stat_bonus] + self.bonus_to_hit + attacker.proficiency
-        if hit_check >= target.ac:
-            damage = calc_roll(self.dice) + attacker.saves[self.stat_bonus] + self.bonus_to_damage
+        die_roll = d20()
+        hit_check = die_roll + attacker.saves[self.stat_bonus] + self.bonus_to_hit + attacker.proficiency
+        if hit_check >= target.ac or die_roll == 20:
+            roll_damage = calc_roll(self.dice)
+            if die_roll == 20:
+                roll_damage *= 2
+            damage = roll_damage + attacker.saves[self.stat_bonus] + self.bonus_to_damage
 
         target.take_damage(damage, self.damage_type)
         self.log_attack(attacker, target, damage)
@@ -167,9 +171,13 @@ class SpellSingleAttack(SingleAttack):
         if self.stat_bonus is not None:
             attack_bonus = attacker.proficiency + \
                            attacker.saves[self.stat_bonus] if self.stat_bonus else 0
-            hit_check = d20() + attack_bonus + self.bonus_to_hit
-            if hit_check >= attacker.ac:
-                damage = calc_roll(self.dice) + self.bonus_to_damage
+            die_roll = d20()
+            hit_check = die_roll + attack_bonus + self.bonus_to_hit
+            if hit_check >= attacker.ac or die_roll == 20:
+                roll_damage = calc_roll(self.dice)
+                if die_roll == 20:
+                    roll_damage *= 2
+                damage = roll_damage + self.bonus_to_damage
         else:
             save_check = d20() + target.saves[self.save_stat]
             if save_check <= self.save_dc:
@@ -274,6 +282,7 @@ class ComboAttack(Action):
             attack.apply_effects(target)
 
     def jsonify(self, current_info={}):
+        self.instantiate()
         attack_info = {
             "expDamage": self.calc_expected_damage()
         }

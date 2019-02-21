@@ -1,9 +1,6 @@
-import os.path as path
 import math
-import json
 import re
 import string
-from collections import defaultdict
 import xml.etree.ElementTree as ET
 
 from django.db import IntegrityError
@@ -11,10 +8,9 @@ from django.db import IntegrityError
 from actions.models import *
 from actors.models import *
 
-from simulation.settings import BASE_DIR
 from utils.stats import convert_stat_to_bonus
 from utils.data_parsing import find_recharge_percentile, \
-    convert_challenge_rating, pull_out_damage_type
+    convert_challenge_rating
 
 translate_table = str.maketrans({key: None for key in string.punctuation})
 

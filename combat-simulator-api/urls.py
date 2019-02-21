@@ -19,7 +19,7 @@ from django.contrib import admin
 
 from actors.views import get_combatants, create_combatant
 from actions.views import get_all_actions
-from simulation.views import get_simulation_results
+from simulation.views import get_simulation_results, save_battle, load_battle
 from .views import FrontendAppView
 
 urlpatterns = [
@@ -28,5 +28,7 @@ urlpatterns = [
     path('simulate', get_simulation_results),
     path('actions', get_all_actions),
     path('createCombatant', create_combatant),
+    path('saveBattle', save_battle),
+    path('loadBattle', load_battle),
     url(r'^', FrontendAppView.as_view())
 ]

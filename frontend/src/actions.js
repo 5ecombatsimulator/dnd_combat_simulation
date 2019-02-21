@@ -13,7 +13,11 @@ export const SET_SIMULATION_RESULTS = 'SET_SIMULATION_RESULTS';
 export const SET_ALL_ACTIONS = 'SET_ALL_ACTIONS';
 export const SET_COMBATANT_ACTIONS = 'SET_COMBATANT_ACTIONS';
 export const SET_COMBATANT_MSG = 'SET_COMBATANT_MSG';
-;
+
+export const SET_BATTLE_KEY = 'SET_BATTLE_KEY';
+export const SET_BATTLE_KEY_MESSAGE = "SET_BATTLE_KEY_MESSAGE";
+export const SET_LOAD_BATTLE_MESSAGE = "SET_LOAD_BATTLE_MESSAGE";
+
 export const SET_COMBATANT_NAME = 'SET_COMBATANT_NAME';
 export const SET_COMBATANT_HP = 'SET_COMBATANT_HP';
 export const SET_COMBATANT_AC = 'SET_COMBATANT_AC';
@@ -24,7 +28,7 @@ export const SET_COMBATANT_CONSTITUTION = 'SET_COMBATANT_CONSTITUTION';
 export const SET_COMBATANT_WISDOM = 'SET_COMBATANT_WISDOM';
 export const SET_COMBATANT_INTELLIGENCE = 'SET_COMBATANT_INTELLIGENCE';
 export const SET_COMBATANT_CHARISMA = 'SET_COMBATANT_CHARISMA';
-;
+
 export const setAllCombatants = setterAction(SET_ALL_COMBATANTS);
 export const setAllActions = setterAction(SET_ALL_ACTIONS);
 export const setT1Combatants = setterAction(SET_TEAM1_COMBATANTS);
@@ -33,6 +37,10 @@ export const setCounter = setterAction(INCREMENT_COUNTER);
 export const setSimulationResults = setterAction(SET_SIMULATION_RESULTS);
 export const setCombatantActions = setterAction(SET_COMBATANT_ACTIONS);
 export const setCombatantCreationMsg = setterAction(SET_COMBATANT_MSG);
+
+export const setBattleKey = setterAction(SET_BATTLE_KEY);
+export const setBattleKeyMessage = setterAction(SET_BATTLE_KEY_MESSAGE);
+export const setLoadBattleMessage = setterAction(SET_LOAD_BATTLE_MESSAGE);
 
 export const setCombatantName = setterAction(SET_COMBATANT_NAME);
 export const setCombatantHP = setterAction(SET_COMBATANT_HP);
@@ -163,6 +171,34 @@ export const createCombatant = () => (dispatch, getState) => {
       dispatch(setAllCombatants(data.combatants))
     }
     dispatch(setCombatantCreationMsg(data.msg))
+  })
+}
+
+export const saveBattle = () => (dispatch, getState) => {
+  let {combatantSelectionReducer} = getState();
+  let {team1Combatants, team2Combatants} = combatantSelectionReducer;
+  SimulatorSource.saveBattle(
+    team1Combatants.map((x) => x.label),
+    team2Combatants.map((x) => x.label)
+  ).then(({data}) => {
+    let updatedMsg = "";
+    if (data.msg === "Successfully saved") {
+      updatedMsg = "Successfully saved with battle key: " + data.battleKey
+    }
+    else {
+      updatedMsg = data.msg
+    }
+    dispatch(setBattleKeyMessage(updatedMsg));
+  })
+};
+
+export const loadBattle = () => (dispatch, getState) => {
+  let {combatantSelectionReducer} = getState();
+  let {battleKey} = combatantSelectionReducer;
+  SimulatorSource.loadBattle(battleKey).then(({data}) => {
+    dispatch(setT1Combatants(data.team1));
+    dispatch(setT2Combatants(data.team2));
+    dispatch(setLoadBattleMessage(data.msg));
   })
 }
 
