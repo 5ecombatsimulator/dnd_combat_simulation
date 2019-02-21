@@ -421,14 +421,15 @@ def parse_file(file_name):
     for entry in root:
         parse_creature(entry)
 
-file_name = "Monster Manual Bestiary.xml"
-tree = ET.parse("/Users/andrewdumit/Desktop/DnD/combat_simulator_v2/combat-simulator-api/xml_data/data/" + file_name)
-root = tree.getroot()
-mon1 = [x for x in root if [e for e in x if e.text == 'Orc War Chief']][0]
-monster_attrs, action_elements, legendary_elements = parse_stats(
-        mon1)
-monster_attrs['num_legendary_actions'] = 3 if legendary_elements else 0
-monster_attrs['proficiency'] = proficiency_mapping[monster_attrs['cr']]
-combatant = Combatant(**monster_attrs)
-a1 = action_elements[1]
-a = action_elements[3]
+# For testing purposes
+# file_name = "Monster Manual Bestiary.xml"
+# tree = ET.parse("/Users/andrewdumit/Desktop/DnD/combat_simulator_v2/combat-simulator-api/xml_data/data/" + file_name)
+# root = tree.getroot()
+# mon1 = [x for x in root if [e for e in x if e.text == 'Orc War Chief']][0]
+# monster_attrs, action_elements, legendary_elements = parse_stats(
+#         mon1)
+# monster_attrs['num_legendary_actions'] = 3 if legendary_elements else 0
+# monster_attrs['proficiency'] = proficiency_mapping[monster_attrs['cr']]
+# combatant = Combatant(**monster_attrs)
+# a1 = action_elements[1]
+# a = action_elements[3]
