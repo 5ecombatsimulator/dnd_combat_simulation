@@ -1,8 +1,9 @@
 /**
  * Created by Andrew on 1/16/18.
  */
-import {setterAction} from './common'
-import SimulatorSource from './sources/simulatorSource'
+import {setterAction} from '../common'
+import get from './utils'
+import SimulatorSource from '../sources/simulatorSource'
 
 /* Action types */
 export const SET_TEAM1_COMBATANTS = 'SET_TEAM1_COMBATANTS';
@@ -52,13 +53,6 @@ export const setCombatantConstitution = setterAction(SET_COMBATANT_CONSTITUTION)
 export const setCombatantWisdom = setterAction(SET_COMBATANT_WISDOM);
 export const setCombatantIntelligence = setterAction(SET_COMBATANT_INTELLIGENCE);
 export const setCombatantCharisma = setterAction(SET_COMBATANT_CHARISMA);
-
-const get = (sourceFunc, action, key) => (...args) => (dispatch) => {
-  sourceFunc(...args).then((res) => {
-    let data = key ? res.data[key] : res.data
-    dispatch(action(data))
-  })
-}
 
 function updateCombatantSet(counter, oldSet, newSet) {
   // Get the new item by seeing what changed from the previous state (filter and get the first item)

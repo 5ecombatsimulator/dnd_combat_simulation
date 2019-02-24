@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import * as t from '../actions'
+import * as t from '../actions/actions'
 import {setterReducer} from '../common'
 
 const allActions = setterReducer([], t.SET_ALL_ACTIONS);

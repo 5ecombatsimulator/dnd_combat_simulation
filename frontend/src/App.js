@@ -4,6 +4,7 @@ import {BrowserRouter} from 'react-router-dom'
 import CombatantScreen from './components/combatantScreen'
 import ResultsScreen from './components/ResultsScreen'
 import CombatantCreation from './components/combatantCreation'
+import PhysicalAttackCreation from './components/actionCreation/actionCreationScreen'
 import { connect } from 'react-redux'
 
 const SimulatorScreen = ({...props}) => (
@@ -25,7 +26,8 @@ const AppRouter = () => (
   <BrowserRouter>
     <div className="App">
       <Route path='/simulator/' component={SimulatorScreen}/>
-      <Route path='/creation/' component={CombatantCreation}/>
+      <Route path='/combatant_creator/' component={CombatantCreation}/>
+      <Route path='/action_creator/' component={PhysicalAttackCreation}/>
     </div>
   </BrowserRouter>
 )

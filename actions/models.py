@@ -1,17 +1,30 @@
-from django.db import models
+from django.db import models, transaction
 from polymorphic.models import PolymorphicModel
 
 from random import random
 from math import ceil
 
 from debug.logger import Logger
-from actions.damage_types import DAMAGE_TYPE_CHOICES
+from actions.damage_types import DAMAGE_TYPE_CHOICES, DAMAGE_TYPES
 from actions.stat_choices import STAT_CHOICES
 from actions.aoe_choices import AOE_CHOICES, AOE_PERCENT_HIT_MAP
 
 from dice.models import Dice
 from effects.models import Effect
 from utils.dice import d20, calc_roll
+
+
+dice_map = dict(Dice.objects.values_list('num_sides', 'id'))
+
+
+def create_dice_from_info(dice, action):
+    created_dice = []
+    for num_sides, num_dice in dice.items():
+        created_dice.append(
+            SingleAttackDice(attack=action,
+                             num_dice=num_dice,
+                             dice_id=dice_map[num_sides]))
+    return created_dice
 
 
 class Action(PolymorphicModel):
@@ -31,6 +44,39 @@ class Action(PolymorphicModel):
 
     def __str__(self):
         return self.name
+
+    @staticmethod
+    def create_action(action_type, **kwargs):
+        """
+
+        Notes:
+            Checks all the necessary attributes of an action and then
+            calls a creation function of an inheritor of action
+
+        Args:
+            action_type (str): One of the inheritors of Action
+            **kwargs: Fields of action and the arguments for the child inheritor
+
+        Returns:
+            msg (str): message of success or the error found
+            action (Action): the actual actual that was created or None
+        """
+        if not ('name' in kwargs and kwargs['name']):
+            return "Action needs a name", None
+
+        if action_type == "PhysicalSingleAttack":
+            return PhysicalSingleAttack.create_action(action_type, **kwargs)
+        elif action_type == "SpellSingleAttack":
+            return SpellSingleAttack.create_action(action_type, **kwargs)
+        elif action_type == "SpellSave":
+            return SpellSave.create_action(action_type, **kwargs)
+        elif action_type == "ComboAttack":
+            return ComboAttack.create_action(action_type, **kwargs)
+        elif action_type == "Heal":
+            return Heal.create_action(action_type, **kwargs)
+        else:
+            return "Action.create_action did not receive a valid action_type " \
+                   "received {}".format(action_type), None
 
     def instantiate(self, num_available=-1):
         self.ready = True
@@ -99,7 +145,7 @@ class SingleAttack(Action):
     def calc_expected_damage(self, num_enemies=1):
         expected_enemies_hit = self.calc_expected_enemies_hit(num_enemies)
         return expected_enemies_hit * sum([
-            n_dice * (max_roll / 2.0 + 0.5) for n_dice, max_roll in
+            n_dice * (max_roll / 2.0 + 0.5) for max_roll, n_dice in
             SingleAttackDice.objects.filter(attack=self).values_list(
                 'dice__num_sides', 'num_dice'
             )])
@@ -141,6 +187,44 @@ class PhysicalSingleAttack(SingleAttack):
         self.action_type = "Attack"
         super().save(*args, **kwargs)
 
+    @staticmethod
+    def create_action(action_type, **kwargs):
+        if action_type != "PhysicalSingleAttack":
+            return "Called PhysicalSingleAttack.create_action with invalid " \
+                   "type", None
+
+        if 'damage_type' not in kwargs:
+            return "damage_type argument is required", None
+        if kwargs['damage_type'] not in DAMAGE_TYPES:
+            return "{} is not a valid damage type".format(kwargs['damage_type']), None
+        if ('save_stat' in kwargs) ^ ('save_dc' in kwargs):
+            return "Cannot provide only one of save_stat and save_dc", None
+        if not ('dice' in kwargs and type(kwargs['dice']) == dict):
+            return "dice argument must be provided and formatted correctly", None
+
+        dice_dict = kwargs['dice']
+        del kwargs['dice']
+
+        if type(kwargs['is_legendary']) != bool:
+            kwargs['is_legendary'] = bool(
+                kwargs['is_legendary'][0].upper() + kwargs['is_legendary'][1:])
+
+        effect_names = []
+        if 'effects' in kwargs:
+            effect_names = kwargs['effects']
+            del kwargs['effects']
+
+        created_action = PhysicalSingleAttack(**kwargs)
+        dice_objs = []
+        with transaction.atomic():
+            created_action.save()
+            dice_objs.extend(create_dice_from_info(dice_dict, created_action))
+            SingleAttackDice.objects.bulk_create(dice_objs)
+            for e_name in effect_names:
+                effect = Effect.objects.get(name=e_name)
+                SingleAttackEffect(effect=effect, attack=created_action).save()
+        return "Success", created_action
+
     def do_damage(self, attacker, target):
         damage = 0
         die_roll = d20()
@@ -165,6 +249,41 @@ class SpellSingleAttack(SingleAttack):
     def save(self, *args, **kwargs):
         self.action_type = "Attack"
         super().save(*args, **kwargs)
+
+    @staticmethod
+    def create_action(action_type, **kwargs):
+        if action_type != "SpellSingleAttack":
+            return "Called SpellSingleAttack.create_action with invalid " \
+                   "type", None
+
+        if 'damage_type' not in kwargs:
+            return "damage_type argument is required", None
+        if kwargs['damage_type'] not in DAMAGE_TYPE_CHOICES:
+            return "{} is not a valid damage type".format(
+                kwargs['damage_type']), None
+        if ('save_stat' in kwargs) ^ ('save_dc' in kwargs):
+            return "Cannot provide only one of save_stat and save_dc", None
+        if not ('dice' in kwargs and type('dice') == dict):
+            return "dice argument must be provided and formatted correctly", None
+
+        dice_dict = kwargs['dice']
+        del kwargs['dice']
+
+        effect_names = []
+        if 'effects' in kwargs:
+            effect_names = kwargs['effects']
+            del kwargs['effects']
+
+        created_action = SpellSingleAttack(**kwargs)
+        dice_objs = []
+        with transaction.atomic():
+            created_action.save()
+            dice_objs.extend(create_dice_from_info(dice_dict, created_action))
+            SingleAttackDice.objects.bulk_create(dice_objs)
+            for e_name in effect_names:
+                effect = Effect.objects.get(name=e_name)
+                SingleAttackEffect(effect=effect, attack=created_action).save()
+        return "Success", created_action
 
     def do_damage(self, attacker, target):
         damage = 0
@@ -196,6 +315,41 @@ class SpellSave(SingleAttack):
     def save(self, *args, **kwargs):
         self.action_type = "Attack"
         super().save(*args, **kwargs)
+
+    @staticmethod
+    def create_action(action_type, **kwargs):
+        if action_type != "SpellSave":
+            return "Called SpellSingleAttack.create_action with invalid " \
+                   "type", None
+
+        if 'damage_type' not in kwargs:
+            return "damage_type argument is required", None
+        if kwargs['damage_type'] not in DAMAGE_TYPE_CHOICES:
+            return "{} is not a valid damage type".format(
+                kwargs['damage_type']), None
+        if not ('save_stat' in kwargs and 'save_dc' in kwargs):
+            return "Must have save_stat and save_dc present", None
+        if not ('dice' in kwargs and type('dice') == dict):
+            return "dice argument must be provided and formatted correctly", None
+
+        dice_dict = kwargs['dice']
+        del kwargs['dice']
+
+        effect_names = []
+        if 'effects' in kwargs:
+            effect_names = kwargs['effects']
+            del kwargs['effects']
+
+        created_action = SpellSave(**kwargs)
+        dice_objs = []
+        with transaction.atomic():
+            created_action.save()
+            dice_objs.extend(create_dice_from_info(dice_dict, created_action))
+            SingleAttackDice.objects.bulk_create(dice_objs)
+            for e_name in effect_names:
+                effect = Effect.objects.get(name=e_name)
+                SingleAttackEffect(effect=effect, attack=created_action).save()
+        return "Success", created_action
 
     def do_damage(self, attacker, target):
         save_check = d20() + target.saves[self.save_stat]

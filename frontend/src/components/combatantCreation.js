@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Select from 'react-select';
 import { connect } from 'react-redux'
 import "react-table/react-table.css";
-import * as actions from '../actions'
+import * as actions from '../actions/actions'
 import Grid from 'react-css-grid';
 import ActionTable from './actionTable'
 import '../index.css';

@@ -10,12 +10,11 @@ from actors.models import *
 
 from utils.stats import convert_stat_to_bonus
 from utils.data_parsing import find_recharge_percentile, \
-    convert_challenge_rating
+    convert_challenge_rating, create_dice_from_info
 
 translate_table = str.maketrans({key: None for key in string.punctuation})
 
 crs = list(range(1, 40)) + [0.125, 0.25, 0.5]
-dice_map = dict(Dice.objects.values_list('num_sides', 'id'))
 
 proficiency_mapping = {x: max(math.floor((x-0.01)/4)+2, 2) for x in crs}
 # This entry doesn't fit the formula...
@@ -309,16 +308,6 @@ def parse_legendary_actions(legendary_elements, other_actions):
     for legendary_element in legendary_elements:
         parsed_actions.extend(parse_single_legendary_action(legendary_element))
     return parsed_actions
-
-
-def create_dice_from_info(dice, action):
-    created_dice = []
-    for num_sides, num_dice in dice.items():
-        created_dice.append(
-            SingleAttackDice(attack=action,
-                             num_dice=num_dice,
-                             dice_id=dice_map[num_sides]))
-    return created_dice
 
 
 def create_and_save_attacks(combatant, attack_infos, mattack_infos,

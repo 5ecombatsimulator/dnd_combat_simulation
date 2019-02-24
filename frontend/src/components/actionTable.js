@@ -2,7 +2,7 @@ import React  from 'react';
 import '../App.css';
 import ReactTable from "react-table";
 import { connect } from 'react-redux';
-import * as actions from '../actions'
+import * as actions from '../actions/actions'
 
 
 const ActionTable = ({allActions, actionAddFunction}) => (

@@ -3,8 +3,10 @@
 const postUrls = {
   getCombatants: '/combatants',
   getActions: '/actions',
+  getDamageTypes: '/damageTypes',
   runSimulation: '/simulate',
   createCombatant: '/createCombatant',
+  createAction: '/createAction',
   saveBattle: '/saveBattle',
   loadBattle: '/loadBattle',
 }

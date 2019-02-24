@@ -2,7 +2,7 @@
  * Created by Andrew on 1/16/18.
  */
 
-import { SET_TEAM1_COMBATANTS, SET_TEAM2_COMBATANTS, INCREMENT_COUNTER } from './actions'
+import { SET_TEAM1_COMBATANTS, SET_TEAM2_COMBATANTS, INCREMENT_COUNTER } from './actions/actions'
 
 const initialState = {
   team1Combatants: [],

@@ -10,6 +10,7 @@
     "react-cookie": "^3.0.8",
     "react-css-grid": "^2.0.0-0",
     "react-dom": "^16.8.2",
+    "react-dropdown": "^1.6.4",
     "react-redux": "^6.0.0",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",

@@ -23,3 +23,31 @@ def load_dice(dice):
          be turned into an integer here.
     """
     return {int(k): v for k, v in dice.items()}
+
+
+def parse_dice_str(dice_str):
+    """ Parses a string that and returns a dice dict
+
+    Examples:
+        3d6 => {6:3}
+        4d6+1d8 => {8:1, 6:4}
+
+    Args:
+        dice_str (str): string to be parsed
+
+    Returns:
+        a dict of int: int with the key being the number of sides of a dice
+        and the value being the number of dice.
+    """
+    split_char = " "
+    for char in ",+":
+        if char in dice_str:
+            split_char = char
+            break
+    split_str = dice_str.split(split_char)
+
+    dice_dict = {}
+    for entry in split_str:
+        entry_split = entry.split("d")
+        dice_dict[int(entry_split[1])] = int(entry_split[0])
+    return dice_dict

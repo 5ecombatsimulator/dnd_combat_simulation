@@ -30,3 +30,5 @@ DAMAGE_TYPE_CHOICES = (
     ("poison", "poison"),
     ("force", "force")
 )
+
+DAMAGE_TYPES = [x[0] for x in DAMAGE_TYPE_CHOICES]
