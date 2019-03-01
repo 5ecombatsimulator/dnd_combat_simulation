@@ -2,6 +2,7 @@ from django.http import JsonResponse
 
 from actions.models import Action, SingleAttackDice
 from actions.damage_types import DAMAGE_TYPE_CHOICES
+from actions.aoe_choices import AOE_PERCENT_HIT_MAP
 from utils.dice import parse_dice_str
 
 
@@ -12,6 +13,11 @@ def get_all_actions(request):
 def get_all_damage_types(request):
     return JsonResponse([{'label': x[0][0].upper() + x[0][1:], 'value': x[0]}
                          for x in DAMAGE_TYPE_CHOICES], safe=False)
+
+
+def get_all_aoe_types(request):
+    return JsonResponse([{'label': x, 'value': x} for x in AOE_PERCENT_HIT_MAP],
+                        safe=False)
 
 
 action_args = {

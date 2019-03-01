@@ -12,6 +12,7 @@ from actions.aoe_choices import AOE_CHOICES, AOE_PERCENT_HIT_MAP
 from dice.models import Dice
 from effects.models import Effect
 from utils.dice import d20, calc_roll
+from utils.data_parsing import convert_bool
 
 
 dice_map = dict(Dice.objects.values_list('num_sides', 'id'))
@@ -205,9 +206,8 @@ class PhysicalSingleAttack(SingleAttack):
         dice_dict = kwargs['dice']
         del kwargs['dice']
 
-        if type(kwargs['is_legendary']) != bool:
-            kwargs['is_legendary'] = bool(
-                kwargs['is_legendary'][0].upper() + kwargs['is_legendary'][1:])
+        kwargs['is_legendary'] = convert_bool(kwargs['is_legendary'])
+        kwargs['is_aoe'] = convert_bool(kwargs['is_aoe'])
 
         effect_names = []
         if 'effects' in kwargs:
@@ -258,16 +258,21 @@ class SpellSingleAttack(SingleAttack):
 
         if 'damage_type' not in kwargs:
             return "damage_type argument is required", None
-        if kwargs['damage_type'] not in DAMAGE_TYPE_CHOICES:
+        if kwargs['damage_type'] not in DAMAGE_TYPES:
             return "{} is not a valid damage type".format(
                 kwargs['damage_type']), None
         if ('save_stat' in kwargs) ^ ('save_dc' in kwargs):
             return "Cannot provide only one of save_stat and save_dc", None
-        if not ('dice' in kwargs and type('dice') == dict):
+        if 'save_stat' in kwargs and 'stat_bonus' in kwargs:
+            return "Cannot have a stat bonus and a save stat", None
+        if not ('dice' in kwargs and type(kwargs['dice']) == dict):
             return "dice argument must be provided and formatted correctly", None
 
         dice_dict = kwargs['dice']
         del kwargs['dice']
+
+        kwargs['is_legendary'] = convert_bool(kwargs['is_legendary'])
+        kwargs['is_aoe'] = convert_bool(kwargs['is_aoe'])
 
         effect_names = []
         if 'effects' in kwargs:
@@ -324,16 +329,19 @@ class SpellSave(SingleAttack):
 
         if 'damage_type' not in kwargs:
             return "damage_type argument is required", None
-        if kwargs['damage_type'] not in DAMAGE_TYPE_CHOICES:
+        if kwargs['damage_type'] not in DAMAGE_TYPES:
             return "{} is not a valid damage type".format(
                 kwargs['damage_type']), None
         if not ('save_stat' in kwargs and 'save_dc' in kwargs):
             return "Must have save_stat and save_dc present", None
-        if not ('dice' in kwargs and type('dice') == dict):
+        if not ('dice' in kwargs and type(kwargs['dice']) == dict):
             return "dice argument must be provided and formatted correctly", None
 
         dice_dict = kwargs['dice']
         del kwargs['dice']
+
+        kwargs['is_legendary'] = convert_bool(kwargs['is_legendary'])
+        kwargs['is_aoe'] = convert_bool(kwargs['is_aoe'])
 
         effect_names = []
         if 'effects' in kwargs:

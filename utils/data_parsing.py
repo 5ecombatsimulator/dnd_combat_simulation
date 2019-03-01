@@ -62,3 +62,17 @@ def pull_out_damage_type(description):
     description_split = description.split(".")
     damage_type_split = description_split[2]
     return damage_type_split.split(" ")[-2]
+
+
+def convert_bool(input_arg):
+    """ Converts 'false' or 'true' to False and True respectively """
+    if input_arg == "false" or input_arg == "False":
+        return False
+    elif input_arg == "true" or input_arg == "True":
+        return True
+    elif input_arg is None:
+        return False
+    elif input_arg in [True, False]:
+        return input_arg
+    else:
+        raise RuntimeError("convert_bool received an invalid arg:", input_arg)

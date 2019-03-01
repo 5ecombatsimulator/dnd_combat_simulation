@@ -18,7 +18,8 @@ from django.urls import path
 from django.contrib import admin
 
 from actors.views import get_combatants, create_combatant
-from actions.views import get_all_actions, get_all_damage_types, create_action
+from actions.views import get_all_actions, get_all_damage_types, \
+    create_action, get_all_aoe_types
 from simulation.views import get_simulation_results, save_battle, load_battle
 from .views import FrontendAppView
 
@@ -29,6 +30,7 @@ urlpatterns = [
     path('actions', get_all_actions),
     path('createAction', create_action),
     path('damageTypes', get_all_damage_types),
+    path('aoeTypes', get_all_aoe_types),
     path('createCombatant', create_combatant),
     path('saveBattle', save_battle),
     path('loadBattle', load_battle),

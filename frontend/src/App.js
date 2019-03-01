@@ -1,18 +1,12 @@
 import React, { Component } from 'react';
 import {Route} from 'react-router'
 import {BrowserRouter} from 'react-router-dom'
-import CombatantScreen from './components/combatantScreen'
-import ResultsScreen from './components/ResultsScreen'
-import CombatantCreation from './components/combatantCreation'
-import PhysicalAttackCreation from './components/actionCreation/actionCreationScreen'
+import CombatantScreen from './components/simulation/simulatorScreen'
+import ResultsScreen from './components/simulation/ResultsScreen'
+import CombatantCreation from './components/combatantCreation/combatantCreationScreen'
+import ActionCreationScreen from './components/actionCreation/actionCreationScreen'
+import HomeScreen from './components/homeScreen'
 import { connect } from 'react-redux'
-
-const SimulatorScreen = ({...props}) => (
-  <div>
-    <CombatantScreen {...props}/>
-    <ResultsScreen {...props}/>
-  </div>
-);
 
 const mapStateToProps = (state) => ({
 
@@ -25,9 +19,10 @@ const mapDispatchToProps = (dispatch) => ({
 const AppRouter = () => (
   <BrowserRouter>
     <div className="App">
-      <Route path='/simulator/' component={SimulatorScreen}/>
-      <Route path='/combatant_creator/' component={CombatantCreation}/>
-      <Route path='/action_creator/' component={PhysicalAttackCreation}/>
+      <Route path='/' component={HomeScreen}/>
+      {/*<Route path='/action_creator' component={ActionCreationScreen}/>*/}
+      {/*<Route path='/simulator/' component={SimulatorScreen}/>*/}
+      {/*<Route path='/combatant_creator/' component={CombatantCreation}/>*/}
     </div>
   </BrowserRouter>
 )

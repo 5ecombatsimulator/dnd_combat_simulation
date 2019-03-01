@@ -39,6 +39,7 @@ def parse_dice_str(dice_str):
         a dict of int: int with the key being the number of sides of a dice
         and the value being the number of dice.
     """
+    print(dice_str)
     split_char = " "
     for char in ",+":
         if char in dice_str:

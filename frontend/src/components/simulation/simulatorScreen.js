@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
 import { connect } from 'react-redux'
-import * as actions from '../actions/actions'
+import * as actions from '../../actions/actions'
 import Grid from 'react-css-grid';
 import CombatantTable from './combatantTable'
-import '../index.css';
+import ResultsScreen from './ResultsScreen'
+import '../../index.css';
 
-const CombatantScreen = ({team1Combatants, team2Combatants, allCombatants, team1Update, team2Update,
+const SimulatorScreen = ({team1Combatants, team2Combatants, allCombatants, team1Update, team2Update,
                           team1Add, team2Add, runSimulation, saveBattle, loadBattle, setBattleKey,
                           battleKey, battleKeyMessage, battleLoadMessage}) => (
   <div>
@@ -59,7 +60,8 @@ class Container extends React.Component{
 
   render() {
     return <div>
-      <CombatantScreen {...this.props} />
+      <SimulatorScreen {...this.props} />
+      <ResultsScreen {...this.props}/>
     </div>
   }
 }

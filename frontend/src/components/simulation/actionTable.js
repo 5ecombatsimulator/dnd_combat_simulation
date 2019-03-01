@@ -1,11 +1,11 @@
 import React  from 'react';
-import '../App.css';
+import '../../App.css';
 import ReactTable from "react-table";
-import "react-table/react-table.css";
 import { connect } from 'react-redux';
+import * as actions from '../../actions/actions'
 
 
-const CombatantTable = ({allCombatants, teamAddFunction}) => (
+const ActionTable = ({allActions, actionAddFunction}) => (
   <div>
     <ReactTable
       getTdProps={(state, rowInfo, column, instance) => {
@@ -20,32 +20,28 @@ const CombatantTable = ({allCombatants, teamAddFunction}) => (
             //   handleOriginal()
             // }
             if (rowInfo !== undefined) {
-              teamAddFunction({value: rowInfo.original.value, label: rowInfo.original.label})
+              actionAddFunction({value: rowInfo.original.value, label: rowInfo.original.label})
             }
           }
         }
       }}
-      data={allCombatants}
+      data={allActions}
       columns={[
         {
           Header: "Name",
           columns: [
             {
-              Header: "Creature Name",
+              Header: "Action Name",
               accessor: "label"
             },
           ]
         },
         {
           Header: 'Stats',
-          columns: [
+          columns: [,
             {
-              Header: "Creature Rating",
-              accessor: "cr"
-            },
-            {
-              Header: "Type",
-              accessor: "creatureType"
+              Header: "Effects",
+              accessor: "actionEffects"
             },
             {
               Header: "Expected Damage",
@@ -63,11 +59,11 @@ const CombatantTable = ({allCombatants, teamAddFunction}) => (
 )
 
 const mapStateToProps = (state) => ({
-  allCombatants: state.combatantSelectionReducer.allCombatants,
+  allActions: state.combatantCreationReducer.allActions,
 })
 
 const mapDispatchToProps = (dispatch) => ({
 
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(CombatantTable)
+export default connect(mapStateToProps, mapDispatchToProps)(ActionTable)

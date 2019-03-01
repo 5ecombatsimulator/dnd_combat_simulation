@@ -1,11 +1,11 @@
 import React  from 'react';
-import '../App.css';
+import '../../App.css';
 import ReactTable from "react-table";
+import "react-table/react-table.css";
 import { connect } from 'react-redux';
-import * as actions from '../actions/actions'
 
 
-const ActionTable = ({allActions, actionAddFunction}) => (
+const CombatantTable = ({allCombatants, teamAddFunction}) => (
   <div>
     <ReactTable
       getTdProps={(state, rowInfo, column, instance) => {
@@ -20,28 +20,32 @@ const ActionTable = ({allActions, actionAddFunction}) => (
             //   handleOriginal()
             // }
             if (rowInfo !== undefined) {
-              actionAddFunction({value: rowInfo.original.value, label: rowInfo.original.label})
+              teamAddFunction({value: rowInfo.original.value, label: rowInfo.original.label})
             }
           }
         }
       }}
-      data={allActions}
+      data={allCombatants}
       columns={[
         {
           Header: "Name",
           columns: [
             {
-              Header: "Action Name",
+              Header: "Creature Name",
               accessor: "label"
             },
           ]
         },
         {
           Header: 'Stats',
-          columns: [,
+          columns: [
             {
-              Header: "Effects",
-              accessor: "actionEffects"
+              Header: "Creature Rating",
+              accessor: "cr"
+            },
+            {
+              Header: "Type",
+              accessor: "creatureType"
             },
             {
               Header: "Expected Damage",
@@ -59,11 +63,11 @@ const ActionTable = ({allActions, actionAddFunction}) => (
 )
 
 const mapStateToProps = (state) => ({
-  allActions: state.combatantCreationReducer.allActions,
+  allCombatants: state.combatantSelectionReducer.allCombatants,
 })
 
 const mapDispatchToProps = (dispatch) => ({
 
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(ActionTable)
+export default connect(mapStateToProps, mapDispatchToProps)(CombatantTable)

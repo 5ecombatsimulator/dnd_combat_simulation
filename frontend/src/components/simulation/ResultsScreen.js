@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import Grid from 'react-css-grid';
-import '../index.css';
+import '../../index.css';
 
 const ResultsScreen = ({results}) => (
   <div>

@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import Select from 'react-select';
 import { connect } from 'react-redux'
 import "react-table/react-table.css";
-import * as actions from '../actions/actions'
+import * as actions from '../../actions/actions'
 import Grid from 'react-css-grid';
-import ActionTable from './actionTable'
-import '../index.css';
+import ActionTable from '../simulation/actionTable'
+import '../../index.css';
 
-const CombatantCreation = ({allActions, combatantActions, updateCombatantActions, addCombatantAction, cr,
+const CombatantCreationScreen = ({allActions, combatantActions, updateCombatantActions, addCombatantAction, cr,
                            setCombatantName, setCombatantHP, setCombatantAC, setCombatantProficiency,
                            setCombatantStrength, setCombatantDexterity, setCombatantConstitution,
                            setCombatantWisdom, setCombatantIntelligence, setCombatantCharisma,
@@ -69,7 +69,7 @@ class Container extends React.Component{
   }
 
   render() {
-    return <CombatantCreation {...this.props} />
+    return <CombatantCreationScreen {...this.props} />
   }
 }
 
