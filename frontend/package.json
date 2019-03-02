@@ -8,7 +8,6 @@
     "js-cookie": "^2.2.0",
     "react": "^16.8.2",
     "react-cookie": "^3.0.8",
-    "react-css-grid": "^2.0.0-0",
     "react-dom": "^16.8.2",
     "react-dropdown": "^1.6.4",
     "react-redux": "^6.0.0",
@@ -21,7 +20,9 @@
     "redux": "^4.0.1",
     "redux-csrf": "^1.1.0",
     "redux-devtools-extension": "^2.13.8",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.85.0"
   },
   "scripts": {
     "start": "react-scripts start",

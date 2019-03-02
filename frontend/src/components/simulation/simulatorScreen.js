@@ -2,17 +2,18 @@ import React, { Component } from 'react';
 import Select from 'react-select';
 import { connect } from 'react-redux'
 import * as actions from '../../actions/actions'
-import Grid from 'react-css-grid';
 import CombatantTable from './combatantTable'
 import ResultsScreen from './ResultsScreen'
 import '../../index.css';
 
+import { Button, Input } from 'semantic-ui-react'
+
 const SimulatorScreen = ({team1Combatants, team2Combatants, allCombatants, team1Update, team2Update,
                           team1Add, team2Add, runSimulation, saveBattle, loadBattle, setBattleKey,
                           battleKey, battleKeyMessage, battleLoadMessage}) => (
-  <div>
-    <Grid width={320} gap={32}>
-      <div className="section">
+  <div className="ui grid">
+    <div className="row">
+      <div className="eight wide column">
         <Select
           closeOnSelect={false}
           isMulti
@@ -24,7 +25,7 @@ const SimulatorScreen = ({team1Combatants, team2Combatants, allCombatants, team1
         />
         <CombatantTable teamAddFunction={team1Add}/>
       </div>
-      <div className="section">
+      <div className="eight wide column">
         <Select
           closeOnSelect={false}
           isMulti
@@ -36,19 +37,24 @@ const SimulatorScreen = ({team1Combatants, team2Combatants, allCombatants, team1
         />
         <CombatantTable teamAddFunction={team2Add}/>
       </div>
-    </Grid>
-    <Grid>
-      <div><button className="button" onClick={runSimulation} type="button">Fight!</button></div>
-      <div>
-        <button className="button" onClick={saveBattle} type="button">Save battle</button>
+    </div>
+
+    <div className="row">
+      <div className="five wide column">
+        <Button secondary onClick={saveBattle}>Save battle</Button>
         <h5 style={{color:battleKeyMessage.indexOf("Success") !== -1 ? "#007f00" : "#e50000"}}>{battleKeyMessage}</h5>
       </div>
-      <div>
-        <button className="button" onClick={loadBattle} type="button">Load battle</button>
-        <input value={battleKey} onChange={setBattleKey} placeholder="Enter battle key to load combatants"/>
+      <div className="six wide column">
+        <Button primary onClick={runSimulation}>Fight!</Button>
+      </div>
+      <div className="five wide column">
+        <Input style={{float:"center"}} type='text' value={battleKey} onChange={setBattleKey} placeholder="Battle key" action>
+          <input />
+          <Button secondary onClick={loadBattle} type='submit'>Load battle</Button>
+        </Input>
         <h5 style={{color:battleLoadMessage.indexOf("Success") !== -1 ? "#007f00" : "#e50000"}}>{battleLoadMessage}</h5>
       </div>
-    </Grid>
+    </div>
   </div>
 )
 

@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import "react-table/react-table.css";
 import * as arActions from '../../actions/actionCreationActions'
 
-import Grid from 'react-css-grid';
 import '../../index.css';
 
 const statOptions = [
@@ -23,7 +22,7 @@ const SpellAttackSaveScreen = ({ar, setActionName, setStatBonus, setDamageType,
                                  createAttackWithSave}) => (
   <div>
     <h2> Create a Spell Attack requiring a save with name: <input value={ar.actionName} placeholder="Action name" onChange={setActionName}/> </h2>
-    <Grid width={160} gap={16}>
+    <div className="ui grid">
       <div>
         <Select value={ar.damageType}
                 placeholder={"Damage type of attack"}
@@ -49,7 +48,7 @@ const SpellAttackSaveScreen = ({ar, setActionName, setStatBonus, setDamageType,
       <div>
 
       </div>
-    </Grid>
+    </div>
     <button className="button" onClick={createAttackWithSave} type="button">Create Action</button>
     <h5 style={{color:ar.actionCreationErrorMsg === "Success" ? "#007f00" : "#e50000"}}>{ar.actionCreationErrorMsg}</h5>
   </div>
@@ -61,6 +60,7 @@ class Container extends React.Component{
     props.getDamageTypeOptions();
     props.getAoeOptions();
     props.resetActionCreationMsg();
+    props.resetTabAttributes();
   }
 
   render() {
@@ -90,6 +90,7 @@ const mapDispatchToProps = (dispatch) => ({
   shiftIsLegendary: () => dispatch(arActions.shiftIsLegendary()),
   shiftDoesHalfDamageOnFailure: () => dispatch(arActions.shiftDoesHalfDamageOnFailure()),
   createAttackWithSave: () => dispatch(arActions.createAction("AttackWithSave")),
+  resetTabAttributes: () => dispatch(arActions.resetTabAttributes())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Container)

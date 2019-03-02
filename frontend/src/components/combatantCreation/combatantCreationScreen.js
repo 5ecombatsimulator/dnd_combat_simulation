@@ -3,9 +3,10 @@ import Select from 'react-select';
 import { connect } from 'react-redux'
 import "react-table/react-table.css";
 import * as actions from '../../actions/actions'
-import Grid from 'react-css-grid';
 import ActionTable from '../simulation/actionTable'
 import '../../index.css';
+
+import { Button, Input } from 'semantic-ui-react'
 
 const CombatantCreationScreen = ({allActions, combatantActions, updateCombatantActions, addCombatantAction, cr,
                            setCombatantName, setCombatantHP, setCombatantAC, setCombatantProficiency,
@@ -14,50 +15,103 @@ const CombatantCreationScreen = ({allActions, combatantActions, updateCombatantA
                            createCombatant}) => (
   <div>
     <h1> Create a combatant:</h1>
-    <Grid width={320} gap={32}>
-      <div className="section">
-        <h4>Combatant Name:</h4>
-        <input value={cr.combatantName} placeholder="Combatant name" onChange={setCombatantName}/>
-        <h4>Hit points:</h4>
-        <input value={cr.combatantHP} placeholder="Hit points" onChange={setCombatantHP} type="number" min="1"/>
-        <h4>Armor Class:</h4>
-        <input value={cr.combatantAC} placeholder="Armor class" onChange={setCombatantAC} type="number" min="8"/>
-        <h4>Proficiency Bonus:</h4>
-        <input value={cr.combatantProficiency} placeholder="Proficiency bonus" onChange={setCombatantProficiency} type="number" min="0"/>
-        <h3>Saves</h3>
-        <Grid width={160} gap={20}>
-          <div className="section">
-            <h4></h4>
-            <input value={cr.combatantStrength} placeholder="Strength" onChange={setCombatantStrength} type="number" min="1"/>
-            <h4></h4>
-            <input value={cr.combatantDexterity} placeholder="Dexterity" onChange={setCombatantDexterity} type="number" min="1"/>
-            <h4></h4>
-            <input value={cr.combatantIntelligence} placeholder="Intelligence" onChange={setCombatantIntelligence} type="number" min="1"/>
+    <div className="ui grid">
+      <div className="row">
+        <div className="eight wide column">
+          <h3>Combatant information:</h3>
+          <div className="ui two column grid">
+            <div className="eight wide column">
+              <Input value={cr.combatantName}
+                     onChange={setCombatantName}
+                     placeholder="Name..."
+                     label={{ tag: false, content: 'Combatant Name' }}
+                     labelPosition='left'
+                     style={{float: 'center'}}/>
+            </div>
+            <div className="eight wide column">
+              <Input value={cr.combatantHP}
+                     onChange={setCombatantHP}
+                     type="number" min="1"
+                     label={{ tag: false, content: 'Combatant HP' }}
+                     labelPosition='left'/>
+            </div>
+            <div className="eight wide column">
+              <Input value={cr.combatantAC}
+                     onChange={setCombatantAC}
+                     type="number" min="8"
+                     label={{ tag: false, content: 'Combatant AC' }}
+                     labelPosition='left'/>
+            </div>
+            <div className="eight wide column">
+              <Input value={cr.combatantProficiency}
+                     onChange={setCombatantProficiency}
+                     type="number" min="0"
+                     label={{ tag: false, content: 'Combatant Proficiency' }}
+                     labelPosition='left'/>
+            </div>
+
           </div>
-          <div className="section">
-            <h4></h4>
-            <input value={cr.combatantConstitution} placeholder="Constitution" onChange={setCombatantConstitution} type="number" min="1"/>
-            <h4></h4>
-            <input value={cr.combatantWisdom} placeholder="Wisdom" onChange={setCombatantWisdom} type="number" min="1"/>
-            <h4></h4>
-            <input value={cr.combatantCharisma} placeholder="Charisma" onChange={setCombatantCharisma} type="number" min="1"/>
+          <h3>Saves</h3>
+          <div className="row">
+            <div className="eight wide column">
+              <Input value={cr.combatantStrength}
+                     placeholder="Strength"
+                     onChange={setCombatantStrength}
+                     type="number" min="1"
+                     label={{ tag: false, content: 'Strength' }}
+                     labelPosition='left'/>
+              <Input value={cr.combatantDexterity}
+                     placeholder="Dexterity"
+                     onChange={setCombatantDexterity}
+                     type="number" min="1"
+                     label={{ tag: false, content: 'Dexterity' }}
+                     labelPosition='left'/>
+              <Input value={cr.combatantConstitution}
+                     placeholder="Constitution"
+                     onChange={setCombatantConstitution}
+                     type="number" min="1"
+                     label={{ tag: false, content: 'Constitution' }}
+                     labelPosition='left'/>
+            </div>
+            <div className="eight wide column">
+              <Input value={cr.combatantIntelligence}
+                     placeholder="Intelligence"
+                     onChange={setCombatantIntelligence}
+                     type="number" min="1"
+                     label={{ tag: false, content: 'Intelligence' }}
+                     labelPosition='left'/>
+              <Input
+                value={cr.combatantWisdom}
+                placeholder="Wisdom"
+                onChange={setCombatantWisdom}
+                type="number" min="1"
+                label={{ tag: false, content: 'Wisdom' }}
+                labelPosition='left'/>
+              <Input
+                value={cr.combatantCharisma}
+                placeholder="Charisma"
+                onChange={setCombatantCharisma}
+                type="number" min="1"
+                label={{ tag: false, content: 'Charisma' }}
+                labelPosition='left'/>
+            </div>
           </div>
-        </Grid>
+        </div>
+        <div className="eight wide column">
+          <Select
+            closeOnSelect={false}
+            isMulti
+            onChange={updateCombatantActions}
+            options={allActions}
+            placeholder="Add your combatant actions"
+            removeSelected={true}
+            value={combatantActions}
+          />
+          <ActionTable actionAddFunction={addCombatantAction}/>
+        </div>
       </div>
-      <div className="section">
-        <Select
-          closeOnSelect={false}
-          isMulti
-          onChange={updateCombatantActions}
-          options={allActions}
-          placeholder="Add your combatant actions"
-          removeSelected={true}
-          value={combatantActions}
-        />
-        <ActionTable actionAddFunction={addCombatantAction}/>
-      </div>
-    </Grid>
-    <button className="button" onClick={createCombatant} type="button">Create Combatant</button>
+    </div>
+    <Button onClick={createCombatant} primary>Create Combatant</Button>
     <h5 style={{color:cr.combatantCreationMsg === "Success" ? "#007f00" : "#e50000"}}>{cr.combatantCreationMsg}</h5>
   </div>
 )
