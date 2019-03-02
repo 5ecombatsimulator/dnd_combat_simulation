@@ -12,5 +12,5 @@
   <li>Back to the django shell and run "from xml_data.convert_source_monsters_xml import *; parse_file("PATH_TO_XML_DATA/DATA_ON_LOCAL/Monster Manual Bestiary.xml")</li>
   <li>In a separate bash shell: cd into frontend directory and run yarn install then yarn start</li> 
   <li>Again, in a separate bash shell, be at top level directory and run "python3 manage.py runserver"</li>
-  <li>Head to localhost:3000/simulation to view app</li>
+  <li>Head to localhost:3000/ to view app</li>
 </ol>
