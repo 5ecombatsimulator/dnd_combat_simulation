@@ -4,52 +4,87 @@ import { connect } from 'react-redux'
 import "react-table/react-table.css";
 import * as arActions from '../../actions/actionCreationActions'
 
+import {DynamicSizeNumericInput, DynamicSizeTextInput, ToggleWithLabel, ConditionalComponent, statOptions} from "../utils";
+import { Button, Grid } from 'semantic-ui-react'
+
 import '../../index.css';
 
-const statOptions = [
-  {value: "STR", label: "Strength"},
-  {value: "DEX", label: "Dexterity"},
-  {value: "CON", label: "Constitution"},
-  {value: "WIS", label: "Wisdom"},
-  {value: "INT", label: "Intelligence"},
-  {value: "CHA", label: "Charisma"}
-];
-
 const SpellAttackSaveScreen = ({ar, setActionName, setStatBonus, setDamageType,
-                                 setDice, setBonusToHit, setBonusToDamage, setMultiAttack,
-                                 setRechargePercentile, shiftIsLegendary, setLegendaryActionCost,
-                                 setSaveStat, setSaveDC, shiftIsAoe, setAoeType, shiftDoesHalfDamageOnFailure,
-                                 createAttackWithSave}) => (
+                                setDice, setBonusToHit, setBonusToDamage, setMultiAttack,
+                                setRechargePercentile, shiftIsLegendary, setLegendaryActionCost,
+                                setSaveStat, setSaveDC, shiftIsAoe, setAoeType, shiftDoesHalfDamageOnFailure,
+                                createAttackWithSave}) => (
   <div>
-    <h2> Create a Spell Attack requiring a save with name: <input value={ar.actionName} placeholder="Action name" onChange={setActionName}/> </h2>
-    <div className="ui grid">
-      <div>
-        <Select value={ar.damageType}
-                placeholder={"Damage type of attack"}
-                onChange={setDamageType}
-                options={ar.damageTypeOptions}/>
-        This spell does half damage on a failure: <input value={ar.doesHalfDamageOnFailure} onChange={shiftDoesHalfDamageOnFailure} type="checkbox"/>
-        <input value={ar.dice} placeholder="Dice for attack" onChange={setDice}/>
-        <Select value={ar.saveStat}
-                placeholder="Stat to save against this attack"
-                onChange={setSaveStat}
-                options={statOptions}/>
-        DC of the save: <input value={ar.saveDC} onChange={setSaveDC} type="number" min="8"/><br/>
-        Multi-attack count: <input value={ar.multiAttack} onChange={setMultiAttack} placeholder="Number of multi-attacks" type="number" min="1"/><br/>
-        Recharge percentile: <input value={ar.rechargePercentile} onChange={setRechargePercentile} placeholder="Recharge Percentile" type="number" min="0.0" step="0.01"/><br/>
-        Does area-of-effect: <input value={ar.isAoe} onChange={shiftIsAoe} type="checkbox"/><br/>
-        <Select value={ar.aoeType}
-                placeholder={"What kind of area this attack effects"}
-                onChange={setAoeType}
-                options={ar.aoeTypeOptions}/>
-        Is legendary: <input value={ar.isLegendary} onChange={shiftIsLegendary} placeholder="Is this a legendary action?" type="checkbox"/><br/>
-        Legendary action cost (0 for non-legendary actions): <input value={ar.legendaryActionCost} onChange={setLegendaryActionCost} type="number" min="0"/><br/>
-      </div>
-      <div>
-
-      </div>
-    </div>
-    <button className="button" onClick={createAttackWithSave} type="button">Create Action</button>
+    <Grid columns="two" divided>
+      <Grid.Column>
+        <Grid.Row>
+          <h3>Action attributes</h3>
+          <DynamicSizeTextInput labelValue="Attack requiring save name:"
+                                inputValue={ar.actionName}
+                                placeholderValue="Super cool action name"
+                                changeFunc={setActionName}/>
+          <Select className="paddedDiv"
+                  value={ar.damageType}
+                  placeholder={"Damage type of attack"}
+                  onChange={setDamageType}
+                  options={ar.damageTypeOptions}/>
+          <Select className="paddedDiv"
+                  value={ar.saveStat}
+                  placeholder="Stat to save against this attack"
+                  onChange={setSaveStat}
+                  options={statOptions}/>
+          <DynamicSizeTextInput labelValue="Dice for damage"
+                                inputValue={ar.dice}
+                                placeholderValue="100d6"
+                                changeFunc={setDice}
+                                tooltip={"The damage this attack does. Can be put in as 5d6 or with a plus between dice types such as 3d6+1d8"}/>
+          <DynamicSizeNumericInput inputValue={ar.saveDC}
+                                   changeFunc={setSaveDC}
+                                   minValue="8"
+                                   labelValue="DC of the save:"
+                                   tooltip={"The save DC of the attack."}/>
+          <DynamicSizeNumericInput inputValue={ar.multiAttack}
+                                   changeFunc={setMultiAttack}
+                                   labelValue="Multi-attack count:"
+                                   minValue="1"
+                                   tooltip={"If this attack should be performed multiple times per use. Scorching ray is an example of a 3 multi attack action."}/>
+          <DynamicSizeNumericInput inputValue={ar.rechargePercentile}
+                                   changeFunc={setRechargePercentile}
+                                   labelValue="Recharge percentile"
+                                   minValue="0.0" stepSize="0.01"
+                                   tooltip={"The percentile the user has to roll higher than to recharge the attack. " +
+                                   "A value of 0.0 means the attack is always available, while a 0.667 value would be equivalent to recharge on 5 or 6."}/>
+          <ToggleWithLabel inputValue={ar.doesHalfDamageOnFailure}
+                           changeFunc={shiftDoesHalfDamageOnFailure}
+                           labelValue="This attack does half damage on a failed save"/>
+          <ToggleWithLabel inputValue={ar.isAoe}
+                           changeFunc={shiftIsAoe}
+                           labelValue="This attack has an area-of-effect"/>
+          <ConditionalComponent
+            condition={ar.isAoe}
+            component={<Select value={ar.aoeType}
+                               placeholder={"What kind of area this attack effects"}
+                               onChange={setAoeType}
+                               options={ar.aoeTypeOptions}/>}
+          />
+          <ToggleWithLabel inputValue={ar.isLegendary}
+                           changeFunc={shiftIsLegendary}
+                           labelValue="This attack is a legendary action"/>
+          <ConditionalComponent
+            condition={ar.isLegendary}
+            component={<DynamicSizeNumericInput inputValue={ar.legendaryActionCost}
+                                   changeFunc={setLegendaryActionCost}
+                                   minValue="0"
+                                   labelValue="Legendary action cost"/>}
+          />
+        </Grid.Row>
+      </Grid.Column>
+      <Grid.Column>
+        <h3>Action effects</h3>
+      </Grid.Column>
+    </Grid>
+    <br/>
+    <Button content='Create Action' primary onClick={createAttackWithSave}/>
     <h5 style={{color:ar.actionCreationErrorMsg === "Success" ? "#007f00" : "#e50000"}}>{ar.actionCreationErrorMsg}</h5>
   </div>
 )

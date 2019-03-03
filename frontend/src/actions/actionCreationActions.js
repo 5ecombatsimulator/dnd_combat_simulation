@@ -59,6 +59,7 @@ export const shiftIsLegendary = () => (dispatch, getState) => {
   let {actionCreationReducer} = getState();
   let {isLegendary} = actionCreationReducer;
   if (isLegendary) {
+    dispatch(setLegendaryActionCost(0));
     dispatch(setIsLegendary(false))
   }
   else {
@@ -68,8 +69,8 @@ export const shiftIsLegendary = () => (dispatch, getState) => {
 
 export const shiftDoesHalfDamageOnFailure = () => (dispatch, getState) => {
   let {actionCreationReducer} = getState();
-  let {halfDamage} = actionCreationReducer;
-  if (halfDamage) {
+  let {doesHalfDamageOnFailure} = actionCreationReducer;
+  if (doesHalfDamageOnFailure) {
     dispatch(setDoesHalfDamageOnFailure(false));
   }
   else {
@@ -81,7 +82,8 @@ export const shiftIsAoe = () => (dispatch, getState) => {
   let {actionCreationReducer} = getState();
   let {isAoe} = actionCreationReducer;
   if (isAoe) {
-    dispatch(setIsAoe(false))
+    dispatch(setAoeType(""));
+    dispatch(setIsAoe(false));
   }
   else {
     dispatch(setIsAoe(true))

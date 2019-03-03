@@ -11,8 +11,6 @@ import AttackAgainstACCreationScreen from './actionCreation/attackAgainstACScree
 import SpellAttackWithSaveCreationScreen from './actionCreation/spellAttackSaveScreen'
 import '../index.css';
 
-import { GridColumn } from 'semantic-ui-react'
-
 const RenderedContent = ({ tabName }) => {
   if (tabName === "Simulator") {
     return <SimulatorScreen />

@@ -6,7 +6,9 @@ import * as actions from '../../actions/actions'
 import ActionTable from '../simulation/actionTable'
 import '../../index.css';
 
-import { Button, Input, Grid } from 'semantic-ui-react'
+import {DynamicSizeNumericInput, DynamicSizeTextInput} from "../utils";
+
+import { Button, Grid } from 'semantic-ui-react'
 
 const CombatantCreationScreen = ({allActions, combatantActions, updateCombatantActions, addCombatantAction, cr,
                            setCombatantName, setCombatantHP, setCombatantAC, setCombatantProficiency,
@@ -22,46 +24,30 @@ const CombatantCreationScreen = ({allActions, combatantActions, updateCombatantA
           <Grid columns="two" divided>
             <Grid.Row>
               <Grid.Column>
-                <div className='ui fluid labeled input'>
-                  <div className="ui label">
-                    Name
-                  </div>
-                  <input value={cr.combatantName}
-                         onChange={setCombatantName}
-                         placeholder="Name..."/>
-                </div>
+                <DynamicSizeTextInput labelValue="Name"
+                                      inputValue={cr.combatantName}
+                                      changeFunc={setCombatantName}
+                                      placeholderValue="Name..."/>
               </Grid.Column>
               <Grid.Column>
-                <div className='ui fluid labeled input'>
-                  <div className="ui label">
-                    Hit points
-                  </div>
-                  <input value={cr.combatantHP}
-                         onChange={setCombatantHP}
-                         type="number" min="1"/>
-                </div>
+                <DynamicSizeNumericInput labelValue="Hit points"
+                                         inputValue={cr.combatantHP}
+                                         changeFunc={setCombatantHP}
+                                         minValue="1"/>
               </Grid.Column>
             </Grid.Row>
             <Grid.Row>
               <Grid.Column>
-                <div className='ui fluid labeled input'>
-                  <div className="ui label">
-                    Armor class
-                  </div>
-                  <input value={cr.combatantAC}
-                         onChange={setCombatantAC}
-                         type="number" min="8"/>
-                </div>
+                <DynamicSizeNumericInput labelValue="Armor class"
+                                         inputValue={cr.combatantAC}
+                                         changeFunc={setCombatantAC}
+                                         minValue="8"/>
               </Grid.Column>
               <Grid.Column>
-                <div className='ui fluid labeled input'>
-                  <div className="ui label">
-                    Proficiency Bonus
-                  </div>
-                  <input value={cr.combatantProficiency}
-                         onChange={setCombatantProficiency}
-                         type="number" min="0"/>
-                </div>
+                <DynamicSizeNumericInput labelValue="Proficiency Bonus"
+                                         inputValue={cr.combatantProficiency}
+                                         changeFunc={setCombatantProficiency}
+                                         minValue="1"/>
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -69,74 +55,44 @@ const CombatantCreationScreen = ({allActions, combatantActions, updateCombatantA
           <Grid columns="two" divided>
             <Grid.Row>
               <Grid.Column>
-                <div className='ui fluid labeled input'>
-                  <div className="ui label">
-                    Strength
-                  </div>
-                  <input value={cr.combatantStrength}
-                         placeholder="Strength"
-                         onChange={setCombatantStrength}
-                         type="number" min="1"/>
-                </div>
+                <DynamicSizeNumericInput labelValue="Strength"
+                                         inputValue={cr.combatantStrength}
+                                         changeFunc={setCombatantStrength}
+                                         minValue="1"/>
               </Grid.Column>
               <Grid.Column>
-                <div className='ui fluid labeled input'>
-                  <div className="ui label">
-                    Dexterity
-                  </div>
-                  <input value={cr.combatantDexterity}
-                         placeholder="Dexterity"
-                         onChange={setCombatantDexterity}
-                         type="number" min="1"/>
-                </div>
+                <DynamicSizeNumericInput labelValue="Dexterity"
+                                         inputValue={cr.combatantDexterity}
+                                         changeFunc={setCombatantDexterity}
+                                         minValue="1"/>
               </Grid.Column>
             </Grid.Row>
             <Grid.Row>
               <Grid.Column>
-                <div className='ui fluid labeled input'>
-                  <div className="ui label">
-                    Constitution
-                  </div>
-                  <input value={cr.combatantConstitution}
-                       placeholder="Constitution"
-                       onChange={setCombatantConstitution}
-                       type="number" min="1"/>
-                </div>
+                <DynamicSizeNumericInput labelValue="Constitution"
+                                         inputValue={cr.combatantConstitution}
+                                         changeFunc={setCombatantConstitution}
+                                         minValue="1"/>
               </Grid.Column>
               <Grid.Column>
-                <div className='ui fluid labeled input'>
-                  <div className="ui label">
-                    Intelligence
-                  </div>
-                  <input value={cr.combatantIntelligence}
-                         placeholder="Intelligence"
-                         onChange={setCombatantIntelligence}
-                         type="number" min="1"/>
-                </div>
+                <DynamicSizeNumericInput labelValue="Intelligence"
+                                         inputValue={cr.combatantIntelligence}
+                                         changeFunc={setCombatantIntelligence}
+                                         minValue="1"/>
               </Grid.Column>
             </Grid.Row>
             <Grid.Row>
               <Grid.Column>
-                <div className='ui fluid labeled input'>
-                  <div className="ui label">
-                    Wisdom
-                  </div>
-                  <input value={cr.combatantWisdom}
-                                placeholder="Wisdom"
-                                onChange={setCombatantWisdom}
-                                type="number" min="1"/>
-                </div>
+                <DynamicSizeNumericInput labelValue="Wisdom"
+                                         inputValue={cr.combatantWisdom}
+                                         changeFunc={setCombatantWisdom}
+                                         minValue="1"/>
               </Grid.Column>
               <Grid.Column>
-                <div className='ui fluid labeled input'>
-                  <div className="ui label">
-                    Charisma
-                  </div>
-                  <input value={cr.combatantCharisma}
-                                placeholder="Charisma"
-                                onChange={setCombatantCharisma}
-                                type="number" min="1"/>
-                </div>
+                <DynamicSizeNumericInput labelValue="Charisma"
+                                         inputValue={cr.combatantCharisma}
+                                         changeFunc={setCombatantCharisma}
+                                         minValue="1"/>
               </Grid.Column>
             </Grid.Row>
           </Grid>

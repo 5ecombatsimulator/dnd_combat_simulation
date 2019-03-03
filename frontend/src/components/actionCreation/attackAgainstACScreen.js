@@ -4,18 +4,11 @@ import { connect } from 'react-redux'
 import "react-table/react-table.css";
 import * as arActions from '../../actions/actionCreationActions'
 
-import { Button } from 'semantic-ui-react'
+import {DynamicSizeNumericInput, DynamicSizeTextInput, ToggleWithLabel, ConditionalComponent, statOptions} from "../utils";
+
+import { Grid, Button } from 'semantic-ui-react'
 
 import '../../index.css';
-
-const statOptions = [
-  {value: "STR", label: "Strength"},
-  {value: "DEX", label: "Dexterity"},
-  {value: "CON", label: "Constitution"},
-  {value: "WIS", label: "Wisdom"},
-  {value: "INT", label: "Intelligence"},
-  {value: "CHA", label: "Charisma"}
-];
 
 const AttackAgainstACScreen = ({ar, setActionName, setStatBonus, setDamageType,
                                 setDice, setBonusToHit, setBonusToDamage, setMultiAttack,
@@ -23,45 +16,77 @@ const AttackAgainstACScreen = ({ar, setActionName, setStatBonus, setDamageType,
                                 setSpellOrAttack,
                                 createAttackAgainstAC}) => (
   <div>
-    <h2> Create an Attack that checks against target's AC with name: <input value={ar.actionName} placeholder="Action name" onChange={setActionName}/> </h2>
-    <div className="ui grid">
-      <div className="row">
-        <div>
-          <label htmlFor="spellOrAttack">Attack</label>
-          <input type="radio" name="spellOrAttack" id="Attack" value="Attack" onChange={setSpellOrAttack}/>
-          <label htmlFor="spellOrAttack">Spell</label>
-          <input type="radio" name="spellOrAttack" id="Spell" value="Spell" onChange={setSpellOrAttack}/>
-        </div>
-        <Select value={ar.damageType}
-                placeholder={"Damage type of attack"}
-                onChange={setDamageType}
-                options={ar.damageTypeOptions}/>
-        <input className="HalfWidthInput" value={ar.dice} placeholder="Dice for attack" onChange={setDice}/>
-        <Select value={ar.statBonus}
-                placeholder="Stat bonus for attack"
-                onChange={setStatBonus}
-                options={statOptions}/>
-        <div className="row">
-          <div>
-            <label>Bonus to hit:</label>
-            <input className="HalfWidthInput" value={ar.bonusToHit} onChange={setBonusToHit} placeholder="Bonus to hit" type="number" min="0"/><br/>
-            <label>Multi-attack count:</label>
-            <input className="HalfWidthInput" value={ar.multiAttack} onChange={setMultiAttack} placeholder="Number of multi-attacks" type="number" min="1"/><br/>
-            <label>Is legendary:</label>
-            <input value={ar.isLegendary} onChange={shiftIsLegendary} placeholder="Is this a legendary action?" type="checkbox"/><br/>
-            <label>Bonus to damage:</label>
-            <input className="HalfWidthInput" value={ar.bonusToDamage} onChange={setBonusToDamage} placeholder="Bonus to damage" type="number" min="0"/><br/>
-            <label>Recharge percentile:</label>
-            <input className="HalfWidthInput" value={ar.rechargePercentile} onChange={setRechargePercentile} placeholder="Recharge Percentile" type="number" min="0.0" step="0.01"/><br/>
-            <label>Legendary action cost (0 for non-legendary actions):</label>
-            <input className="HalfWidthInput" value={ar.legendaryActionCost} onChange={setLegendaryActionCost} type="number" min="0"/><br/>
+    <Grid columns="two" divided>
+      <Grid.Column>
+        <Grid.Row>
+          <h3>Action attributes</h3>
+          <DynamicSizeTextInput inputValue={ar.actionName}
+                          placeholderValue="Super cool action name"
+                          changeFunc={setActionName}
+                          labelValue="Attack against AC name:"/>
+          <div className="ui form" style={{align: "center", paddingTop: "5px", paddingLeft: "3px"}}>
+            <div className="inline fields">
+              <label className="ui label"><h5 style={{color: "rgba(0,0,0,.6)"}}>This action is a:</h5></label>
+              <div className="field">
+                <div className="ui checkbox">
+                  <input type="radio" name="spellOrAttack" id="Attack" value="Attack" onChange={setSpellOrAttack}/>
+                  <label>Physical attack</label>
+                </div>
+              </div>
+              <div className="field">
+                <div className="ui checkbox">
+                  <input type="radio" name="spellOrAttack" id="Spell" value="Spell" onChange={setSpellOrAttack}/>
+                  <label>Spell attack</label>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div>
+          <Select className="paddedDiv"
+                  value={ar.damageType}
+                  placeholder={"Damage type of attack"}
+                  onChange={setDamageType}
+                  options={ar.damageTypeOptions}/>
+          <DynamicSizeTextInput labelValue="Dice for damage"
+                                inputValue={ar.dice}
+                                placeholderValue="100d6"
+                                changeFunc={setDice}/>
+          <Select className="paddedDiv"
+                  value={ar.statBonus}
+                  placeholder="Stat bonus for attack"
+                  onChange={setStatBonus}
+                  options={statOptions}/>
+          <DynamicSizeNumericInput inputValue={ar.bonusToHit}
+                                   changeFunc={setBonusToHit}
+                                   labelValue="Bonus to hit:"
+                                   minValue="0"/>
+          <DynamicSizeNumericInput inputValue={ar.bonusToDamage}
+                                   changeFunc={setBonusToDamage}
+                                   labelValue="Bonus to damage:"
+                                   minValue="0"/>
+          <DynamicSizeNumericInput inputValue={ar.multiAttack}
+                                   changeFunc={setMultiAttack}
+                                   labelValue="Multi-attack count:"
+                                   minValue="1"/>
+          <DynamicSizeNumericInput inputValue={ar.rechargePercentile}
+                                   changeFunc={setRechargePercentile}
+                                   labelValue="Recharge percentile"
+                                   minValue="0.0" stepSize="0.01"/>
+          <ToggleWithLabel inputValue={ar.isLegendary}
+                           changeFunc={shiftIsLegendary}
+                           labelValue="This attack is a legendary action"/>
+          <ConditionalComponent
+            condition={ar.isLegendary}
+            component={<DynamicSizeNumericInput inputValue={ar.legendaryActionCost}
+                                   changeFunc={setLegendaryActionCost}
+                                   minValue="0"
+                                   labelValue="Legendary action cost"/>}/>
+        </Grid.Row>
+      </Grid.Column>
+      <Grid.Column>
 
-      </div>
-    </div>
+      </Grid.Column>
+    </Grid>
+    <br/>
     <Button content='Create Action' primary onClick={createAttackAgainstAC}/>
   </div>
 )
