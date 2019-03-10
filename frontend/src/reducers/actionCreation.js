@@ -26,6 +26,9 @@ const doesHalfDamageOnFailure = setterReducer(false, t.SET_DOES_HALF_DAMAGE_ON_F
 
 const actionCreationErrorMsg = setterReducer("", t.SET_ACTION_CREATION_ERROR_MSG);
 
+const actionEffects = setterReducer([], t.SET_ACTION_EFFECTS);
+const allEffects = setterReducer([], t.SET_ALL_EFFECTS);
+
 
 const reducer = combineReducers({
   actionName,
@@ -47,6 +50,8 @@ const reducer = combineReducers({
   spellOrAttack,
   actionCreationErrorMsg,
   doesHalfDamageOnFailure,
+  allEffects,
+  actionEffects,
 });
 
 export {reducer as default}

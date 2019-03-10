@@ -1,6 +1,6 @@
 import {setterAction} from '../common'
 import SimulatorSource from '../sources/simulatorSource'
-import {setAllActions} from "./actions";
+import {setAllActions, setAllCombatants, setCombatantActions} from "./actions";
 import get from "./utils"
 
 
@@ -27,7 +27,8 @@ export const SET_AOE_TYPE_OPTIONS = "SET_AOE_TYPE_OPTIONS";
 export const SET_SPELL_OR_ATTACK = "SET_SPELL_OR_ATTACK";
 export const SET_DOES_HALF_DAMAGE_ON_FAILURE = "SET_DOES_HALF_DAMAGE_ON_FAILURE";
 export const SET_ACTION_CREATION_ERROR_MSG = "SET_ACTION_CREATION_ERROR_MSG";
-
+export const SET_ALL_EFFECTS = "SET_ALL_EFFECTS";
+export const SET_ACTION_EFFECTS = "SET_ACTION_EFFECTS";
 
 /* Setter actions */
 export const setActionName = setterAction(SET_ACTION_NAME);
@@ -45,6 +46,8 @@ export const setSaveDC = setterAction(SET_SAVE_DC);
 export const setIsAoe = setterAction(SET_IS_AOE);
 export const setAoeType = setterAction(SET_AOE_TYPE);
 export const setActionCreationErrorMsg = setterAction(SET_ACTION_CREATION_ERROR_MSG);
+export const setAllEffects = setterAction(SET_ALL_EFFECTS);
+export const setActionEffects = setterAction(SET_ACTION_EFFECTS);
 
 export const setSpellOrAttack = setterAction(SET_SPELL_OR_ATTACK);
 export const setDoesHalfDamageOnFailure = setterAction(SET_DOES_HALF_DAMAGE_ON_FAILURE);
@@ -94,6 +97,26 @@ export const resetActionCreationErrorMsg = () => (dispatch, getState) => {
   dispatch(setActionCreationErrorMsg(""));
 };
 
+export const addActionEffect = (newEffect) => (dispatch, getState) => {
+  /*
+   * Kind of a hacky way to insert into the list... thought the list should
+   * never be all that long so seems okay. Maybe revisit if this call ends up
+   * taking a lot of time.
+   */
+  let {actionCreationReducer} = getState();
+  let {actionEffects} = actionCreationReducer;
+  for (let key in actionEffects) {
+    if (actionEffects[key].value === newEffect.value) {
+      return
+    }
+  }
+  dispatch(setActionEffects(actionEffects.concat(newEffect)));
+}
+
+export const updateActionEffects = (newState) => (dispatch, getState) => {
+  dispatch(setActionEffects(newState));
+}
+
 export const resetTabAttributes = () => (dispatch, getState) => {
   let {actionCreationReducer} = getState();
   let ar = actionCreationReducer;
@@ -115,6 +138,8 @@ export const resetTabAttributes = () => (dispatch, getState) => {
   ar.actionCreationErrorMsg = "";
   ar.doesHalfDamageOnFailure = false;
 };
+
+export const getAllEffects = get(SimulatorSource.getEffects, setAllEffects);
 
 export const createAction = (actionType) => (dispatch, getState) => {
   let {actionCreationReducer} = getState();

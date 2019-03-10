@@ -10,6 +10,7 @@ from debug.logger import Logger
 class Effect(models.Model):
     name = models.CharField(max_length=128, unique=True)
     effect_type = models.CharField(max_length=32)
+    description = models.TextField(null=True)
 
     def instantiate(self, turns_left):
         self.logger = Logger()
@@ -30,12 +31,34 @@ class Effect(models.Model):
         """
         raise RuntimeError("on_turn_end() is not implemented for {}!".format(self.name))
 
+    def jsonify(self):
+        return {
+            # Front end json entries
+            "label": self.name,
+            "value": self.name,
+            # Regular entries
+            "name": self.name,
+            "type": self.effect_type,
+            "description": self.description
+        }
+
 
 class DOTEffect(Effect):
-    effect_type = "DOT Effect"
     dice = models.ManyToManyField(Dice, through='DOTDice')
     save_dc = models.SmallIntegerField()
     save_stat = models.CharField(choices=STAT_CHOICES, null=True, max_length=16)
+
+    def save(self, *args, **kwargs):
+        self.description = "{} damage per turn with a DC {} {} save".format(
+            self.format_dice(), self.save_dc, self.save_stat)
+        self.effect_type = "DOT Effect"
+        super().save(*args, **kwargs)
+
+    def format_dice(self):
+        dice = DOTDice.objects.filter(effect=self)
+        return "+".join(["{}d{}".format(nsides, num_dice)
+                         for nsides, num_dice in dice.values_list(
+                'dice__num_sides', 'num_dice')])
 
     def apply(self, creature):
         save_attempt = d20() + creature.saves[self.save_stat]
@@ -71,7 +94,10 @@ class DOTDice(models.Model):
 
 
 class PermanentTypeResistance(Effect):
-    effect_type = "Type Resistance"
+
+    def save(self, *args, **kwargs):
+        self.effect_type = "Type Resistance"
+        super().save(*args, **kwargs)
 
     def apply(self, creature):
         creature.applied_effects.append(self)
@@ -84,13 +110,18 @@ class PermanentTypeResistance(Effect):
 
 
 class StunEffect(Effect):
-    effect_type = "Stun Effect"
     save_dc = models.SmallIntegerField()
     save_stat = models.CharField(choices=STAT_CHOICES, null=True, max_length=16)
 
+    def save(self, *args, **kwargs):
+        self.description = "Stuns if the target fails a DC {} {} save".format(
+            self.save_dc, self.save_stat)
+        self.effect_type = "Stun Effect"
+        super().save(*args, **kwargs)
+
     def apply(self, creature):
-        save_attempt = d20() + creature.saves[self.save['stat']]
-        if save_attempt >= self.save['DC']:
+        save_attempt = d20() + creature.saves[self.save_stat]
+        if save_attempt >= self.save_dc:
             self.logger.log_action(
                 "{0} saved from {1}".format(creature.name, self.name))
             return
@@ -107,8 +138,8 @@ class StunEffect(Effect):
         if self.turns_left <= 0:
             return False
 
-        save_attempt = d20() + creature.saves[self.save['stat']]
-        if save_attempt >= self.save['DC']:
+        save_attempt = d20() + creature.saves[self.save_stat]
+        if save_attempt >= self.save_dc:
             self.logger.log_action(
                 "{0} saved from {1}".format(creature.name, self.name))
             return False

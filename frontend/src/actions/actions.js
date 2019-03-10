@@ -84,8 +84,8 @@ function addCombatantToSet(combatant, counter, set) {
 
 }
 
-export const getAllCombatants = get(SimulatorSource.getCombatants, setAllCombatants)
-export const getAllActions = get(SimulatorSource.getActions, setAllActions)
+export const getAllCombatants = get(SimulatorSource.getCombatants, setAllCombatants);
+export const getAllActions = get(SimulatorSource.getActions, setAllActions);
 
 export const updateT1Combatants = (newSet) => (dispatch, getState) => {
   let {combatantSelectionReducer} = getState();

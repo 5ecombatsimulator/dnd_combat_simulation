@@ -3,6 +3,7 @@ import Select from 'react-select';
 import { connect } from 'react-redux'
 import "react-table/react-table.css";
 import * as arActions from '../../actions/actionCreationActions'
+import EffectTable from './effectTable'
 
 import {DynamicSizeNumericInput, DynamicSizeTextInput, ToggleWithLabel, ConditionalComponent, statOptions} from "../utils";
 
@@ -13,7 +14,7 @@ import '../../index.css';
 const AttackAgainstACScreen = ({ar, setActionName, setStatBonus, setDamageType,
                                 setDice, setBonusToHit, setBonusToDamage, setMultiAttack,
                                 setRechargePercentile, shiftIsLegendary, setLegendaryActionCost,
-                                setSpellOrAttack,
+                                setSpellOrAttack, updateActionEffects, addEffect,
                                 createAttackAgainstAC}) => (
   <div>
     <Grid columns="two" divided>
@@ -83,7 +84,16 @@ const AttackAgainstACScreen = ({ar, setActionName, setStatBonus, setDamageType,
         </Grid.Row>
       </Grid.Column>
       <Grid.Column>
-
+        <Select
+            closeOnSelect={false}
+            isMulti
+            onChange={updateActionEffects}
+            options={ar.allEffects}
+            placeholder="Add the effects of the action"
+            removeSelected={true}
+            value={ar.actionEffects}
+          />
+        <EffectTable addEffectFunction={addEffect}/>
       </Grid.Column>
     </Grid>
     <br/>
@@ -111,7 +121,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   getDamageTypeOptions: () => dispatch(arActions.getDamageTypeOptions()),
   resetActionCreationMsg: () => dispatch(arActions.resetActionCreationErrorMsg()),
-
   setActionName: (e) => dispatch(arActions.setActionName(e.target.value)),
   setStatBonus: (e) => dispatch(arActions.setStatBonus(e)),
   setDamageType: (e) => dispatch(arActions.setDamageType(e)),
@@ -124,7 +133,10 @@ const mapDispatchToProps = (dispatch) => ({
   setLegendaryActionCost: (e) => dispatch(arActions.setLegendaryActionCost(e.target.value)),
   shiftIsLegendary: () => dispatch(arActions.shiftIsLegendary()),
   createAttackAgainstAC: () => dispatch(arActions.createAction("AttackAgainstAC")),
-  resetTabAttributes: () => dispatch(arActions.resetTabAttributes())
+  resetTabAttributes: () => dispatch(arActions.resetTabAttributes()),
+
+  addEffect: (e) => dispatch(arActions.addActionEffect(e)),
+  updateActionEffects: (newSet) => dispatch(arActions.updateActionEffects(newSet)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Container)

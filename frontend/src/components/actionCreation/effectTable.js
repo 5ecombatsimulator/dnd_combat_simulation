@@ -3,9 +3,10 @@ import '../../App.css';
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 import { connect } from 'react-redux';
+import * as arActions from '../../actions/actionCreationActions'
 
 
-const CombatantTable = ({allCombatants, teamAddFunction}) => (
+const EffectTable = ({allEffects, addEffectFunction}) => (
   <div>
     <ReactTable
       getTdProps={(state, rowInfo, column, instance) => {
@@ -20,18 +21,18 @@ const CombatantTable = ({allCombatants, teamAddFunction}) => (
             //   handleOriginal()
             // }
             if (rowInfo !== undefined) {
-              teamAddFunction({value: rowInfo.original.value, label: rowInfo.original.label})
+              addEffectFunction({value: rowInfo.original.value, label: rowInfo.original.label})
             }
           }
         }
       }}
-      data={allCombatants}
+      data={allEffects}
       columns={[
         {
           Header: "Name",
           columns: [
             {
-              Header: "Creature Name",
+              Header: "Effect Name",
               accessor: "label"
             },
           ]
@@ -40,18 +41,13 @@ const CombatantTable = ({allCombatants, teamAddFunction}) => (
           Header: 'Stats',
           columns: [
             {
-              Header: "Creature Rating",
-              accessor: "cr"
+              Header: "Effect type",
+              accessor: "type"
             },
             {
-              Header: "Type",
-              accessor: "creatureType"
+              Header: "Description",
+              accessor: "description"
             },
-            {
-              Header: "Expected Damage",
-              accessor: "expDamage"
-            },
-
           ]
         }
       ]}
@@ -62,12 +58,23 @@ const CombatantTable = ({allCombatants, teamAddFunction}) => (
   </div>
 );
 
+class Container extends React.Component{
+  constructor(props) {
+    super(props);
+    props.getAllEffects()
+  }
+
+  render() {
+    return <EffectTable {...this.props} />
+  }
+}
+
 const mapStateToProps = (state) => ({
-  allCombatants: state.combatantSelectionReducer.allCombatants,
+  allEffects: state.actionCreationReducer.allEffects,
 })
 
 const mapDispatchToProps = (dispatch) => ({
-
+  getAllEffects: () => dispatch(arActions.getAllEffects()),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(CombatantTable)
+export default connect(mapStateToProps, mapDispatchToProps)(Container)

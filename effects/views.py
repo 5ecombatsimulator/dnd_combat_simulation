@@ -1,3 +1,7 @@
-from django.shortcuts import render
+from django.http import JsonResponse
 
-# Create your views here.
+from effects.models import Effect
+
+
+def get_all_effects(request):
+    return JsonResponse([e.jsonify() for e in Effect.objects.all()], safe=False)
