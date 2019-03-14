@@ -10,7 +10,7 @@ from actors.models import *
 
 from utils.stats import convert_stat_to_bonus
 from utils.data_parsing import find_recharge_percentile, \
-    convert_challenge_rating, create_dice_from_info
+    convert_challenge_rating
 
 translate_table = str.maketrans({key: None for key in string.punctuation})
 
