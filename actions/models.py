@@ -15,10 +15,9 @@ from utils.dice import d20, calc_roll
 from utils.data_parsing import convert_bool
 
 
-dice_map = dict(Dice.objects.values_list('num_sides', 'id'))
-
-
 def create_dice_from_info(dice, action):
+    dice_map = dict(Dice.objects.values_list('num_sides', 'id'))
+
     created_dice = []
     for num_sides, num_dice in dice.items():
         created_dice.append(
