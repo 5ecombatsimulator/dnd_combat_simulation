@@ -9,6 +9,7 @@ import SimulatorScreen from './simulation/simulatorScreen'
 import CombatantCreationScreen from './combatantCreation/combatantCreationScreen'
 import AttackAgainstACCreationScreen from './actionCreation/attackAgainstACScreen'
 import SpellAttackWithSaveCreationScreen from './actionCreation/spellAttackSaveScreen'
+import EffectCreationScreen from './effectCreation/effectCreationScreen'
 import '../index.css';
 
 const RenderedContent = ({ tabName }) => {
@@ -23,6 +24,9 @@ const RenderedContent = ({ tabName }) => {
   }
   else if (tabName === "AttackWithSave") {
     return <SpellAttackWithSaveCreationScreen/>
+  }
+  else if (tabName === "EffectCreation") {
+    return <EffectCreationScreen/>
   }
 }
 
@@ -55,6 +59,7 @@ class HomeScreen extends React.Component{
                 <a className="item" onClick={() => this.changeTab('AttackWithSave')}>Attack requiring save</a>
               </div>
             </div>
+            <a className="item" onClick={() => this.changeTab('EffectCreation')} name="EffectCreation">Effect Creation</a>
           </div>
         </div>
         <div className="row">

@@ -5,7 +5,11 @@ from simulation.heuristics.heuristic_container import HeuristicContainer
 
 from actions.models import Action, SingleAttack, ComboAttack
 from actions.aoe_choices import AOE_PERCENT_HIT_MAP
-from effects.models import Effect
+from effects.models import Effect, STUN_EFFECT_TYPE, PARALYZE_EFFECT_TYPE, \
+    PRONE_EFFECT_TYPE, RESTRAINED_EFFECT_TYPE, TYPE_RESISTANCE_TYPE, \
+    TYPE_IMMUNITY_TYPE, TYPE_VULNERABILITY_TYPE, BLINDED_EFFECT_TYPE, \
+    INVISIBLE_EFFECT_TYPE, POISONED_EFFECT_TYPE, SELF_ADVANTAGE_SET, \
+    SELF_DISADVANTAGE_SET, TARGET_ADVANTAGE_SET, TARGET_DISADVANTAGE_SET
 
 
 class Combatant(models.Model):
@@ -171,7 +175,9 @@ class Combatant(models.Model):
     def on_turn_start(self):
         if self.applied_effects is not None and len(self.applied_effects) > 0:
             for effect in self.applied_effects:
-                effect.on_turn_start(self)
+                still_active = effect.on_turn_start(self)
+                if not still_active:
+                    self.applied_effects.remove(effect)
         self.legendary_actions_left = self.num_legendary_actions
 
     def on_turn_end(self):
@@ -260,13 +266,35 @@ class Combatant(models.Model):
     def take_damage(self, damage, attack_type):
         """ Takes the given damage while checking for modifications to it """
         for e in self.applied_effects:
-            if e.effect_type == "Type Resistance" and e.name == attack_type:
+            if e.effect_type == TYPE_RESISTANCE_TYPE and e.name == attack_type:
                 damage *= 0.5
-            if e.effect_type == "Type Vulnerability" and e.name == attack_type:
+            if e.effect_type == TYPE_VULNERABILITY_TYPE and e.name == attack_type:
                 damage *= 1.5
-            if e.effect_type == "Type Immunity" and e.name == attack_type:
+            if e.effect_type == TYPE_IMMUNITY_TYPE and e.name == attack_type:
                 damage = 0
+
         self.hp -= damage
+
+    # Combat helper methods
+    def check_for_effect(self, effect_type):
+        if [e.effect_type == effect_type for e in self.applied_effects]:
+            return True
+        return False
+
+    def check_for_advantage(self, target):
+        if ([e.effect_type in SELF_ADVANTAGE_SET for e in self.applied_effects]
+                or [e.effect_type in TARGET_ADVANTAGE_SET
+                    for e in target.applied_effects]):
+            return True
+        return False
+
+    def check_for_disadvantage(self, target):
+        if ([e.effect_type in SELF_DISADVANTAGE_SET
+             for e in self.applied_effects]
+                or [e.effect_type in TARGET_DISADVANTAGE_SET
+                    for e in target.applied_effects]):
+            return True
+        return False
 
     def jsonify(self):
         """ Turn a creature object into JSON """

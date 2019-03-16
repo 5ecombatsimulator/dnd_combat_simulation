@@ -10,9 +10,13 @@ from actions.stat_choices import STAT_CHOICES
 from actions.aoe_choices import AOE_CHOICES, AOE_PERCENT_HIT_MAP
 
 from dice.models import Dice
-from effects.models import Effect
 from utils.dice import d20, calc_roll
 from utils.data_parsing import convert_bool
+
+from effects.models import Effect, STUN_EFFECT_TYPE, PARALYZE_EFFECT_TYPE, \
+    PRONE_EFFECT_TYPE, RESTRAINED_EFFECT_TYPE, TYPE_RESISTANCE_TYPE, \
+    TYPE_IMMUNITY_TYPE, TYPE_VULNERABILITY_TYPE, BLINDED_EFFECT_TYPE, \
+    INVISIBLE_EFFECT_TYPE, POISONED_EFFECT_TYPE
 
 
 def create_dice_from_info(dice, action):
@@ -25,6 +29,27 @@ def create_dice_from_info(dice, action):
                              num_dice=num_dice,
                              dice_id=dice_map[num_sides]))
     return created_dice
+
+
+def calc_attack_roll(attacker, target):
+    """ Rolls a d20 and checks for advantage and disadvantage
+
+    Args:
+        attacker (Combatant): A Combatant
+        target (Combatant): A Combatant
+
+    Returns:
+        (int): The resulting attack roll with advantage and disadvantage
+            calculated in
+    """
+    has_advantage = attacker.check_for_advantage(target)
+    has_disadvantage = attacker.check_for_disadvantage(target)
+    if has_advantage and not has_disadvantage:
+        return max(d20(), d20())
+    elif has_disadvantage and not has_advantage:
+        return min(d20(), d20())
+    else:
+        return d20()
 
 
 class Action(PolymorphicModel):
@@ -226,11 +251,11 @@ class PhysicalSingleAttack(SingleAttack):
 
     def do_damage(self, attacker, target):
         damage = 0
-        die_roll = d20()
+        die_roll = calc_attack_roll(attacker, target)
         hit_check = die_roll + attacker.saves[self.stat_bonus] + self.bonus_to_hit + attacker.proficiency
         if hit_check >= target.ac or die_roll == 20:
             roll_damage = calc_roll(self.dice)
-            if die_roll == 20:
+            if die_roll == 20 or target.check_for_effect(PARALYZE_EFFECT_TYPE):
                 roll_damage *= 2
             damage = roll_damage + attacker.saves[self.stat_bonus] + self.bonus_to_damage
 
@@ -294,7 +319,7 @@ class SpellSingleAttack(SingleAttack):
         if self.stat_bonus is not None:
             attack_bonus = attacker.proficiency + \
                            attacker.saves[self.stat_bonus] if self.stat_bonus else 0
-            die_roll = d20()
+            die_roll = calc_attack_roll(attacker, target)
             hit_check = die_roll + attack_bonus + self.bonus_to_hit
             if hit_check >= attacker.ac or die_roll == 20:
                 roll_damage = calc_roll(self.dice)
