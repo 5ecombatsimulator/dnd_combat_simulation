@@ -9,6 +9,7 @@ const postUrls = {
   runSimulation: '/simulate',
   createCombatant: '/createCombatant',
   createAction: '/createAction',
+  createEffect: '/createEffect',
   saveBattle: '/saveBattle',
   loadBattle: '/loadBattle',
 }
