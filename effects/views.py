@@ -10,7 +10,7 @@ def get_all_effects(request):
 def get_all_effect_types(request):
     return JsonResponse([
         {"value": e_type, "label":e_type} for e_type in get_effect_list()
-    ])
+    ], safe=False)
 
 
 def create_effect(request):

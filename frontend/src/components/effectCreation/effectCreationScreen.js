@@ -59,8 +59,8 @@ const EffectCreationScreen = ({er, setEffectName, changeEffectType, createEffect
 
 class Container extends React.Component{
   constructor(props) {
+    props.getDamageTypeOptions();
     super(props);
-    actions.getAndSetEffectTypes();
   }
 
   render() {
@@ -79,6 +79,7 @@ const mapDispatchToProps = (dispatch) => ({
   setSaveStat: (e) => dispatch(actions.setEffectSaveStat(e)),
   setDamageDice: (e) => dispatch(actions.setEffectDamageDice(e.target.value)),
   setNumTurns: (e) => dispatch(actions.setEffectNumTurns(e.target.value)),
+  getDamageTypeOptions: () => dispatch(actions.getAndSetEffectTypes()),
 
   createEffect: () => dispatch(actions.createEffect()),
 });
