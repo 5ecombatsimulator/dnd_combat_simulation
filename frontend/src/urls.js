@@ -4,6 +4,7 @@ const postUrls = {
   getCombatants: '/combatants',
   getActions: '/actions',
   getEffects: '/effects',
+  getAllEffectTypes: '/effectTypes',
   getDamageTypes: '/damageTypes',
   getAoeTypes: '/aoeTypes',
   runSimulation: '/simulate',

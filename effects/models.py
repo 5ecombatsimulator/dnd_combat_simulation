@@ -22,6 +22,15 @@ TYPE_RESISTANCE_TYPE = "Type Resistance"
 TYPE_IMMUNITY_TYPE = "Type Immunity"
 TYPE_VULNERABILITY_TYPE = "Type Vulnerability"
 
+
+def get_effect_list():
+    return [
+        STUN_EFFECT_TYPE, PARALYZE_EFFECT_TYPE, DOT_EFFECT_TYPE,
+        BLINDED_EFFECT_TYPE, RESTRAINED_EFFECT_TYPE, INVISIBLE_EFFECT_TYPE,
+        PETRIFIED_EFFECT_TYPE, POISONED_EFFECT_TYPE, PRONE_EFFECT_TYPE
+    ]
+
+
 # Effects that apply advantage for an attacker if the target has them
 TARGET_ADVANTAGE_SET = {
     PRONE_EFFECT_TYPE, RESTRAINED_EFFECT_TYPE, BLINDED_EFFECT_TYPE,
@@ -49,7 +58,7 @@ class Effect(models.Model):
     name = models.CharField(max_length=128, unique=True)
     effect_type = models.CharField(max_length=32)
     description = models.TextField(null=True)
-    max_turns = models.SmallIntegerField(default=-1)
+    # max_turns = models.SmallIntegerField(default=-1)
 
     def instantiate(self, turns_left=None):
         self.logger = Logger()
@@ -69,6 +78,33 @@ class Effect(models.Model):
             This method should implement some way for the effect to be removed.
         """
         raise RuntimeError("on_turn_end() is not implemented for {}!".format(self.name))
+
+    @classmethod
+    def create_named_effect(cls, name, max_turns, save_stat, save_dc):
+        if name == "":
+            return None, "Name must be non-empty"
+        elif max_turns <= 0:
+            return None, "Effect must last for at least 1 turn"
+
+        created = cls.objects.create(name=name, max_turns=max_turns,
+                           save_stat=save_stat, save_dc=save_dc)
+        if created:
+            return created, "Success"
+        else:
+            return None, "Failed to create effect, unknown error"
+
+
+    @staticmethod
+    def create_effect(*args, **kwargs):
+        effect_type = kwargs['effect_type']
+        if effect_type == STUN_EFFECT_TYPE:
+            StunEffect.create_named_effect(
+                kwargs['name'], kwargs['max_turns'],
+                kwargs['save_stat'], kwargs['save_dc'])
+        elif effect_type == PARALYZE_EFFECT_TYPE:
+            ParalyzedEffect.create_named_effect(
+                kwargs['name'], kwargs['max_turns'],
+                kwargs['save_stat'], kwargs['save_dc'])
 
     def jsonify(self):
         return {
