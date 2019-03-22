@@ -15,7 +15,7 @@ const combatantWisdom = setterReducer(null, t.SET_COMBATANT_WISDOM);
 const combatantIntelligence = setterReducer(null, t.SET_COMBATANT_INTELLIGENCE);
 const combatantCharisma = setterReducer(null, t.SET_COMBATANT_CHARISMA);
 const combatantCR = setterReducer(null, t.SET_COMBATANT_CR);
-const chosenCombatant = setterReducer("", t.SET_CHOSEN_COMBATANT);
+const chosenCombatant = setterReducer(null, t.SET_CHOSEN_COMBATANT);
 
 
 const reducer = combineReducers({

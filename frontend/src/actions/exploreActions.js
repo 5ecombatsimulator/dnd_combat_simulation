@@ -3,19 +3,21 @@ import get from './utils'
 import SimulatorSource from '../sources/simulatorSource'
 
 /* Action types */
-export const SET_COMBATANT_NAME = "SET_COMBATANT_NAME";
-export const SET_COMBATANT_HP = 'SET_COMBATANT_HP';
-export const SET_COMBATANT_AC = 'SET_COMBATANT_AC';
-export const SET_COMBATANT_PROFICIENCY = 'SET_COMBATANT_PROFICIENCY';
-export const SET_COMBATANT_STRENGTH = 'SET_COMBATANT_STRENGTH';
-export const SET_COMBATANT_DEXTERITY = 'SET_COMBATANT_DEXTERITY';
-export const SET_COMBATANT_CONSTITUTION = 'SET_COMBATANT_CONSTITUTION';
-export const SET_COMBATANT_WISDOM = 'SET_COMBATANT_WISDOM';
-export const SET_COMBATANT_INTELLIGENCE = 'SET_COMBATANT_INTELLIGENCE';
-export const SET_COMBATANT_CHARISMA = 'SET_COMBATANT_CHARISMA';
-export const SET_COMBATANT_ACTIONS = 'SET_COMBATANT_ACTIONS';
-export const SET_COMBATANT_CR = 'SET_COMBATANT_CR';
-export const SET_CHOSEN_COMBATANT = 'SET_CHOSEN_COMBATANT';
+/* Need the E_ prefix because otherwise the action names conflict with
+ * the comabtantCreation actions */
+export const SET_COMBATANT_NAME = "E_SET_COMBATANT_NAME";
+export const SET_COMBATANT_HP = 'E_SET_COMBATANT_HP';
+export const SET_COMBATANT_AC = 'E_SET_COMBATANT_AC';
+export const SET_COMBATANT_PROFICIENCY = 'E_SET_COMBATANT_PROFICIENCY';
+export const SET_COMBATANT_STRENGTH = 'E_SET_COMBATANT_STRENGTH';
+export const SET_COMBATANT_DEXTERITY = 'E_SET_COMBATANT_DEXTERITY';
+export const SET_COMBATANT_CONSTITUTION = 'E_SET_COMBATANT_CONSTITUTION';
+export const SET_COMBATANT_WISDOM = 'E_SET_COMBATANT_WISDOM';
+export const SET_COMBATANT_INTELLIGENCE = 'E_SET_COMBATANT_INTELLIGENCE';
+export const SET_COMBATANT_CHARISMA = 'E_SET_COMBATANT_CHARISMA';
+export const SET_COMBATANT_ACTIONS = 'E_SET_COMBATANT_ACTIONS';
+export const SET_COMBATANT_CR = 'E_SET_COMBATANT_CR';
+export const SET_CHOSEN_COMBATANT = 'E_SET_CHOSEN_COMBATANT';
 
 export const setCombatantName = setterAction(SET_COMBATANT_NAME);
 export const setCombatantHP = setterAction(SET_COMBATANT_HP);
@@ -31,8 +33,9 @@ export const setCombatantActions = setterAction(SET_COMBATANT_ACTIONS);
 export const setCombatantCR = setterAction(SET_COMBATANT_CR);
 export const setChosenCombatant = setterAction(SET_CHOSEN_COMBATANT);
 
+
 export const loadCombatant = (combatant) => (dispatch, getState) => {
-  dispatch(setChosenCombatant(combatant.value));
+  dispatch(setChosenCombatant(combatant));
 
   SimulatorSource.loadCombatant(combatant.value).then(({data}) => {
     let combatantData = data.combatant;

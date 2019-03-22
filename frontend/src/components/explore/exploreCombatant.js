@@ -29,18 +29,18 @@ const FullStatBox = ({str, dex, con, wis, int, cha}) => (
   <div className="ui raised segment">
     <Grid.Row>
       <TwoColumnGrid
-        col1Content={<Stat stat_label="Strength" stat_val={str}/>}
-        col2Content={<Stat stat_label="Intelligence" stat_val={int}/>}/>
+        col1Content={<Stat stat_label="STR save" stat_val={str}/>}
+        col2Content={<Stat stat_label="INT save" stat_val={int}/>}/>
     </Grid.Row>
     <Grid.Row>
       <TwoColumnGrid
-        col1Content={<Stat stat_label="Dexterity" stat_val={dex}/>}
-        col2Content={<Stat stat_label="Wisdom" stat_val={wis}/>}/>
+        col1Content={<Stat stat_label="DEX save" stat_val={dex}/>}
+        col2Content={<Stat stat_label="WIS save" stat_val={wis}/>}/>
     </Grid.Row>
     <Grid.Row>
       <TwoColumnGrid
-        col1Content={<Stat stat_label="Constitution" stat_val={con}/>}
-        col2Content={<Stat stat_label="Charisma" stat_val={cha}/>}/>
+        col1Content={<Stat stat_label="CON save" stat_val={con}/>}
+        col2Content={<Stat stat_label="CHA save" stat_val={cha}/>}/>
     </Grid.Row>
   </div>
 );
@@ -48,11 +48,11 @@ const FullStatBox = ({str, dex, con, wis, int, cha}) => (
 const ExtraStatBox = ({cr, prof, hp, ac}) => (
   <div className="ui raised segment">
     <TwoColumnGrid
-        col1Content={<Stat stat_label="Creature Rating" stat_val={cr}/>}
+        col1Content={<Stat stat_label="CR" stat_val={cr}/>}
         col2Content={<Stat stat_label="Proficiency" stat_val={prof}/>}/>
     <TwoColumnGrid
-        col1Content={<Stat stat_label="Hit points" stat_val={hp}/>}
-        col2Content={<Stat stat_label="Armor class" stat_val={ac}/>}/>
+        col1Content={<Stat stat_label="HP" stat_val={hp}/>}
+        col2Content={<Stat stat_label="AC" stat_val={ac}/>}/>
   </div>
 );
 
