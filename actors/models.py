@@ -296,7 +296,7 @@ class Combatant(models.Model):
             return True
         return False
 
-    def jsonify(self):
+    def jsonify(self, jsonify_actions=False):
         """ Turn a creature object into JSON """
         combatant_info = {
             "label": self.name,  # This is for the frontend
@@ -306,9 +306,10 @@ class Combatant(models.Model):
             "ac": self.ac,
             "proficiency": self.proficiency,
             "saves": self._convert_saves_to_dict(),
-            "actions": [a.name for a in self.actions.all()],
+            "actions": [a.jsonify() if jsonify_actions else a.name for a in self.actions.all()],
             "innate_effects": [e.name for e in self.innate_effects.all()],
-            "cr": self.cr
+            "cr": self.cr,
+            "speed": self.speed,
         }
         return combatant_info
 

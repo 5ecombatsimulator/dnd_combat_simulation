@@ -64,10 +64,10 @@ def parse_attack(attack_element, saves):
     try:
         attack_type = re.findall(attack_type_parse, desc)[0]
     except IndexError:
-        return name, None, None, None, None, None
+        return name, None, None, None, None, None, None
 
     if not damage_types:
-        return name, None, None, None, None, None
+        return name, None, None, None, None, None, None
 
     # Each dice in dice_damage should be XdX
     damage_dice_map = {}
@@ -82,7 +82,7 @@ def parse_attack(attack_element, saves):
     stat_for_bonus = which_stat[0][0][:3].upper() if which_stat else "STR"
     recharge_percentile = find_recharge_percentile(name)
 
-    return name, damage_dice_map, stat_for_bonus, recharge_percentile, \
+    return name, desc, damage_dice_map, stat_for_bonus, recharge_percentile, \
            damage_types[0], attack_type
 
 
@@ -117,7 +117,7 @@ def parse_aoe_attack(action_element):
     elif not aoe_range:
         print("Failed to find aoe_range from description:", desc)
     if not save or not aoe_type or not aoe_range:
-        return name, None, None, None, None, None, None, None, None
+        return name, None, None, None, None, None, None, None, None, None
     save_dc, save_stat = save[0]
     if aoe_type[0] == "within":
         aoe_type = ["radius"]
@@ -125,14 +125,14 @@ def parse_aoe_attack(action_element):
 
     if not damage_types:
         print("Could not find damage type for description: {}".format(desc))
-        return name, None, None, None, None, None, None, None, None
+        return name, None, None, None, None, None, None, None, None, None
 
     damage_dice_map = {}
     for dice in dice_damage:
         split_dice = dice.split('d')
         damage_dice_map[int(split_dice[1])] = int(split_dice[0])
 
-    return name, damage_dice_map, None, recharge_percentile, damage_types[0], \
+    return name, desc, damage_dice_map, None, recharge_percentile, damage_types[0], \
         "AOE", int(save_dc), stat_map[save_stat], aoe_type
 
 
@@ -197,16 +197,18 @@ def parse_multi_attack(multi_attack_element, creature_name, other_attacks):
         print("Failed multi attack creation on:", attack_description)
         return None, None
 
-    return ComboAttack(name=creature_name + " - Multi-attack"), attacks
+    return ComboAttack(name=creature_name + " - Multi-attack",
+                       description=attack_description), attacks
 
 
-def create_single_attack(name, stat_for_bonus, recharge_percentile, damage_type,
+def create_single_attack(name, desc, stat_for_bonus, recharge_percentile, damage_type,
                          creature_name, attack_type, name_prefix="",
                          is_legendary=False, cost=0, save_stat=None,
                          save_dc=None, aoe_type=None):
     if attack_type == "Weapon":
         created_action = PhysicalSingleAttack(
             name=(name_prefix if name_prefix else creature_name) + " - " + name,
+            description=desc,
             stat_bonus=stat_for_bonus,
             damage_type=damage_type,
             bonus_to_hit=0,
@@ -217,6 +219,7 @@ def create_single_attack(name, stat_for_bonus, recharge_percentile, damage_type,
     elif attack_type == "Spell":
         created_action = SpellSingleAttack(
             name=(name_prefix if name_prefix else creature_name) + " - " + name,
+            description=desc,
             stat_bonus=stat_for_bonus,
             damage_type=damage_type,
             bonus_to_hit=0,
@@ -227,6 +230,7 @@ def create_single_attack(name, stat_for_bonus, recharge_percentile, damage_type,
     elif attack_type == "AOE":
         created_action = SpellSave(
             name=(name_prefix if name_prefix else creature_name) + " - " + name,
+            description=desc,
             stat_bonus=None,
             damage_type=damage_type,
             bonus_to_hit=0,
@@ -259,10 +263,10 @@ def parse_all_actions(action_elements, saves, creature_name):
     for attack in attacks:
         if not attack:
             continue
-        name, damage_dice_map, stat_for_bonus, recharge_percentile, \
+        name, desc, damage_dice_map, stat_for_bonus, recharge_percentile, \
             damage_type, attack_type = parse_attack(attack, saves)
         if attack_type is None:
-            name, damage_dice_map, stat_for_bonus, recharge_percentile, \
+            name, desc, damage_dice_map, stat_for_bonus, recharge_percentile, \
                 damage_type, attack_type, save_dc, \
                 save_stat, aoe_type = parse_aoe_attack(attack)
             if aoe_type is None:
@@ -270,12 +274,12 @@ def parse_all_actions(action_elements, saves, creature_name):
                     name, creature_name))
                 continue
             aoe_infos.append((create_single_attack(
-                name, stat_for_bonus, recharge_percentile,
+                name, desc, stat_for_bonus, recharge_percentile,
                 damage_type, creature_name, attack_type, save_dc=save_dc,
                 save_stat=save_stat, aoe_type=aoe_type), damage_dice_map))
         else:
             attack_infos.append((create_single_attack(
-                name, stat_for_bonus, recharge_percentile,
+                name, desc, stat_for_bonus, recharge_percentile,
                 damage_type, creature_name, attack_type), damage_dice_map))
     for mattack in multi_attacks:
         if not mattack:
@@ -333,7 +337,7 @@ def create_and_save_attacks(combatant, attack_infos, mattack_infos,
     for laction, damage_dice, cost in laction_info:
         attack_type = "Weapon" if isinstance(laction, PhysicalSingleAttack) else "Spell"
         created_action = create_single_attack(
-            laction.name, laction.stat_bonus, laction.recharge_percentile,
+            laction.name, laction.description, laction.stat_bonus, laction.recharge_percentile,
             laction.damage_type, combatant.name, attack_type,
             name_prefix='Legendary Action', is_legendary=True, cost=cost)
         created_action.save()

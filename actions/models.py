@@ -61,6 +61,7 @@ class Action(PolymorphicModel):
     is_legendary = models.BooleanField(default=False)
     legendary_action_cost = models.PositiveSmallIntegerField(default=0)
     effects = models.ManyToManyField(Effect, through="ActionToEffect")
+    description = models.TextField(null=True)
 
     def save(self, *args, **kwargs):
         if self.is_legendary and self.legendary_action_cost == 0:
@@ -121,6 +122,7 @@ class Action(PolymorphicModel):
             "value": self.name,
             "name": self.name,
             "actionEffects": [e.name for e in self.effects.all()],
+            "description": self.description
         }
         return dict(**current_info, **default_info)
 

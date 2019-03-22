@@ -18,7 +18,7 @@ const reducer = combineReducers({
   saveDC,
   saveStat,
   numTurns,
-  allEffectTypes
+  allEffectTypes,
 })
 
 export {reducer as default}

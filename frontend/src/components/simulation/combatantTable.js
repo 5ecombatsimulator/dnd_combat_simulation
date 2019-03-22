@@ -5,7 +5,7 @@ import "react-table/react-table.css";
 import { connect } from 'react-redux';
 
 
-const CombatantTable = ({allCombatants, teamAddFunction}) => (
+const CombatantTable = ({allCombatants, onClickFunction}) => (
   <div>
     <ReactTable
       getTdProps={(state, rowInfo, column, instance) => {
@@ -20,7 +20,7 @@ const CombatantTable = ({allCombatants, teamAddFunction}) => (
             //   handleOriginal()
             // }
             if (rowInfo !== undefined) {
-              teamAddFunction({value: rowInfo.original.value, label: rowInfo.original.label})
+              onClickFunction({value: rowInfo.original.value, label: rowInfo.original.label})
             }
           }
         }

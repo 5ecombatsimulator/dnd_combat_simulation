@@ -31,3 +31,9 @@ def create_combatant(request):
         'msg': msg,
         "combatants": [c.jsonify() for c in Combatant.objects.all()]
     }, safe=False)
+
+
+def load_combatant(request, combatant_name):
+    combatant = Combatant.objects.get(name=combatant_name)
+    return JsonResponse({"combatant": combatant.jsonify(jsonify_actions=True)},
+                        safe=False)

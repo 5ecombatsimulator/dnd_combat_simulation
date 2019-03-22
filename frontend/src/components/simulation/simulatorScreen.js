@@ -23,7 +23,7 @@ const SimulatorScreen = ({team1Combatants, team2Combatants, allCombatants, team1
           removeSelected={false}
           value={team1Combatants}
         />
-        <CombatantTable teamAddFunction={team1Add}/>
+        <CombatantTable onClickFunction={team1Add}/>
       </div>
       <div className="eight wide column">
         <Select
@@ -35,7 +35,7 @@ const SimulatorScreen = ({team1Combatants, team2Combatants, allCombatants, team1
           removeSelected={false}
           value={team2Combatants}
         />
-        <CombatantTable teamAddFunction={team2Add}/>
+        <CombatantTable onClickFunction={team2Add}/>
       </div>
     </div>
 

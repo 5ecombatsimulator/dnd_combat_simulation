@@ -10,6 +10,7 @@ import CombatantCreationScreen from './combatantCreation/combatantCreationScreen
 import AttackAgainstACCreationScreen from './actionCreation/attackAgainstACScreen'
 import SpellAttackWithSaveCreationScreen from './actionCreation/spellAttackSaveScreen'
 import EffectCreationScreen from './effectCreation/effectCreationScreen'
+import ExploreCombatantScreen from './explore/exploreCombatant'
 import '../index.css';
 
 const RenderedContent = ({ tabName }) => {
@@ -27,6 +28,9 @@ const RenderedContent = ({ tabName }) => {
   }
   else if (tabName === "EffectCreation") {
     return <EffectCreationScreen/>
+  }
+  else if (tabName === "exploreCombatant") {
+    return <ExploreCombatantScreen/>
   }
 }
 
@@ -49,6 +53,13 @@ class HomeScreen extends React.Component{
       <div className="ui grid">
         <div className="row">
           <div className="ui horizontal menu" style={{margin: "auto"}}>
+            <div className="ui simple dropdown item">
+              Explore
+              <i className="dropdown icon"/>
+              <div className="menu">
+                <a className="item" onClick={() => this.changeTab('exploreCombatant')}>Combatants</a>
+              </div>
+            </div>
             <a className="item" onClick={() => this.changeTab('Simulator')} name='Simulator'>Simulator</a>
             <a className="item" onClick={() => this.changeTab('CombatantCreation')} name='CombatantCreation'>Combatant Creation</a>
             <div className="ui simple dropdown item">
