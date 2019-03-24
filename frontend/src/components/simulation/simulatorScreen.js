@@ -6,12 +6,12 @@ import CombatantTable from './combatantTable'
 import ResultsScreen from './ResultsScreen'
 import '../../index.css';
 
-import { Button, Input } from 'semantic-ui-react'
+import { Button, Input, Grid } from 'semantic-ui-react'
 
 const SimulatorScreen = ({team1Combatants, team2Combatants, allCombatants, team1Update, team2Update,
                           team1Add, team2Add, runSimulation, saveBattle, loadBattle, setBattleKey,
                           battleKey, battleKeyMessage, battleLoadMessage}) => (
-  <div className="ui grid">
+  <Grid stackable>
     <div className="row">
       <div className="eight wide column">
         <Select
@@ -19,7 +19,7 @@ const SimulatorScreen = ({team1Combatants, team2Combatants, allCombatants, team1
           isMulti
           onChange={team1Update}
           options={allCombatants}
-          placeholder="Choose your combatants!"
+          placeholder="Team 1 combatants"
           removeSelected={false}
           value={team1Combatants}
         />
@@ -31,7 +31,7 @@ const SimulatorScreen = ({team1Combatants, team2Combatants, allCombatants, team1
           isMulti
           onChange={team2Update}
           options={allCombatants}
-          placeholder="Choose your combatants!"
+          placeholder="Team 2 combatants"
           removeSelected={false}
           value={team2Combatants}
         />
@@ -55,7 +55,7 @@ const SimulatorScreen = ({team1Combatants, team2Combatants, allCombatants, team1
         <h5 style={{color:battleLoadMessage.indexOf("Success") !== -1 ? "#007f00" : "#e50000"}}>{battleLoadMessage}</h5>
       </div>
     </div>
-  </div>
+  </Grid>
 )
 
 class Container extends React.Component{

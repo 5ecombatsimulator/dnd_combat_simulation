@@ -5,6 +5,7 @@ import "react-table/react-table.css";
 import * as arActions from '../../actions/actionCreationActions'
 
 import {DynamicSizeNumericInput, DynamicSizeTextInput, ToggleWithLabel, ConditionalComponent, statOptions} from "../utils";
+import EffectTable from './effectTable'
 import { Button, Grid } from 'semantic-ui-react'
 
 import '../../index.css';
@@ -13,9 +14,9 @@ const SpellAttackSaveScreen = ({ar, setActionName, setStatBonus, setDamageType,
                                 setDice, setBonusToHit, setBonusToDamage, setMultiAttack,
                                 setRechargePercentile, shiftIsLegendary, setLegendaryActionCost,
                                 setSaveStat, setSaveDC, shiftIsAoe, setAoeType, shiftDoesHalfDamageOnFailure,
-                                createAttackWithSave}) => (
+                                createAttackWithSave, addEffect, updateActionEffects}) => (
   <div>
-    <Grid columns="two" divided>
+    <Grid columns="two" divided stackable>
       <Grid.Column>
         <Grid.Row>
           <h3>Action attributes</h3>
@@ -81,6 +82,16 @@ const SpellAttackSaveScreen = ({ar, setActionName, setStatBonus, setDamageType,
       </Grid.Column>
       <Grid.Column>
         <h3>Action effects</h3>
+        <Select
+            closeOnSelect={false}
+            isMulti
+            onChange={updateActionEffects}
+            options={ar.allEffects}
+            placeholder="Add the effects of the action"
+            removeSelected={true}
+            value={ar.actionEffects}
+          />
+        <EffectTable addEffectFunction={addEffect}/>
       </Grid.Column>
     </Grid>
     <br/>
@@ -125,7 +136,10 @@ const mapDispatchToProps = (dispatch) => ({
   shiftIsLegendary: () => dispatch(arActions.shiftIsLegendary()),
   shiftDoesHalfDamageOnFailure: () => dispatch(arActions.shiftDoesHalfDamageOnFailure()),
   createAttackWithSave: () => dispatch(arActions.createAction("AttackWithSave")),
-  resetTabAttributes: () => dispatch(arActions.resetTabAttributes())
+  resetTabAttributes: () => dispatch(arActions.resetTabAttributes()),
+
+  addEffect: (e) => dispatch(arActions.addActionEffect(e)),
+  updateActionEffects: (newSet) => dispatch(arActions.updateActionEffects(newSet)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Container)

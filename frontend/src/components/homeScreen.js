@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import Select from 'react-select';
 import { connect } from 'react-redux'
 
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import "react-tabs/style/react-tabs.css";
 
 import SimulatorScreen from './simulation/simulatorScreen'
@@ -12,6 +10,8 @@ import SpellAttackWithSaveCreationScreen from './actionCreation/spellAttackSaveS
 import EffectCreationScreen from './effectCreation/effectCreationScreen'
 import ExploreCombatantScreen from './explore/exploreCombatant'
 import '../index.css';
+
+import {Grid} from 'semantic-ui-react'
 
 const RenderedContent = ({ tabName }) => {
   if (tabName === "Simulator") {
@@ -50,7 +50,7 @@ class HomeScreen extends React.Component{
   render() {
     const { renderTab } = this.state;
     return (
-      <div className="ui grid">
+      <Grid stackable>
         <div className="row">
           <div className="ui horizontal menu" style={{margin: "auto"}}>
             <div className="ui simple dropdown item">
@@ -80,7 +80,7 @@ class HomeScreen extends React.Component{
           </div>
           <div className="one wide column"/>
         </div>
-      </div>
+      </Grid>
     )
   }
 }

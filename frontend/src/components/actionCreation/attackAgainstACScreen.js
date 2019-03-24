@@ -17,7 +17,7 @@ const AttackAgainstACScreen = ({ar, setActionName, setStatBonus, setDamageType,
                                 setSpellOrAttack, updateActionEffects, addEffect,
                                 createAttackAgainstAC}) => (
   <div>
-    <Grid columns="two" divided>
+    <Grid columns="two" divided stackable>
       <Grid.Column>
         <Grid.Row>
           <h3>Action attributes</h3>

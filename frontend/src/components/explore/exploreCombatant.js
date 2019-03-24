@@ -77,7 +77,7 @@ const ActionBox = ({actions}) => (
 
 const ExploreCombatantScreen = ({allCombatants, loadCombatant, setCombatantFromClick, ec}) => (
   <div>
-    <Grid columns="two">
+    <Grid columns="two" stackable>
       <Grid.Column>
         <Select options={allCombatants}
                 value={ec.chosenCombatant}

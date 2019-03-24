@@ -17,7 +17,7 @@ const CombatantCreationScreen = ({allActions, combatantActions, updateCombatantA
                            createCombatant}) => (
   <div>
     <h1> Create a combatant:</h1>
-    <Grid columns="two">
+    <Grid columns="two" stackable>
       <Grid.Row className="row">
         <Grid.Column>
           <h3>Combatant information:</h3>
