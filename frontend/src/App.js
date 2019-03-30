@@ -17,6 +17,9 @@ const mapDispatchToProps = (dispatch) => ({
 const AppRouter = () => (
   <BrowserRouter>
     <div className="App">
+      <head>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+      </head>
       <Route path='/' component={HomeScreen}/>
     </div>
   </BrowserRouter>
