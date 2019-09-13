@@ -1,11 +1,9 @@
-import React, { Component } from 'react';
-import Select from 'react-select';
-import { connect } from 'react-redux'
+import React from 'react';
 import '../../index.css';
 
-import { Button, Input, Grid } from 'semantic-ui-react'
+import { Grid } from 'semantic-ui-react'
 
-const GeneralInfoScreen = ({}) => (
+const GeneralInfoScreen = () => (
   <Grid stackable>
     <div className="row">
       <div className="eight wide column">
@@ -25,12 +23,4 @@ const GeneralInfoScreen = ({}) => (
   </Grid>
 )
 
-const mapStateToProps = (state) => ({
-
-})
-
-const mapDispatchToProps = (dispatch) => ({
-
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(GeneralInfoScreen)
+export default GeneralInfoScreen

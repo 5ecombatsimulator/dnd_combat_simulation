@@ -18,7 +18,7 @@ const http = (url, method, args, returnData=true) => {
   // TODO: Deal with the CSRF token?
   return axios({
     method: method,
-    url: url,
+    url: 'http://localhost:8000' + url,
     data: data,
     withCredentials: false,
     headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}

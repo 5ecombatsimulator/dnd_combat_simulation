@@ -78,4 +78,4 @@ const SideNavComponent = ({setCurrentTab}) => {
   </SideNav>
 }
 
-export default SideNavComponent;
+export default SideNavComponent

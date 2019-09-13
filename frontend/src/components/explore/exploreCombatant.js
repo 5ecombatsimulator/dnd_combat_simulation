@@ -1,5 +1,5 @@
 import React  from 'react';
-import { connect } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import "react-table/react-table.css";
 import Select from 'react-select';
 import * as actions from '../../actions/exploreActions'
@@ -75,64 +75,51 @@ const ActionBox = ({actions}) => (
 );
 
 
-const ExploreCombatantScreen = ({allCombatants, loadCombatant, setCombatantFromClick, ec}) => (
-  <div>
-    <Grid columns="two" stackable>
-      <Grid.Column>
-        <Select options={allCombatants}
-                value={ec.chosenCombatant}
-                placeholder="Choose a combatant"
-                onChange={loadCombatant}/>
-        <CombatantTable onClickFunction={setCombatantFromClick}/>
-      </Grid.Column>
-      <Grid.Column className="ui raised segment" style={{backgroundColor:"#f2f2f2"}}>
-        <Grid.Row>
-          <Grid columns="one">
-            <Grid.Column className="ui raised segment centered ten wide">
-              <i><h1>{ec.combatantName !== "" ? ec.combatantName : "Combatant Name..."}</h1></i>
-            </Grid.Column>
-          </Grid>
-        </Grid.Row>
-        <br/>
-        <Grid.Row>
-          <Grid columns="two" style={{textAlign: "left"}}>
-            <Grid.Column>
-              <FullStatBox str={ec.combatantStrength} dex={ec.combatantDexterity} con={ec.combatantConstitution}
-                           wis={ec.combatantWisdom} int={ec.combatantIntelligence} cha={ec.combatantCharisma}/>
-            </Grid.Column>
-            <Grid.Column>
-              <ExtraStatBox cr={ec.combatantCR} prof={ec.combatantProficiency}
-                            hp={ec.combatantHP} ac={ec.combatantAC}/>
-            </Grid.Column>
-          </Grid>
-        </Grid.Row>
-        <br/>
-        <Grid.Row>
-          <ActionBox actions={ec.combatantActions}/>
-        </Grid.Row>
-      </Grid.Column>
-    </Grid>
-  </div>
-)
+const ExploreCombatantScreen = () => {
+  let ec = useSelector(state => state.exploreCombatantReducer)
 
-class Container extends React.Component{
-  constructor(props) {
-    super(props)
-  }
+  const dispatch = useDispatch()
+  const loadCombatant = c => dispatch(actions.loadCombatant(c))
 
-  render() {
-    return <ExploreCombatantScreen {...this.props} />
-  }
+  return (
+    <div>
+      <Grid columns="two" stackable>
+        <Grid.Column>
+          <Select options={ec.allCombatants}
+                  value={ec.chosenCombatant}
+                  placeholder="Choose a combatant"
+                  onChange={loadCombatant}/>
+          <CombatantTable onClickFunction={loadCombatant}/>
+        </Grid.Column>
+        <Grid.Column className="ui raised segment" style={{backgroundColor:"#f2f2f2"}}>
+          <Grid.Row>
+            <Grid columns="one">
+              <Grid.Column className="ui raised segment centered ten wide">
+                <i><h1>{ec.combatantName !== "" ? ec.combatantName : "Combatant Name..."}</h1></i>
+              </Grid.Column>
+            </Grid>
+          </Grid.Row>
+          <br/>
+          <Grid.Row>
+            <Grid columns="two" style={{textAlign: "left"}}>
+              <Grid.Column>
+                <FullStatBox str={ec.combatantStrength} dex={ec.combatantDexterity} con={ec.combatantConstitution}
+                            wis={ec.combatantWisdom} int={ec.combatantIntelligence} cha={ec.combatantCharisma}/>
+              </Grid.Column>
+              <Grid.Column>
+                <ExtraStatBox cr={ec.combatantCR} prof={ec.combatantProficiency}
+                              hp={ec.combatantHP} ac={ec.combatantAC}/>
+              </Grid.Column>
+            </Grid>
+          </Grid.Row>
+          <br/>
+          <Grid.Row>
+            <ActionBox actions={ec.combatantActions}/>
+          </Grid.Row>
+        </Grid.Column>
+      </Grid>
+    </div>
+  )
 }
 
-const mapStateToProps = (state) => ({
-  ec: state.exploreCombatantReducer,
-  allCombatants: state.combatantSelectionReducer.allCombatants,
-})
-
-const mapDispatchToProps = (dispatch) => ({
-  loadCombatant: (c) => dispatch(actions.loadCombatant(c)),
-  setCombatantFromClick: (c) => dispatch(actions.loadCombatant(c)),
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(Container)
+export default ExploreCombatantScreen
