@@ -4,7 +4,6 @@ import combatantCreationReducer from '../combatantCreation/reducers'
 import actionCreationReducer from '../actionCreation/reducers'
 import effectCreationReducer from '../effectCreation/reducers'
 import exploreCombatantReducer from '../exploreCombatants/reducers'
-import tabController from '../nav/reducers'
 
 const reducer = combineReducers({
   combatantSelectionReducer,
@@ -12,7 +11,6 @@ const reducer = combineReducers({
   actionCreationReducer,
   effectCreationReducer,
   exploreCombatantReducer,
-  tabController,
 });
 
 export {reducer as default}

@@ -1,10 +1,6 @@
-import React from 'react'
-import { connect } from 'react-redux'
-
-
+import React, {useState} from 'react'
 import "react-tabs/style/react-tabs.css"
-
-import * as tcActions from '../../nav/actions'
+import '../../index.css'
 
 import SimulatorScreen from '../../simulation/components/SimulatorScreen'
 import CombatantCreationScreen from '../../combatantCreation/components/combatantCreationScreen'
@@ -13,7 +9,6 @@ import SpellAttackWithSaveCreationScreen from '../../actionCreation/components/s
 import EffectCreationScreen from '../../effectCreation/components/effectCreationScreen'
 import ExploreCombatantScreen from '../../exploreCombatants/components/exploreCombatant'
 import SidebarNav from '../../nav/components/Navbar'
-import '../../index.css'
 
 import {Grid} from 'semantic-ui-react'
 
@@ -27,17 +22,18 @@ const tabs = {
   "generalInfo": () => (<div />)
 }
 
-const HomeScreen = (props) => {
-  const RenderedContent = tabs[props.currentTab]
+export default function HomeScreen (props) {
+  const [currentTab, setCurrentTab] = useState("Simulator")
+  const RenderedContent = tabs[currentTab]
 
   return (
     <body>
-      <SidebarNav setCurrentTab={props.setCurrentTab}/>
+      <SidebarNav setCurrentTab={setCurrentTab}/>
       <Grid stackable>
         <Grid.Row>
           <div className="one wide column"/>
           <div className="fourteen wide column">
-            <RenderedContent tabName={props.currentTab} />
+            <RenderedContent tabName={currentTab} />
           </div>
           <div className="one wide column"/>
         </Grid.Row>
@@ -45,13 +41,3 @@ const HomeScreen = (props) => {
     </body>
   )
 }
-
-const mapStateToProps = (state) => ({
-  currentTab: state.tabController.currentTab
-})
-
-const mapDispatchToProps = (dispatch) => ({
-  setCurrentTab: (t) => dispatch(tcActions.setCurrentTab(t)),
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen)
