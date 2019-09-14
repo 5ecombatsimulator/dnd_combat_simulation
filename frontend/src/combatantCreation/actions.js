@@ -1,20 +1,20 @@
 import * as t from './actionTypes'
-import {setterAction} from '../common/utils'
+import {simpleAction} from '../common/utils'
 import SimulatorSource from '../common/sources/simulatorSource'
 import {setAllCombatants} from '../simulation/actions'
 
-export const setCombatantName = setterAction(t.SET_COMBATANT_NAME);
-export const setCombatantHP = setterAction(t.SET_COMBATANT_HP);
-export const setCombatantAC = setterAction(t.SET_COMBATANT_AC);
-export const setCombatantProficiency = setterAction(t.SET_COMBATANT_PROFICIENCY);
-export const setCombatantStrength = setterAction(t.SET_COMBATANT_STRENGTH);
-export const setCombatantDexterity = setterAction(t.SET_COMBATANT_DEXTERITY);
-export const setCombatantConstitution = setterAction(t.SET_COMBATANT_CONSTITUTION);
-export const setCombatantWisdom = setterAction(t.SET_COMBATANT_WISDOM);
-export const setCombatantIntelligence = setterAction(t.SET_COMBATANT_INTELLIGENCE);
-export const setCombatantCharisma = setterAction(t.SET_COMBATANT_CHARISMA);
-export const setCombatantActions = setterAction(t.SET_COMBATANT_ACTIONS);
-export const setCombatantCreationMsg = setterAction(t.SET_COMBATANT_MSG);
+export const setCombatantName = simpleAction(t.SET_COMBATANT_NAME);
+export const setCombatantHP = simpleAction(t.SET_COMBATANT_HP);
+export const setCombatantAC = simpleAction(t.SET_COMBATANT_AC);
+export const setCombatantProficiency = simpleAction(t.SET_COMBATANT_PROFICIENCY);
+export const setCombatantStrength = simpleAction(t.SET_COMBATANT_STRENGTH);
+export const setCombatantDexterity = simpleAction(t.SET_COMBATANT_DEXTERITY);
+export const setCombatantConstitution = simpleAction(t.SET_COMBATANT_CONSTITUTION);
+export const setCombatantWisdom = simpleAction(t.SET_COMBATANT_WISDOM);
+export const setCombatantIntelligence = simpleAction(t.SET_COMBATANT_INTELLIGENCE);
+export const setCombatantCharisma = simpleAction(t.SET_COMBATANT_CHARISMA);
+export const setCombatantActions = simpleAction(t.SET_COMBATANT_ACTIONS);
+export const setCombatantCreationMsg = simpleAction(t.SET_COMBATANT_MSG);
 
 export const addCombatantAction = (newAction) => (dispatch, getState) => {
     /*
