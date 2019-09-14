@@ -6,7 +6,7 @@ import * as actions from '../actions'
 import {getAllActions} from '../../simulation/actions'
 import ActionTable from './ActionTable'
 
-import {DynamicSizeNumericInput, DynamicSizeTextInput} from "../../components/utils"
+import {DynamicSizeNumericInput, DynamicSizeTextInput} from "../../common/components/utils"
 
 import { Button, Grid } from 'semantic-ui-react'
 

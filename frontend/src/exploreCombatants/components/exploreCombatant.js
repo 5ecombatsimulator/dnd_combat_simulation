@@ -2,7 +2,7 @@ import React  from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import "react-table/react-table.css";
 import Select from 'react-select';
-import * as actions from '../../actions/exploreActions'
+import * as actions from '../actions'
 import CombatantTable from '../../simulation/components/CombatantTable'
 import '../../index.css';
 

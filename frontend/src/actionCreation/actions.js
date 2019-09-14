@@ -1,59 +1,33 @@
-import {setterAction} from '../common'
-import SimulatorSource from '../sources/simulatorSource'
+import {setterAction} from '../common/utils'
+import SimulatorSource from '../common/sources/simulatorSource'
 import {setAllActions} from "../simulation/actions";
-import get from "./utils"
-
-
-/* Action types */
-
-// 'effects',
-
-export const SET_ACTION_NAME = 'SET_ACTION_NAME';
-export const SET_STAT_BONUS = 'SET_STAT_BONUS';
-export const SET_DAMAGE_TYPE = 'SET_DAMAGE_TYPE';
-export const SET_BONUS_TO_HIT = 'SET_BONUS_TO_HIT';
-export const SET_BONUS_TO_DAMAGE = 'SET_BONUS_TO_DAMAGE';
-export const SET_MULTI_ATTACK = 'SET_MULTI_ATTACK';
-export const SET_RECHARGE_PERCENTILE = 'RECHARGE_PERCENTILE';
-export const SET_IS_LEGENDARY = 'IS_LEGENDARY';
-export const SET_LEGENDARY_ACTION_COST = 'LEGENDARY_ACTION_COST';
-export const SET_DICE = "SET_DICE";
-export const SET_DAMAGE_TYPE_OPTIONS = "SET_DAMAGE_TYPE_OPTIONS";
-export const SET_SAVE_STAT = "SET_SAVE_STAT";
-export const SET_SAVE_DC = "SET_SAVE_DC";
-export const SET_IS_AOE = "SET_IS_AOE";
-export const SET_AOE_TYPE = "SET_AOE_TYPE";
-export const SET_AOE_TYPE_OPTIONS = "SET_AOE_TYPE_OPTIONS";
-export const SET_SPELL_OR_ATTACK = "SET_SPELL_OR_ATTACK";
-export const SET_DOES_HALF_DAMAGE_ON_FAILURE = "SET_DOES_HALF_DAMAGE_ON_FAILURE";
-export const SET_ACTION_CREATION_ERROR_MSG = "SET_ACTION_CREATION_ERROR_MSG";
-export const SET_ALL_EFFECTS = "SET_ALL_EFFECTS";
-export const SET_ACTION_EFFECTS = "SET_ACTION_EFFECTS";
+import get from "../common/actionUtils"
+import * as t from './actionTypes'
 
 /* Setter actions */
-export const setActionName = setterAction(SET_ACTION_NAME);
-export const setStatBonus = setterAction(SET_STAT_BONUS);
-export const setDamageType = setterAction(SET_DAMAGE_TYPE);
-export const setBonusToHit = setterAction(SET_BONUS_TO_HIT);
-export const setBonusToDamage = setterAction(SET_BONUS_TO_DAMAGE);
-export const setMultiAttack = setterAction(SET_MULTI_ATTACK);
-export const setRechargePercentile = setterAction(SET_RECHARGE_PERCENTILE);
-export const setLegendaryActionCost = setterAction(SET_LEGENDARY_ACTION_COST);
-export const setDice = setterAction(SET_DICE);
-export const setIsLegendary = setterAction(SET_IS_LEGENDARY);
-export const setSaveStat = setterAction(SET_SAVE_STAT);
-export const setSaveDC = setterAction(SET_SAVE_DC);
-export const setIsAoe = setterAction(SET_IS_AOE);
-export const setAoeType = setterAction(SET_AOE_TYPE);
-export const setActionCreationErrorMsg = setterAction(SET_ACTION_CREATION_ERROR_MSG);
-export const setAllEffects = setterAction(SET_ALL_EFFECTS);
-export const setActionEffects = setterAction(SET_ACTION_EFFECTS);
+export const setActionName = setterAction(t.SET_ACTION_NAME);
+export const setStatBonus = setterAction(t.SET_STAT_BONUS);
+export const setDamageType = setterAction(t.SET_DAMAGE_TYPE);
+export const setBonusToHit = setterAction(t.SET_BONUS_TO_HIT);
+export const setBonusToDamage = setterAction(t.SET_BONUS_TO_DAMAGE);
+export const setMultiAttack = setterAction(t.SET_MULTI_ATTACK);
+export const setRechargePercentile = setterAction(t.SET_RECHARGE_PERCENTILE);
+export const setLegendaryActionCost = setterAction(t.SET_LEGENDARY_ACTION_COST);
+export const setDice = setterAction(t.SET_DICE);
+export const setIsLegendary = setterAction(t.SET_IS_LEGENDARY);
+export const setSaveStat = setterAction(t.SET_SAVE_STAT);
+export const setSaveDC = setterAction(t.SET_SAVE_DC);
+export const setIsAoe = setterAction(t.SET_IS_AOE);
+export const setAoeType = setterAction(t.SET_AOE_TYPE);
+export const setActionCreationErrorMsg = setterAction(t.SET_ACTION_CREATION_ERROR_MSG);
+export const setAllEffects = setterAction(t.SET_ALL_EFFECTS);
+export const setActionEffects = setterAction(t.SET_ACTION_EFFECTS);
 
-export const setSpellOrAttack = setterAction(SET_SPELL_OR_ATTACK);
-export const setDoesHalfDamageOnFailure = setterAction(SET_DOES_HALF_DAMAGE_ON_FAILURE);
+export const setSpellOrAttack = setterAction(t.SET_SPELL_OR_ATTACK);
+export const setDoesHalfDamageOnFailure = setterAction(t.SET_DOES_HALF_DAMAGE_ON_FAILURE);
 
-export const setDamageTypeOptions = setterAction(SET_DAMAGE_TYPE_OPTIONS);
-export const setAoeTypeOptions = setterAction(SET_AOE_TYPE_OPTIONS);
+export const setDamageTypeOptions = setterAction(t.SET_DAMAGE_TYPE_OPTIONS);
+export const setAoeTypeOptions = setterAction(t.SET_AOE_TYPE_OPTIONS);
 
 export const getDamageTypeOptions = get(SimulatorSource.getDamageTypes, setDamageTypeOptions);
 export const getAoeTypeOptions = get(SimulatorSource.getAoeTypes, setAoeTypeOptions);

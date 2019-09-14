@@ -1,8 +1,8 @@
 import React  from 'react'
 import ReactTable from "react-table"
 import "react-table/react-table.css"
-import { connect, useSelector, useDispatch } from 'react-redux'
-import * as arActions from '../../actions/actionCreationActions'
+import { useSelector, useDispatch } from 'react-redux'
+import * as arActions from '../actions'
 
 const getTdProps = (addEffectFunction) => (state, rowInfo, column, instance) => {
   return {

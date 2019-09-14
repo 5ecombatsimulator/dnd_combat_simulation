@@ -1,9 +1,9 @@
 import React  from 'react';
 
-import SideNav, { Toggle, Nav, NavItem, NavIcon, NavText } from '@trendmicro/react-sidenav';
+import SideNav, { NavItem, NavIcon, NavText } from '@trendmicro/react-sidenav';
 import '@trendmicro/react-sidenav/dist/react-sidenav.css';
 
-import {CrossedSwords, Magnifier, Flame, EditPerson, Flare, OpenBook} from "../assets/svgIcons";
+import {CrossedSwords, Magnifier, Flame, EditPerson, Flare, OpenBook} from "../../assets/svgIcons";
 
 const SideNavComponent = ({setCurrentTab}) => {
   return <SideNav

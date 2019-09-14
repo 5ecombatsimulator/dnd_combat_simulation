@@ -4,16 +4,16 @@ import { connect } from 'react-redux'
 
 import "react-tabs/style/react-tabs.css"
 
-import * as tcActions from '../actions/tabControllerActions'
+import * as tcActions from '../../nav/actions'
 
-import SimulatorScreen from '../simulation/components/SimulatorScreen'
-import CombatantCreationScreen from '../combatant/components/combatantCreationScreen'
-import AttackAgainstACCreationScreen from './actionCreation/attackAgainstACScreen'
-import SpellAttackWithSaveCreationScreen from './actionCreation/spellAttackSaveScreen'
-import EffectCreationScreen from './effectCreation/effectCreationScreen'
-import ExploreCombatantScreen from './explore/exploreCombatant'
-import SidebarNav from './Navbar'
-import '../index.css'
+import SimulatorScreen from '../../simulation/components/SimulatorScreen'
+import CombatantCreationScreen from '../../combatantCreation/components/combatantCreationScreen'
+import AttackAgainstACCreationScreen from '../../actionCreation/components/attackAgainstACScreen'
+import SpellAttackWithSaveCreationScreen from '../../actionCreation/components/spellAttackSaveScreen'
+import EffectCreationScreen from '../../effectCreation/components/effectCreationScreen'
+import ExploreCombatantScreen from '../../exploreCombatants/components/exploreCombatant'
+import SidebarNav from '../../nav/components/Navbar'
+import '../../index.css'
 
 import {Grid} from 'semantic-ui-react'
 

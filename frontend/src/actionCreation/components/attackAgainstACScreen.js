@@ -2,10 +2,10 @@ import React from 'react'
 import Select from 'react-select'
 import { useSelector, useDispatch } from 'react-redux'
 import "react-table/react-table.css"
-import * as arActions from '../../actions/actionCreationActions'
+import * as arActions from '../actions'
 import EffectTable from './effectTable'
 
-import {DynamicSizeNumericInput, DynamicSizeTextInput, ToggleWithLabel, ConditionalComponent, statOptions} from "../utils"
+import {DynamicSizeNumericInput, DynamicSizeTextInput, ToggleWithLabel, ConditionalComponent, statOptions} from "../../common/components/utils"
 
 import { Grid, Button } from 'semantic-ui-react'
 

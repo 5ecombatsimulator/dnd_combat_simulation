@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import '../styles/paddingStyles.css'
+import React from 'react';
+import '../../styles/paddingStyles.css'
 import {Popup} from 'semantic-ui-react'
 
 export const ConditionalComponent = ({condition, component}) => {

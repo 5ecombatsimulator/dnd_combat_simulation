@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import * as t from './actionTypes'
-import {setterReducer} from '../common'
+import {setterReducer} from '../common/utils'
 import {SET_ALL_ACTIONS} from '../simulation/actionTypes'
 
 const allActions = setterReducer([], SET_ALL_ACTIONS);

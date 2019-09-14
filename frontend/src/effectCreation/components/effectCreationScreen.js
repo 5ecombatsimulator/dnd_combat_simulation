@@ -2,9 +2,9 @@ import React from 'react';
 import Select from 'react-select'
 import { useSelector, useDispatch } from 'react-redux'
 
-import {DynamicSizeNumericInput, DynamicSizeTextInput, statOptions} from "../utils"
+import {DynamicSizeNumericInput, DynamicSizeTextInput, statOptions} from "../../common/components/utils"
 import { Button, Grid } from 'semantic-ui-react'
-import * as actions from "../../actions/effectCreationActions"
+import * as actions from "../actions"
 
 const ShowDamageDice = ({effectType}) => {
   return effectType === "DOT Effect"

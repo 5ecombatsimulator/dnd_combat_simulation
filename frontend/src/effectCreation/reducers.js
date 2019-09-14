@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
-import * as t from '../actions/effectCreationActions'
-import {setterReducer} from '../common'
+import * as t from './actionTypes'
+import {setterReducer} from '../common/utils'
 
 const effectName = setterReducer("", t.SET_EFFECT_NAME);
 const effectType = setterReducer("", t.SET_EFFECT_TYPE);

@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
-import * as t from '../actions/tabControllerActions'
-import {setterReducer} from '../common'
+import * as t from './actions'
+import {setterReducer} from '../common/utils'
 
 
 const currentTab = setterReducer("Simulator", t.SET_CURRENT_TAB);

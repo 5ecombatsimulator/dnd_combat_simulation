@@ -1,9 +1,9 @@
 /**
  * Created by Andrew on 1/16/18.
  */
-import {setterAction} from '../common'
-import get from '../actions/utils'
-import SimulatorSource from '../sources/simulatorSource'
+import {setterAction} from '../common/utils'
+import get from '../common/actionUtils'
+import SimulatorSource from '../common/sources/simulatorSource'
 import * as t from './actionTypes'
 
 /* Action types */

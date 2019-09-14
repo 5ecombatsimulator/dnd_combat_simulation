@@ -1,6 +1,6 @@
 import * as t from './actionTypes'
-import {setterAction} from '../common'
-import SimulatorSource from '../sources/simulatorSource'
+import {setterAction} from '../common/utils'
+import SimulatorSource from '../common/sources/simulatorSource'
 import {setAllCombatants} from '../simulation/actions'
 
 export const setCombatantName = setterAction(t.SET_COMBATANT_NAME);

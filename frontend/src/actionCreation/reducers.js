@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
-import * as t from '../actions/actionCreationActions'
-import {setterReducer} from '../common'
+import * as t from './actionTypes'
+import {setterReducer} from '../common/utils'
 
 const actionName = setterReducer("", t.SET_ACTION_NAME);
 const statBonus = setterReducer("", t.SET_STAT_BONUS);

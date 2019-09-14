@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import * as t from './actionTypes'
-import {setterReducer} from '../common'
+import {setterReducer} from '../common/utils'
 
 const team1Combatants = setterReducer([], t.SET_TEAM1_COMBATANTS);
 const team2Combatants = setterReducer([], t.SET_TEAM2_COMBATANTS);
