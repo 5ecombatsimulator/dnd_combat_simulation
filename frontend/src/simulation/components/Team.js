@@ -1,6 +1,6 @@
 import React from 'react'
 import {useSelector, useDispatch} from 'react-redux'
-import * as actions from '../../actions/actions'
+import * as actions from '../actions'
 import Select from 'react-select'
 import CombatantTable from './CombatantTable'
 

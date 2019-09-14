@@ -1,6 +1,6 @@
 import {setterAction} from '../common'
 import SimulatorSource from '../sources/simulatorSource'
-import {setAllActions, setAllCombatants, setCombatantActions} from "./actions";
+import {setAllActions} from "../simulation/actions";
 import get from "./utils"
 
 

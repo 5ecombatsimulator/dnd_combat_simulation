@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, Input } from 'semantic-ui-react'
 import { useSelector, useDispatch } from 'react-redux'
-import * as actions from '../../actions/actions'
+import * as actions from '../actions'
 
 export default function LoadBattle() {
   let {battleKey, battleLoadMessage} = useSelector(state => state.combatantSelectionReducer)

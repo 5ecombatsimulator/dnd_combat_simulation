@@ -2,7 +2,7 @@
 import React from 'react'
 import { Button } from 'semantic-ui-react'
 import { useDispatch } from 'react-redux'
-import {runSimulation} from '../../actions/actions'
+import {runSimulation} from '../actions'
 
 export default function FightButton() {
   const dispatch = useDispatch()

@@ -6,8 +6,8 @@ import "react-tabs/style/react-tabs.css"
 
 import * as tcActions from '../actions/tabControllerActions'
 
-import SimulatorScreen from './simulation/SimulatorScreen'
-import CombatantCreationScreen from './combatantCreation/combatantCreationScreen'
+import SimulatorScreen from '../simulation/components/SimulatorScreen'
+import CombatantCreationScreen from '../combatant/components/combatantCreationScreen'
 import AttackAgainstACCreationScreen from './actionCreation/attackAgainstACScreen'
 import SpellAttackWithSaveCreationScreen from './actionCreation/spellAttackSaveScreen'
 import EffectCreationScreen from './effectCreation/effectCreationScreen'

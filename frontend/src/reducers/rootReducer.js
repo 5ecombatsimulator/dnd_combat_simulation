@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
-import combatantSelectionReducer from './combatantSelection'
-import combatantCreationReducer from './combatantCreation'
+import combatantSelectionReducer from '../simulation/reducers'
+import combatantCreationReducer from '../combatant/reducers'
 import actionCreationReducer from './actionCreation'
 import effectCreationReducer from './effectCreation'
 import exploreCombatantReducer from './exploreCombatant'

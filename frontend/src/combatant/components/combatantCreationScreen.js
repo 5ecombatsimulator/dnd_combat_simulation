@@ -2,10 +2,11 @@ import React from 'react'
 import Select from 'react-select'
 import { useSelector, useDispatch } from 'react-redux'
 import "react-table/react-table.css"
-import * as actions from '../../actions/actions'
+import * as actions from '../actions'
+import {getAllActions} from '../../simulation/actions'
 import ActionTable from './ActionTable'
 
-import {DynamicSizeNumericInput, DynamicSizeTextInput} from "../utils"
+import {DynamicSizeNumericInput, DynamicSizeTextInput} from "../../components/utils"
 
 import { Button, Grid } from 'semantic-ui-react'
 
@@ -14,7 +15,7 @@ const CombatantCreationScreen = () => {
 
   const dispatch = useDispatch()
   if (cr.allActions.length < 1)
-    dispatch(actions.getAllActions())
+    dispatch(getAllActions())
 
   const addCombatantAction = (combatantAction) => dispatch(actions.addCombatantAction(combatantAction))
   const updateCombatantActions = (updatedSet) => dispatch(actions.updateCombatantActions(updatedSet))

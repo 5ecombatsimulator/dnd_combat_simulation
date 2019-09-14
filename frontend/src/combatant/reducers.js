@@ -1,8 +1,9 @@
 import { combineReducers } from 'redux'
-import * as t from '../actions/actions'
+import * as t from './actionTypes'
 import {setterReducer} from '../common'
+import {SET_ALL_ACTIONS} from '../simulation/actionTypes'
 
-const allActions = setterReducer([], t.SET_ALL_ACTIONS);
+const allActions = setterReducer([], SET_ALL_ACTIONS);
 const combatantActions = setterReducer([], t.SET_COMBATANT_ACTIONS);
 const combatantName = setterReducer("", t.SET_COMBATANT_NAME);
 const combatantHP = setterReducer(1, t.SET_COMBATANT_HP);

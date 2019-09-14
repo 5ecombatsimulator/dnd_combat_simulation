@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import * as actions from '../../actions/actions'
+import * as actions from '../actions'
 import ResultsScreen from './ResultsScreen'
 import Team from './Team'
 import SaveButton from './SaveButton'

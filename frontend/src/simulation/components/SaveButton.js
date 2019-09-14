@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button } from 'semantic-ui-react'
 import { useSelector, useDispatch } from 'react-redux'
-import {saveBattle} from '../../actions/actions'
+import {saveBattle} from '../actions'
 
 export default function SaveButton() {
   const {battleKeyMessage} = useSelector(state => state.combatantSelectionReducer)
