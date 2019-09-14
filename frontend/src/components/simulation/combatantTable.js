@@ -3,15 +3,12 @@ import ReactTable from "react-table"
 import "react-table/react-table.css"
 import { useSelector } from 'react-redux'
 
-const getTdProps = (onClickFunction) => (state, rowInfo, column, instance) => {
-  return {
-    onClick: (e, handleOriginal) => {
-      if (rowInfo !== undefined) {
-        onClickFunction({value: rowInfo.original.value, label: rowInfo.original.label})
-      }
-    }
+const getTdProps = (onClickFunction) => (state, rowInfo) => ({
+  onClick: () => {
+    if (rowInfo !== undefined) 
+      onClickFunction({value: rowInfo.original.value, label: rowInfo.original.label})
   }
-}
+})
 
 const columns = [
   {

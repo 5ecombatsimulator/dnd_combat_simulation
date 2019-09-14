@@ -14,7 +14,7 @@ const columns = [
   },
   {
     Header: 'Stats',
-    columns: [,
+    columns: [
       {
         Header: "Effects",
         accessor: "actionEffects"
@@ -28,15 +28,12 @@ const columns = [
   }
 ]
 
-const getTdProps = (actionAddFunction) => (state, rowInfo, column, instance) => {
-  return {
-    onClick: (e, handleOriginal) => {
-      if (rowInfo !== undefined) {
-        actionAddFunction({value: rowInfo.original.value, label: rowInfo.original.label})
-      }
-    }
+const getTdProps = (actionAddFunction) => (state, rowInfo) => ({
+  onClick: () => {
+    if (rowInfo !== undefined)
+      actionAddFunction({value: rowInfo.original.value, label: rowInfo.original.label})
   }
-}
+})
 
 
 const ActionTable = ({actionAddFunction}) => {

@@ -15,6 +15,9 @@ export const SET_ALL_ACTIONS = 'SET_ALL_ACTIONS';
 export const SET_COMBATANT_ACTIONS = 'SET_COMBATANT_ACTIONS';
 export const SET_COMBATANT_MSG = 'SET_COMBATANT_MSG';
 
+export const ADD_TEAM_COMBATANT = 'ADD_TEAM_COMBATANT'
+export const UPDATE_TEAM_COMBATANTS = 'UPDATE_TEAM_COMBATANTS'
+
 export const SET_BATTLE_KEY = 'SET_BATTLE_KEY';
 export const SET_BATTLE_KEY_MESSAGE = "SET_BATTLE_KEY_MESSAGE";
 export const SET_LOAD_BATTLE_MESSAGE = "SET_LOAD_BATTLE_MESSAGE";
@@ -87,7 +90,7 @@ function addCombatantToSet(combatant, counter, set) {
 export const getAllCombatants = get(SimulatorSource.getCombatants, setAllCombatants);
 export const getAllActions = get(SimulatorSource.getActions, setAllActions);
 
-export const updateT1Combatants = (newSet) => (dispatch, getState) => {
+export const team1Update = (newSet) => (dispatch, getState) => {
   let {combatantSelectionReducer} = getState();
   let {team1Combatants, counter} = combatantSelectionReducer;
   // Must increment the counter each time to keep the appended values unique
@@ -96,7 +99,7 @@ export const updateT1Combatants = (newSet) => (dispatch, getState) => {
   dispatch(setT1Combatants(updatedSet))
 };
 
-export const updateT2Combatants = (newSet) => (dispatch, getState) => {
+export const team2Update = (newSet) => (dispatch, getState) => {
   let {combatantSelectionReducer} = getState();
   let {team2Combatants, counter} = combatantSelectionReducer;
   // Must increment the counter each time to keep the appended values unique
@@ -107,7 +110,7 @@ export const updateT2Combatants = (newSet) => (dispatch, getState) => {
   dispatch(setT2Combatants(updatedSet))
 };
 
-export const addT1Combatant = (newCombatant) => (dispatch, getState) => {
+export const team1Add = (newCombatant) => (dispatch, getState) => {
   let {combatantSelectionReducer} = getState();
   let {team1Combatants, counter} = combatantSelectionReducer;
   // Must increment the counter each time to keep the appended values unique
@@ -116,7 +119,7 @@ export const addT1Combatant = (newCombatant) => (dispatch, getState) => {
   dispatch(setT1Combatants(addCombatantToSet(newCombatant, counter, team1Combatants)))
 };
 
-export const addT2Combatant = (newCombatant) => (dispatch, getState) => {
+export const team2Add = (newCombatant) => (dispatch, getState) => {
   let {combatantSelectionReducer} = getState();
   let {team2Combatants, counter} = combatantSelectionReducer;
   // Must increment the counter each time to keep the appended values unique

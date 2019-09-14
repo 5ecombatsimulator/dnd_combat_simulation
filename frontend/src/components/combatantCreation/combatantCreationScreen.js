@@ -3,7 +3,7 @@ import Select from 'react-select'
 import { useSelector, useDispatch } from 'react-redux'
 import "react-table/react-table.css"
 import * as actions from '../../actions/actions'
-import ActionTable from '../simulation/actionTable'
+import ActionTable from './ActionTable'
 
 import {DynamicSizeNumericInput, DynamicSizeTextInput} from "../utils"
 

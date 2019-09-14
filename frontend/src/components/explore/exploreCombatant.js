@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import "react-table/react-table.css";
 import Select from 'react-select';
 import * as actions from '../../actions/exploreActions'
-import CombatantTable from '../simulation/combatantTable'
+import CombatantTable from '../simulation/CombatantTable'
 import '../../index.css';
 
 import { Grid } from 'semantic-ui-react'
