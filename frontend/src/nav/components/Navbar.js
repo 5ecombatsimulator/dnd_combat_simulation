@@ -15,7 +15,7 @@ const tabs = {
   },
   'EffectCreation': {icon: Flare, text: 'Create an effect'},
   'exploration': {icon: Magnifier, text: 'Explore', children: {
-      'exploreCombatant': 'Combatants'
+      'exploreCombatant': {text: 'Combatants'}
     }
   },
   'generalInfo': {icon: OpenBook, text: 'Information'}

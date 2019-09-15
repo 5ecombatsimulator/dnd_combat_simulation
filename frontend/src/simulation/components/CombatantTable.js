@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 const getTdProps = (onClickFunction) => (state, rowInfo) => ({
   onClick: () => {
     if (rowInfo !== undefined) 
-      onClickFunction({value: rowInfo.original.value, label: rowInfo.original.label})
+      onClickFunction({[rowInfo.original.label]: {quantity: 1}})
   }
 })
 

@@ -21,10 +21,11 @@ export const setCombatantCR = simpleAction(t.SET_COMBATANT_CR);
 export const setChosenCombatant = simpleAction(t.SET_CHOSEN_COMBATANT);
 
 
-export const loadCombatant = (combatant) => (dispatch, getState) => {
+export const loadCombatant = (c) => (dispatch, getState) => {
+  let combatant = Object.keys(c)[0]
   dispatch(setChosenCombatant(combatant));
 
-  SimulatorSource.loadCombatant(combatant.value).then(({data}) => {
+  SimulatorSource.loadCombatant(combatant).then(({data}) => {
     let combatantData = data.combatant;
     dispatch(setCombatantName(combatantData.name));
     dispatch(setCombatantHP(combatantData.hp));

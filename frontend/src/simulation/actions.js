@@ -10,10 +10,14 @@ import * as t from './actionTypes'
 export const setAllCombatants = simpleAction(t.SET_ALL_COMBATANTS);
 export const setAllActions = simpleAction(t.SET_ALL_ACTIONS);
 export const setSimulationResults = simpleAction(t.SET_SIMULATION_RESULTS);
-export const team1Update = simpleAction(t.SET_TEAM1_COMBATANTS)
-export const team2Update = simpleAction(t.SET_TEAM2_COMBATANTS)
+export const team1Delete = simpleAction(t.DELETE_TEAM1_COMBATANT)
+export const team2Delete = simpleAction(t.DELETE_TEAM2_COMBATANT)
 export const team1Add = simpleAction(t.ADD_TEAM1_COMBATANT)
 export const team2Add = simpleAction(t.ADD_TEAM2_COMBATANT)
+export const team1Quantity = (item, quantity) => ({type: t.QUANTITY_TEAM1_COMBATANTS, item, quantity})
+export const team2Quantity = (item, quantity) => ({type: t.QUANTITY_TEAM2_COMBATANTS, item, quantity})
+export const team1Update = simpleAction(t.SET_TEAM1_COMBATANTS)
+export const team2Update = simpleAction(t.SET_TEAM2_COMBATANTS)
 export const setBattleKey = simpleAction(t.SET_BATTLE_KEY);
 export const setBattleKeyMessage = simpleAction(t.SET_BATTLE_KEY_MESSAGE);
 export const setLoadBattleMessage = simpleAction(t.SET_LOAD_BATTLE_MESSAGE);
@@ -25,8 +29,8 @@ export const saveBattle = () => (dispatch, getState) => {
   let {combatantSelectionReducer} = getState();
   let {team1Combatants, team2Combatants} = combatantSelectionReducer;
   SimulatorSource.saveBattle(
-    team1Combatants.map((x) => x.label),
-    team2Combatants.map((x) => x.label)
+    JSON.stringify(team1Combatants),
+    JSON.stringify(team2Combatants)
   ).then(({data}) => {
     let updatedMsg = "";
     if (data.msg === "Successfully saved") {
@@ -53,8 +57,8 @@ export const runSimulation = () => (dispatch, getState) => {
   let {combatantSelectionReducer} = getState();
   let {team1Combatants, team2Combatants} = combatantSelectionReducer;
   SimulatorSource.runSimulation(
-    team1Combatants.map((x) => x.label),
-    team2Combatants.map((x) => x.label)
+    JSON.stringify(team1Combatants),
+    JSON.stringify(team2Combatants)
   ).then(({data}) => {
     dispatch(setSimulationResults(data))
   })
