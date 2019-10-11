@@ -1,18 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {Route} from 'react-router'
 import {BrowserRouter} from 'react-router-dom'
 import 'semantic-ui-css/semantic.min.css'
 import './styles/paddingStyles.css'
-import HomeScreen from './components/homeScreen'
-import { connect } from 'react-redux'
-
-const mapStateToProps = (state) => ({
-
-})
-
-const mapDispatchToProps = (dispatch) => ({
-
-})
+import HomeScreen from './common/components/homeScreen'
 
 const AppRouter = () => (
   <BrowserRouter>
@@ -25,4 +16,4 @@ const AppRouter = () => (
   </BrowserRouter>
 )
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppRouter)
+export default AppRouter

@@ -1,0 +1,8 @@
+FROM node:12-alpine
+
+WORKDIR /code
+
+COPY ./frontend/package.json .
+RUN npm install
+
+CMD ["npm", "start"]
