@@ -1,16 +1,19 @@
 # dnd_combat_simulation
 
 # Setup
+## Requirements to run locally:
+<ol>
+  <li>Docker: https://www.docker.com/products/docker-desktop</li>
+</ol>
 
 <ol>
   <li>Clone repo to local</li>
-  <li>Create any local python environment you want to run for this (I'm using anaconda)</li>
-  <li>Run "pip install -r reqs.txt"</li>
-  <li>Run "python3 manage.py migrate"</li>
-  <li>Run "python3 manage.py shell" and then "from test_data.dice import gen_dice; gen_dice()"</li>
-  <li>Exit shell and go to https://github.com/ceryliae/DnDAppFiles/blob/master/Bestiary/Monster%20Manual%20Bestiary.xml and download that file to a new directory: xml_data/data</li>
-  <li>Back to the django shell and run "from xml_data.convert_source_monsters_xml import *; parse_file("PATH_TO_XML_DATA/DATA_ON_LOCAL/Monster Manual Bestiary.xml")</li>
-  <li>In a separate bash shell: cd into frontend directory and run yarn install then yarn start</li> 
-  <li>Again, in a separate bash shell, be at top level directory and run "python3 manage.py runserver"</li>
-  <li>Head to localhost:3000/ to view app</li>
+  <li>cd into directory</li>
+  <li>Run: "docker-compose build" - this should build both the frontend and backend environments for you. </li>
+  <li>Run: "docker-compose run api migrate"</li>
+  <li>Go to: https://github.com/ceryliae/DnDAppFiles/blob/master/Bestiary/Monster%20Manual%20Bestiary.xml and download that file. Put it in the xml_data/data directory</li>
+  <li>Run "docker-compose run api shell"</li>
+  <li>Inside the shell run: "from xml_data.convert_source_monsters_xml import *; parse_file('./xml_data/data/Monster Manual Bestiary.xml')"</li>
+  <li>Run "docker-compose up"</li>
+  <li>Head to localhost:3000/ to view the app!</li>
 </ol>
