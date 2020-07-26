@@ -8,6 +8,7 @@ import AttackAgainstACCreationScreen from '../../actionCreation/components/attac
 import SpellAttackWithSaveCreationScreen from '../../actionCreation/components/spellAttackSaveScreen'
 import EffectCreationScreen from '../../effectCreation/components/effectCreationScreen'
 import ExploreCombatantScreen from '../../exploreCombatants/components/exploreCombatant'
+import InfoPage from '../../informationPage/components/informationPageReact'
 import SidebarNav from '../../nav/components/Navbar'
 
 import {Grid} from 'semantic-ui-react'
@@ -19,7 +20,7 @@ const tabs = {
   "AttackWithSave": SpellAttackWithSaveCreationScreen,
   "EffectCreation": EffectCreationScreen,
   "exploreCombatant": ExploreCombatantScreen,
-  "generalInfo": () => (<div />)
+  "generalInfo": InfoPage,
 }
 
 export default function HomeScreen (props) {
