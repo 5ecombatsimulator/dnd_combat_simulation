@@ -8,5 +8,5 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         gen_dice()
-        parse_file("./xml_data/data/Monster Manual Bestiary.xml")
+        parse_file("Monster Manual Bestiary.xml")
         print("Complete!")
