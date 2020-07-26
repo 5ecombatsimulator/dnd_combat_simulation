@@ -1,5 +1,6 @@
 import React  from 'react';
 import "react-table/react-table.css";
+import "../../styles/textStyles.css"
 import { Grid } from 'semantic-ui-react'
 
 
@@ -8,7 +9,7 @@ const ExploreCombatantScreen = () => {
     <div>
       <Grid className="eight wide">
         <Grid.Row>
-          <Grid.Column className="sixteen wide">
+          <Grid.Column className="sixteen wide text-left">
             <h1>Welcome to D&D 5e Combat Simulator v0.1</h1>
             <h3>Have you ever wondered...</h3>
             <ul>
@@ -44,12 +45,12 @@ const ExploreCombatantScreen = () => {
         <Grid.Row>
           <Grid.Column className="ui raised segment seven wide" style={{backgroundColor:"#f2f2f2"}}>
             <h1 style={{textAlign: "center"}}>FAQs</h1>
-            <h3>Can I save my combatants?</h3>
-            <p>
-              Currently, you can save a unique string that will let you easily import them again in the future!
-              We're also looking into building account features in the future so your character can
-              be more easily saved and possibly even allow you to import them from
-              elsewhere.
+            <h3 className="text-left">Can I save my combatants?</h3>
+            <p className="text-left">
+              Currently, you can save a unique series of letters and numbers that will let you easily
+              import them again in the future! We're also looking into building account
+              features in the future so your character can be more easily saved and
+              possibly even allow you to import them from elsewhere.
             </p>
           </Grid.Column>
           <Grid.Column className="two wide"/>
