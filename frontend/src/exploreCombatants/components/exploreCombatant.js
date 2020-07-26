@@ -5,21 +5,10 @@ import Select from 'react-select';
 import * as actions from '../actions'
 import CombatantTable from '../../simulation/components/CombatantTable'
 import '../../index.css';
+import TwoColumnGrid from '../../common/components/twoColumnGrid'
 
 import { Grid } from 'semantic-ui-react'
 
-const TwoColumnGrid = ({col1Content, col2Content}) => (
-  <div>
-    <Grid>
-      <Grid.Column className="eight wide">
-        {col1Content}
-      </Grid.Column>
-      <Grid.Column className="eight wide">
-        {col2Content}
-      </Grid.Column>
-    </Grid>
-  </div>
-);
 
 const Stat = ({stat_label, stat_val}) => (
   <h5>{stat_label}: {stat_val}</h5>

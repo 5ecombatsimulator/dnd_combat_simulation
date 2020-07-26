@@ -3,7 +3,7 @@ FROM python:3.7-alpine
 WORKDIR /code
 
 COPY ./reqs.txt .
-RUN apk --no-cache --update-cache --virtual .build-deps add gcc python-dev gfortran build-base \
+RUN apk --no-cache --update-cache --virtual .build-deps add gcc gfortran build-base \
     && pip install -r reqs.txt \
     && apk del .build-deps
 
