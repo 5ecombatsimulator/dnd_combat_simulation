@@ -1,5 +1,6 @@
 # Project files
 /json_data/*
+*.ipynb
 
 
 #Byte-compiled / optimized / DLL files
