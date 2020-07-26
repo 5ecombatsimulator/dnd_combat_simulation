@@ -49,11 +49,12 @@ const CombatantTable = ({onClickFunction}) => {
   const handleSearchChange = (e) => {
     let search = e.target.value
     setSearchVal(search)
-    if (search == '') {
+    search = search.toLowerCase()
+    if (search === '') {
       setChoices(allCombatants)
       return
     }
-    setChoices(allCombatants.filter((combatant) => combatant.name.includes(search)))
+    setChoices(allCombatants.filter((combatant) => combatant.name.toLowerCase().includes(search)))
   }
 
   return (
@@ -61,7 +62,7 @@ const CombatantTable = ({onClickFunction}) => {
       <Input placeholder='Search...' type="text" onChange={handleSearchChange} value={searchVal}  />
       <ReactTable
         getTdProps={getTdProps(onClickFunction)}
-        data={searchVal.length == 0 ? allCombatants : choices}
+        data={searchVal.length === 0 ? allCombatants : choices}
         columns={columns}
         defaultPageSize={10}
         className="-striped -highlight"
