@@ -409,7 +409,7 @@ element_tags = {
 
 
 def parse_file(file_name):
-    tree = ET.parse("/Users/andrewdumit/Desktop/DnD/combat_simulator_v2/combat-simulator-api/xml_data/data/" + file_name)
+    tree = ET.parse('/code/xml_data/data/' + file_name)
     root = tree.getroot()
     for entry in root:
         parse_creature(entry)
