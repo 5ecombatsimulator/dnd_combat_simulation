@@ -1,4 +1,6 @@
-# dnd_combat_simulation
+# D&D 5e Combat Simulator
+
+## Version 0.1
 
 # Setup
 ### Requirements to run locally:
