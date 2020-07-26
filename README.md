@@ -1,11 +1,12 @@
 # dnd_combat_simulation
 
 # Setup
-## Requirements to run locally:
+### Requirements to run locally:
 <ol>
   <li>Docker: https://www.docker.com/products/docker-desktop</li>
 </ol>
 
+### Steps to set up
 <ol>
   <li>Clone repo to local</li>
   <li>cd into directory</li>
