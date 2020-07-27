@@ -21,8 +21,8 @@ const SimulatorScreen = () => {
     <div>
       <Grid stackable>
         <div className="row">
-          <Team teamName="team1" />
-          <Team teamName="team2" />
+          <Team teamName="team1" viewName="Team 1" />
+          <Team teamName="team2" viewName="Team 2"/>
         </div>
         <div className="row">
           <SaveButton />
