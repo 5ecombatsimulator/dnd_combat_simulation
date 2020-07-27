@@ -21,6 +21,7 @@ export const team2Update = simpleAction(t.SET_TEAM2_COMBATANTS)
 export const setBattleKey = simpleAction(t.SET_BATTLE_KEY);
 export const setBattleKeyMessage = simpleAction(t.SET_BATTLE_KEY_MESSAGE);
 export const setLoadBattleMessage = simpleAction(t.SET_LOAD_BATTLE_MESSAGE);
+export const setRunButtonDisabled = simpleAction(t.SET_RUN_BUTTON_DISABLED);
 
 export const getAllCombatants = get(SimulatorSource.getCombatants, setAllCombatants);
 export const getAllActions = get(SimulatorSource.getActions, setAllActions);
@@ -56,10 +57,13 @@ export const loadBattle = () => (dispatch, getState) => {
 export const runSimulation = () => (dispatch, getState) => {
   let {combatantSelectionReducer} = getState();
   let {team1Combatants, team2Combatants} = combatantSelectionReducer;
+  dispatch(setRunButtonDisabled(true));
   SimulatorSource.runSimulation(
     JSON.stringify(team1Combatants),
     JSON.stringify(team2Combatants)
   ).then(({data}) => {
     dispatch(setSimulationResults(data))
-  })
+  }).then(() =>
+    dispatch(setRunButtonDisabled(false))
+  )
 };
