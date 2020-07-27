@@ -3,14 +3,14 @@ import { useSelector } from 'react-redux'
 
 const columns = [
   {
-    'avg_num_rounds': 'Average Number of Rounds',
+    'avg_num_rounds': 'Average number of rounds',
     'perc_time_t1_won': 'Percent of times Team 1 won',
-    'num_times_at_least_one_t1_death': 'Number of Times 1 Team 1 member died',
+    'num_times_at_least_one_t1_death': 'Number of times at least one member from team 1 died',
   },
   {
-    'avg_t1_deaths': 'Average Number of Team 1 deaths',
-    'avg_num_round_when_t1_won': 'Average Number of Rounds when Team 1 won',
-    'avg_num_round_when_t2_won': 'Average Number of Rounds when Team 2 won'
+    'avg_t1_deaths': 'Average number of team 1 deaths per fight',
+    'avg_num_round_when_t1_won': 'Average number of rounds when Team 1 won',
+    'avg_num_round_when_t2_won': 'Average number of rounds when Team 2 won'
   }
 ]
 

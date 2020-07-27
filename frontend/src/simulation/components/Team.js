@@ -5,7 +5,7 @@ import Select from 'react-select'
 import CombatantTable from './CombatantTable'
 import CombatantList from './CombatantList'
 
-const Team = ({teamName}) => {
+const Team = ({teamName, viewName}) => {
   const csr = useSelector(state => state.combatantSelectionReducer)
   const team = csr[teamName + 'Combatants']
 
@@ -16,15 +16,7 @@ const Team = ({teamName}) => {
 
   return (
     <div className="eight wide column">
-      {/* <Select
-        closeOnSelect={false}
-        isMulti
-        onChange={teamUpdate}
-        options={csr.allCombatants}
-        placeholder="Team 1 combatants"
-        removeSelected={false}
-        value={team}
-      /> */}
+      <h2>{viewName}</h2>
       <CombatantTable onClickFunction={teamAdd}/>
       <CombatantList team={team} onDelete={teamDelete} onQuantityChange={teamQuantity} />
     </div>
