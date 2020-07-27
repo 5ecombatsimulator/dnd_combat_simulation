@@ -6,6 +6,8 @@ services:
       - "8000:8000"
     volumes:
       - "./:/code"
+    env_file:
+      - "./environments/secret.env"
   front:
     build:
       context: .
