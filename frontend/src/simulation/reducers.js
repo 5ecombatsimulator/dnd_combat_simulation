@@ -46,6 +46,7 @@ const allCombatants = setterReducer([], t.SET_ALL_COMBATANTS);
 const battleKey = setterReducer("", t.SET_BATTLE_KEY);
 const battleKeyMessage = setterReducer("", t.SET_BATTLE_KEY_MESSAGE);
 const battleLoadMessage = setterReducer("", t.SET_LOAD_BATTLE_MESSAGE);
+const runButtonDisabled = setterReducer(false, t.SET_RUN_BUTTON_DISABLED);
 
 const simulationResults = setterReducer(
   {"avg_num_rounds": "-",
@@ -65,6 +66,7 @@ const reducer = combineReducers({
   battleKey,
   battleKeyMessage,
   battleLoadMessage,
+  runButtonDisabled,
 });
 
 export {reducer as default}
