@@ -64,3 +64,14 @@ class BattleCombatant(models.Model):
     combatant = models.ForeignKey(Combatant, on_delete=models.CASCADE)
     battle = models.ForeignKey(SavedBattle, on_delete=models.CASCADE)
     team = models.PositiveSmallIntegerField()
+
+
+class SimulatedBattle(models.Model):
+    simulated_time = models.DateTimeField(auto_now_add=True)
+
+
+class SimulatedCombatant(models.Model):
+    team = models.PositiveSmallIntegerField()
+    combatant = models.ForeignKey(Combatant, on_delete=models.PROTECT)
+    battle = models.ForeignKey(SimulatedBattle, on_delete=models.PROTECT)
+

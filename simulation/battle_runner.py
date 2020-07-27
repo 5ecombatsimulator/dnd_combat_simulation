@@ -3,6 +3,7 @@ import numpy as np
 from simulation.heuristics import target_selection_heuristics, \
     heuristic_container
 from simulation.simulator import Simulator
+from simulation.models import SimulatedCombatant, SimulatedBattle
 from actors.models import Combatant
 
 heuristic_mapping = dict([(name, cls) for name, cls
@@ -99,6 +100,8 @@ class BattleRunner:
             self.res.winning_teams.append(winning_team)
             self.res.number_of_rounds.append(num_rounds)
 
+        self.save_simulation(team1, team2)
+
     def get_results(self):
         return self.res
 
@@ -119,6 +122,24 @@ class BattleRunner:
         if monsters_won:
             result_text += "Average number of rounds when monsters won: {0}\n".format(np.mean(monsters_won))
         return result_text
+
+    def save_simulation(self, team1, team2):
+        simulated_battle = SimulatedBattle.objects.create()
+        combatants_to_save = []
+        for combatant in team1:
+            combatants_to_save.append(SimulatedCombatant(
+                combatant=combatant,
+                team=1,
+                battle=simulated_battle
+            ))
+        for combatant in team2:
+            combatants_to_save.append(SimulatedCombatant(
+                combatant=combatant,
+                team=2,
+                battle=simulated_battle
+            ))
+        SimulatedCombatant.objects.bulk_create(combatants_to_save)
+        return
 
 
 if __name__ == "__main__":
