@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'true') == 'true'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['api.dndfightsimulator.com', 'internal.dndfightsimulator.com', 'localhost']
 
 
 # Application definition
@@ -60,10 +60,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'combat-simulator-api.urls'
 
-CORS_ORIGIN_WHITELIST = (
-    "localhost:3000",
-)
 CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
 
 REACT_APP_DIR = os.path.join(BASE_DIR, 'frontend')
 
