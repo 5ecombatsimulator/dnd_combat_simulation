@@ -4,7 +4,7 @@ import "../../styles/textStyles.css"
 import { Grid } from 'semantic-ui-react'
 
 
-const ExploreCombatantScreen = () => {
+const InformationPageReact = () => {
   return (
     <div>
       <Grid className="eight wide">
@@ -67,4 +67,4 @@ const ExploreCombatantScreen = () => {
   )
 }
 
-export default ExploreCombatantScreen
+export default InformationPageReact
