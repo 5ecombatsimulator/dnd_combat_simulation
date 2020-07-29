@@ -108,7 +108,7 @@ export default function HomeScreen (props) {
   return (
     <body>
       <SidebarNav setCurrentTab={setCurrentTab}/>
-      <Grid stackable>
+      <Grid stackable style={{marginTop: 40}}>
         <Grid.Row>
           <div className="one wide column"/>
           <div className="fourteen wide column">

@@ -51,7 +51,7 @@ const SideNavComponent = ({setCurrentTab}) => {
   })
 
   return <SideNav
-    style={dimensions.width > 480 || expanded ? navStyleBase : {...navStyleBase, bottom: dimensions.height - 64}}
+    style={dimensions.width > 480 || expanded ? navStyleBase : {...navStyleBase, bottom: dimensions.height - 64, right: 0}}
     expanded={expanded}
     onToggle={handleToggle}
     onSelect={(selected) => {setCurrentTab(selected)}}>
