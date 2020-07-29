@@ -57,9 +57,9 @@ const InformationPageReact = () => {
           <Grid.Column className="ui raised segment seven wide" style={{backgroundColor:"#f2f2f2"}}>
             <h2>Contributing</h2>
             <h3>Where can I contribute?</h3>
-            <p>If you'd like to contribute code to the project, you can open a pull request here: https://github.com/adumit/dnd_combat_simulation</p>
+            <p>If you'd like to contribute code to the project, you can open a pull request here: <a href="https://github.com/adumit/dnd_combat_simulation">https://github.com/adumit/dnd_combat_simulation</a></p>
             <h3>Contributing to the server costs</h3>
-            <p>If you'd like to buy us a coffee, go here: https://www.buymeacoffee.com/5ecombatsim</p>
+            <p>If you'd like to buy us a coffee, go here: <a href="https://www.buymeacoffee.com/5ecombatsim">https://www.buymeacoffee.com/5ecombatsim</a></p>
           </Grid.Column>
         </Grid.Row>
       </Grid>
