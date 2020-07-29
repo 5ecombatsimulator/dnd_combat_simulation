@@ -38,6 +38,11 @@ const SideNavComponent = ({setCurrentTab}) => {
     setExpanded(!expanded)
   }
 
+  const handleSelect = (selected) => {
+    setExpanded(false)
+    setCurrentTab(selected)
+  }
+
   useEffect(() => {
     function handleResize() {
       setDimensions({
@@ -54,7 +59,7 @@ const SideNavComponent = ({setCurrentTab}) => {
     style={dimensions.width > 480 || expanded ? navStyleBase : {...navStyleBase, bottom: dimensions.height - 64, right: 0}}
     expanded={expanded}
     onToggle={handleToggle}
-    onSelect={(selected) => {setCurrentTab(selected)}}>
+    onSelect={handleSelect}>
     <SideNav.Toggle/>
     <SideNav.Nav defaultSelected="Simulator">
       {window.innerWidth <= 480 && !expanded ? <span /> : Object.keys(tabs).map(tab => (
