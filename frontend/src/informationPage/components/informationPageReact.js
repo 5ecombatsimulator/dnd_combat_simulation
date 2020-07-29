@@ -31,7 +31,7 @@ const InformationPageReact = () => {
             <p>Head over to the battle simulator tab marked with the crossed swords.
               Once there, you can click on each combatant from the list or search
               for one you're looking for. Once you've selected one or more combatants for
-              each side, press 'Fight!' and you'll get your results shortly."
+              each side, press 'Fight!' and you'll get your results shortly.
             </p>
             <p>
               If you want to add in any of your own players, you'll need to
@@ -44,7 +44,7 @@ const InformationPageReact = () => {
         </Grid.Row>
         <Grid.Row>
           <Grid.Column className="ui raised segment seven wide" style={{backgroundColor:"#f2f2f2"}}>
-            <h1 style={{textAlign: "center"}}>FAQs</h1>
+            <h2 style={{textAlign: "center"}}>FAQs</h2>
             <h3 className="text-left">Can I save my combatants?</h3>
             <p className="text-left">
               Currently, you can save a unique series of letters and numbers that will let you easily
@@ -55,7 +55,7 @@ const InformationPageReact = () => {
           </Grid.Column>
           <Grid.Column className="two wide"/>
           <Grid.Column className="ui raised segment seven wide" style={{backgroundColor:"#f2f2f2"}}>
-            <h1>Contributing</h1>
+            <h2>Contributing</h2>
             <h3>Where can I contribute?</h3>
             <p>If you'd like to contribute code to the project, you can open a pull request here: https://github.com/adumit/dnd_combat_simulation</p>
             <h3>Contributing to the server costs</h3>

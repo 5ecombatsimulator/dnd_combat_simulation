@@ -1,5 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
+import "../../styles/textStyles.css"
 
 const columns = [
   {
@@ -22,7 +23,7 @@ const ResultsScreen = () => {
       <div className="ui grid">
         {columns.map(column => (
           <div className="eight wide column">
-            {Object.keys(column).map(k => <h4>{column[k]}: {results[k]}</h4>)}
+            {Object.keys(column).map(k => <h5 style={{textAlign: 'left'}}>{column[k]}: {results[k]}</h5>)}
           </div>
         ))}
       </div>
