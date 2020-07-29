@@ -12,7 +12,7 @@ import SpellAttackWithSaveCreationScreen from '../../actionCreation/components/s
 import EffectCreationScreen from '../../effectCreation/components/effectCreationScreen'
 import ExploreCombatantScreen from '../../exploreCombatants/components/exploreCombatant'
 import InfoPage from '../../informationPage/components/informationPageReact'
-import SidebarNav from '../../nav/components/Navbar2'
+import SidebarNav from '../../nav/components/Navbar'
 
 import {Grid} from 'semantic-ui-react'
 
@@ -101,23 +101,23 @@ class SideNavAndBody extends React.Component {
   }
 
 export default function HomeScreen (props) {
-  return <Demo/>
-  // const [currentTab, setCurrentTab] = useState("Simulator")
-  // const RenderedContent = tabs[currentTab]
-  //
-  // return (
-  //   <body>
-  //     <SidebarNav setCurrentTab={setCurrentTab}/>
-  //     <Grid stackable>
-  //       <Grid.Row>
-  //         <div className="one wide column"/>
-  //         <div className="fourteen wide column">
-  //           <RenderedContent tabName={currentTab} />
-  //         </div>
-  //         <div className="one wide column"/>
-  //       </Grid.Row>
-  //     </Grid>
-  //   </body>
-  // )
+  //return <Demo/>
+  const [currentTab, setCurrentTab] = useState("Simulator")
+  const RenderedContent = tabs[currentTab]
+  
+  return (
+    <body>
+      <SidebarNav setCurrentTab={setCurrentTab}/>
+      <Grid stackable>
+        <Grid.Row>
+          <div className="one wide column"/>
+          <div className="fourteen wide column">
+            <RenderedContent tabName={currentTab} />
+          </div>
+          <div className="one wide column"/>
+        </Grid.Row>
+      </Grid>
+    </body>
+  )
 
 }
