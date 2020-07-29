@@ -1,4 +1,4 @@
-import React  from 'react';
+import React, {useState, useEffect}  from 'react';
 
 import SideNav, { NavItem, NavIcon, NavText } from '@trendmicro/react-sidenav';
 import '@trendmicro/react-sidenav/dist/react-sidenav.css';
@@ -27,12 +27,37 @@ const Icon = ({icon}) => {
 }
 
 const SideNavComponent = ({setCurrentTab}) => {
+  let navStyleBase = {backgroundColor: "#2185d0", position: 'fixed'}
+
+  const [expanded, setExpanded] = useState(false)
+  const [dimensions, setDimensions] = useState({ 
+    height: window.innerHeight,
+    width: window.innerWidth
+  })
+  const handleToggle = (e) => {
+    setExpanded(!expanded)
+  }
+
+  useEffect(() => {
+    function handleResize() {
+      setDimensions({
+        height: window.innerHeight,
+        width: window.innerWidth
+      })
+    }
+    
+
+    window.addEventListener('resize', handleResize)
+  })
+
   return <SideNav
-    style={{backgroundColor: "#2185d0"}}
+    style={dimensions.width > 480 || expanded ? navStyleBase : {...navStyleBase, bottom: dimensions.height - 64}}
+    expanded={expanded}
+    onToggle={handleToggle}
     onSelect={(selected) => {setCurrentTab(selected)}}>
     <SideNav.Toggle/>
     <SideNav.Nav defaultSelected="Simulator">
-      {Object.keys(tabs).map(tab => (
+      {window.innerWidth <= 480 && !expanded ? <span /> : Object.keys(tabs).map(tab => (
         <NavItem eventKey={tab}>
           {tabs[tab].icon ? <NavIcon>
             <Icon icon={tabs[tab].icon} />
