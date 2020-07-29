@@ -26,11 +26,11 @@ const tabs = {
 export default function HomeScreen (props) {
   const [currentTab, setCurrentTab] = useState("Simulator")
   const RenderedContent = tabs[currentTab]
-
+  
   return (
     <body>
       <SidebarNav setCurrentTab={setCurrentTab}/>
-      <Grid stackable>
+      <Grid stackable style={{marginTop: 40}}>
         <Grid.Row>
           <div className="one wide column"/>
           <div className="fourteen wide column">
@@ -41,4 +41,5 @@ export default function HomeScreen (props) {
       </Grid>
     </body>
   )
+
 }

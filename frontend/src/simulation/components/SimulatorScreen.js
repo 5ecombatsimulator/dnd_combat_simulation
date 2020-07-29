@@ -1,5 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import "../../styles/textStyles.css"
 import * as actions from '../actions'
 import ResultsScreen from './ResultsScreen'
 import Team from './Team'
