@@ -21,7 +21,11 @@ h3 {
 @media only screen and (max-width: 380px) {
 
    body {
-      font-size: 10px;
+      font-size: 12px;
    }
+
+    h1 {
+      font-size: 2.2rem;
+    }
 
 }

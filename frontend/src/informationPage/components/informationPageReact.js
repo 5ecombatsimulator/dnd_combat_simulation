@@ -1,5 +1,4 @@
 import React  from 'react';
-import "react-table/react-table.css";
 import "../../styles/textStyles.css"
 import { Grid } from 'semantic-ui-react'
 
@@ -7,7 +6,7 @@ import { Grid } from 'semantic-ui-react'
 const InformationPageReact = () => {
   return (
     <div>
-      <Grid className="eight wide">
+      <Grid className="eight wide" stackable>
         <Grid.Row>
           <Grid.Column className="sixteen wide text-left">
             <h1>Welcome to D&D 5e Combat Simulator v0.1</h1>
@@ -42,8 +41,8 @@ const InformationPageReact = () => {
             </p>
           </Grid.Column>
         </Grid.Row>
-        <Grid.Row>
-          <Grid.Column className="ui raised segment seven wide" style={{backgroundColor:"#f2f2f2"}}>
+        <div className="row">
+          <div className="raised seven wide column" style={{backgroundColor:"#f2f2f2"}}>
             <h2 style={{textAlign: "center"}}>FAQs</h2>
             <h3 className="text-left">Can I save my combatants?</h3>
             <p className="text-left">
@@ -52,16 +51,16 @@ const InformationPageReact = () => {
               features in the future so your character can be more easily saved and
               possibly even allow you to import them from elsewhere.
             </p>
-          </Grid.Column>
-          <Grid.Column className="two wide"/>
-          <Grid.Column className="ui raised segment seven wide" style={{backgroundColor:"#f2f2f2"}}>
+          </div>
+          <div className="two wide column"/>
+          <div className="raised seven wide column" style={{backgroundColor:"#f2f2f2"}}>
             <h2>Contributing</h2>
             <h3>Where can I contribute?</h3>
-            <p>If you'd like to contribute code to the project, you can open a pull request here: <a href="https://github.com/adumit/dnd_combat_simulation">https://github.com/adumit/dnd_combat_simulation</a></p>
+            <p>If you'd like to contribute code to the project, you can open a pull request here: <a href="https://github.com/5ecombatsimulator/dnd_combat_simulation">https://github.com/5ecombatsimulator/dnd_combat_simulation</a></p>
             <h3>Contributing to the server costs</h3>
             <p>If you'd like to buy us a coffee, go here: <a href="https://www.buymeacoffee.com/5ecombatsim">https://www.buymeacoffee.com/5ecombatsim</a></p>
-          </Grid.Column>
-        </Grid.Row>
+          </div>
+        </div>
       </Grid>
     </div>
   )
