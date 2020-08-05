@@ -16,13 +16,12 @@ const columns = [
 ]
 
 const resultToPercent = (r) => {
-  r = parseFloat(r)
-  let base = r * 100
-  base = base.toFixed(2).toString() // round to 2 decimal places and convert to string
-  if (base === 'NaN') {
-    base = '0.00'
+  let percent = parseFloat(r) * 100
+  percent = percent.toFixed(2).toString() // round to 2 decimal places and convert to string
+  if (percent === 'NaN') {
+    percent = '0.00'
   }
-  return base + '%'
+  return percent + '%'
 }
 
 const ResultsScreen = () => {
