@@ -24,7 +24,7 @@ const tabs = {
 }
 
 export default function HomeScreen (props) {
-  const [currentTab, setCurrentTab] = useState("Simulator")
+  const [currentTab, setCurrentTab] = useState("generalInfo")
   const RenderedContent = tabs[currentTab]
   
   return (
