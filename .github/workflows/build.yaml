@@ -46,5 +46,6 @@ jobs:
     - name: Build static frontend
       run: |
         cd frontend
+        npm install
         npm run build
         aws s3 sync ./build s3://dnd-frontend-bucket-e3f3755/ --acl public-read
