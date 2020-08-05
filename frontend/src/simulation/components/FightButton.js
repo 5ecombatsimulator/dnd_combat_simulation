@@ -1,8 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Button } from 'semantic-ui-react'
 import { useDispatch, useSelector } from 'react-redux'
 import {runSimulation} from '../actions'
-import combatantSelectionReducer from "../reducers";
 
 
 export default function FightButton(isEnabled) {

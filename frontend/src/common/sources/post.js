@@ -16,7 +16,7 @@ const argsToForm = (args) => {
 const http = (url, method, args, returnData=true) => {
   let data = args ? argsToForm(args) : undefined;
   // TODO: Deal with the CSRF token?
-  let prefix = window.location.hostname == 'localhost' ? 'http://localhost:8000' : 'https://api.dndfightsimulator.com'
+  let prefix = window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'https://api.dndfightsimulator.com'
   console.log(prefix)
   return axios({
     method: method,
