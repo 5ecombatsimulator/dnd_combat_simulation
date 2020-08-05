@@ -43,9 +43,13 @@ jobs:
       run: |
         docker tag frontend 446416495538.dkr.ecr.us-west-2.amazonaws.com/dnd-frontend:latest
         docker push 446416495538.dkr.ecr.us-west-2.amazonaws.com/dnd-frontend:latest
-    - name: Build static frontend
-      run: |
-        cd frontend
-        npm install
-        npm run build
-        aws s3 sync ./build s3://dnd-frontend-bucket-e3f3755/ --acl public-read
+  buildStaticFrontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build static frontend
+        run: |
+          cd frontend
+          npm install
+          npm run build
+          aws s3 sync ./build s3://dnd-frontend-bucket-e3f3755/ --acl public-read
