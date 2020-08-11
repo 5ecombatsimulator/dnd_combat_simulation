@@ -321,7 +321,8 @@ def create_and_save_attacks(combatant, attack_infos, mattack_infos,
     combatant_actions = []
     for attack, damage_dice_map in attack_infos:
         attack.save()
-        single_attack_dice.extend(create_dice_from_info(damage_dice_map, attack))
+        single_attack_dice.extend(create_dice_from_info(
+            damage_dice_map, attack, SingleAttackDice))
         combatant_actions.append(CombatantAction(
             action=attack, combatant=combatant))
     for mattack, components in mattack_infos:
@@ -342,13 +343,14 @@ def create_and_save_attacks(combatant, attack_infos, mattack_infos,
             name_prefix='Legendary Action', is_legendary=True, cost=cost)
         created_action.save()
         single_attack_dice.extend(
-            create_dice_from_info(damage_dice, created_action))
+            create_dice_from_info(
+                damage_dice, created_action, SingleAttackDice))
         combatant_actions.append(CombatantAction(
             action=created_action, combatant=combatant))
     for aoe_action, damage_dice in aoe_action_info:
         aoe_action.save()
         single_attack_dice.extend(
-            create_dice_from_info(damage_dice, aoe_action))
+            create_dice_from_info(damage_dice, aoe_action, SingleAttackDice))
         combatant_actions.append(CombatantAction(
             action=aoe_action, combatant=combatant))
     SingleAttackDice.objects.bulk_create(single_attack_dice)
