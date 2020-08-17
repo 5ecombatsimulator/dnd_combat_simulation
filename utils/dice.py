@@ -31,6 +31,7 @@ def parse_dice_str(dice_str):
     Examples:
         3d6 => {6:3}
         4d6+1d8 => {8:1, 6:4}
+        10d8+40 => {8:10, 1:40}
 
     Args:
         dice_str (str): string to be parsed
@@ -39,7 +40,8 @@ def parse_dice_str(dice_str):
         a dict of int: int with the key being the number of sides of a dice
         and the value being the number of dice.
     """
-    print(dice_str)
+    if dice_str is None:
+        return None
     split_char = " "
     for char in ",+":
         if char in dice_str:
@@ -49,6 +51,20 @@ def parse_dice_str(dice_str):
 
     dice_dict = {}
     for entry in split_str:
-        entry_split = entry.split("d")
-        dice_dict[int(entry_split[1])] = int(entry_split[0])
+        # Bit of a hack to handle static values which occur occasionally
+        if "d" not in entry:
+            try:
+                int(entry)
+            except ValueError:
+                raise ValueError(f"Could not convert non-d entry in "
+                                 f"parse_dice_str: {entry}")
+            dice_dict[1] = int(entry)
+        else:
+            entry_split = entry.split("d")
+            try:
+                dice_dict[int(entry_split[1])] = int(entry_split[0])
+            except IndexError as e:
+                print(f"Error in parse_dice_str with dice={dice_str} "
+                      f"and entry_split = {entry_split}")
+                raise e
     return dice_dict
