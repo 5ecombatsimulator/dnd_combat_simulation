@@ -17,7 +17,8 @@ from django.conf.urls import url
 from django.urls import path
 from django.contrib import admin
 
-from actors.views import get_combatants, create_combatant, load_combatant
+from actors.views import get_combatants, create_combatant, load_combatant, \
+    import_combatant_from_ddb
 from actions.views import get_all_actions, get_all_damage_types, \
     create_action, get_all_aoe_types
 from effects.views import get_all_effects, create_effect, get_all_effect_types
@@ -35,6 +36,7 @@ urlpatterns = [
     path('damageTypes', get_all_damage_types),
     path('aoeTypes', get_all_aoe_types),
     path('createCombatant', create_combatant),
+    path('ddbImport', import_combatant_from_ddb),
     path('loadCombatant/<str:combatant_name>/', load_combatant),
     path('createEffect', create_effect),
     path('saveBattle', save_battle),
