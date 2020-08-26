@@ -10,6 +10,7 @@ const postUrls = {
   getAoeTypes: '/aoeTypes',
   runSimulation: '/simulate',
   createCombatant: '/createCombatant',
+  ddbImport: '/ddbImport',
   createAction: '/createAction',
   createEffect: '/createEffect',
   saveBattle: '/saveBattle',

@@ -9,6 +9,7 @@ import ActionTable from './ActionTable'
 import {DynamicSizeNumericInput, DynamicSizeTextInput} from "../../common/components/utils"
 
 import { Button, Grid } from 'semantic-ui-react'
+import {setDNDBeyondURL} from "../actions";
 
 const CombatantCreationScreen = () => {
   const cr = useSelector(state => state.combatantCreationReducer)
@@ -29,6 +30,7 @@ const CombatantCreationScreen = () => {
   const setCombatantWisdom = (e) => dispatch(actions.setCombatantWisdom(e.target.value))
   const setCombatantIntelligence = (e) => dispatch(actions.setCombatantIntelligence(e.target.value))
   const setCombatantCharisma = (e) => dispatch(actions.setCombatantCharisma(e.target.value))
+  const setDNDBeyondURL = (e) => dispatch(actions.setDNDBeyondURL(e.target.value))
   const createCombatant = () => dispatch(actions.createCombatant())
 
   return (
@@ -128,6 +130,10 @@ const CombatantCreationScreen = () => {
           </Grid.Column>
         </Grid.Row>
       </Grid>
+      <DynamicSizeTextInput labelValue="DnD Beyond import"
+                            inputValue={cr.dndbeyondURL}
+                            changeFunc={setDNDBeyondURL}
+                            placeholderValue="https://character-service.dndbeyond.com/character/v3/character/{YOUR CHARACTER ID}"/>
       <Button onClick={createCombatant} primary>Create Combatant</Button>
       <h5 style={{color:cr.combatantCreationMsg === "Success" ? "#007f00" : "#e50000"}}>{cr.combatantCreationMsg}</h5>
     </div>

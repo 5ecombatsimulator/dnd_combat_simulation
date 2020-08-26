@@ -11,11 +11,17 @@ from actors.models import Combatant
 
 stat_id_map = {
     'Strength': 1,
+    'STR': 1,
     'Dexterity': 2,
+    'DEX': 2,
     'Constitution': 3,
+    'CON': 3,
     'Intelligence': 4,
+    'INT': 4,
     'Wisdom': 5,
-    'Charisma': 6
+    'WIS': 5,
+    'Charisma': 6,
+    'CHA': 6,
 }
 
 stat_id_to_str = {v: k for k, v in stat_id_map.items()}
@@ -148,11 +154,11 @@ def get_class_casting_stat(char_data):
     for class_info in char_data['classes']:
         class_name = class_info['definition']['name']
         if class_name in ['Monk', 'Ranger', 'Cleric', 'Druid']:
-            return 'Wisdom'
+            return 'WIS'
         elif class_name in ['Wizard', 'Artificer', 'Fighter', 'Rogue']:
-            return 'Intelligence'
+            return 'INT'
         elif class_name in ['Warlock', 'Sorcerer', 'Bard', 'Paladin']:
-            return 'Charisma'
+            return 'CHA'
     classes = char_data['classes']
     raise RuntimeError(f"NEW CLASS in get_class_casting_stat: {classes}")
 
@@ -192,8 +198,8 @@ def parse_single_item_kwargs(item_data, char_data):
               'dice': parse_dice_str(item_def['damage']['diceString']),
               'damageType': item_def['damageType'].lower()}
     weapon_props = {p['name'] for p in item_def['properties']}
-    kwargs['stat_bonus'] = 'dexterity' if weapon_props.intersection(
-        dex_based_props) else 'strength'
+    kwargs['stat_bonus'] = 'DEX' if weapon_props.intersection(
+        dex_based_props) else 'STR'
     kwargs['description'] = item_def['description']
     return kwargs
 
@@ -416,8 +422,4 @@ def parse_character(url):
         charisma=get_stat_data('Charisma', char_data),
         cr=get_level(char_data),
         actions=",".join(action_names))
-    if msg == 'Success':
-        return Combatant.objects.get(name=char_data['name'])
-    else:
-        raise RuntimeError(f"Failed to create {char_data['name']} "
-                           f"because of {msg}")
+    return msg

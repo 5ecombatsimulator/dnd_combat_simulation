@@ -15,6 +15,7 @@ export const setCombatantIntelligence = simpleAction(t.SET_COMBATANT_INTELLIGENC
 export const setCombatantCharisma = simpleAction(t.SET_COMBATANT_CHARISMA);
 export const setCombatantActions = simpleAction(t.SET_COMBATANT_ACTIONS);
 export const setCombatantCreationMsg = simpleAction(t.SET_COMBATANT_MSG);
+export const setDNDBeyondURL = simpleAction(t.SET_DNDBEYOND_URL);
 
 export const addCombatantAction = (newAction) => (dispatch, getState) => {
     /*
@@ -38,8 +39,17 @@ export const addCombatantAction = (newAction) => (dispatch, getState) => {
   
   export const createCombatant = () => (dispatch, getState) => {
     let {combatantCreationReducer} = getState();
-    let {combatantActions} = combatantCreationReducer;
-    SimulatorSource.createCombatant(
+    let {combatantActions, dndbeyondURL} = combatantCreationReducer;
+    if (dndbeyondURL !== "") {
+      SimulatorSource.dndbeyondimport(dndbeyondURL).then(({data}) => {
+      if (data.combatants) {
+        dispatch(setAllCombatants(data.combatants))
+      }
+      dispatch(setCombatantCreationMsg(data.msg))
+    })
+    }
+    else {
+      SimulatorSource.createCombatant(
       combatantCreationReducer.combatantName,
       combatantCreationReducer.combatantHP,
       combatantCreationReducer.combatantAC,
@@ -57,4 +67,6 @@ export const addCombatantAction = (newAction) => (dispatch, getState) => {
       }
       dispatch(setCombatantCreationMsg(data.msg))
     })
+    }
+
   }

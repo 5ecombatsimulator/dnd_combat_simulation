@@ -11,6 +11,7 @@ const SimulatorSource = {
   runSimulation: (team1, team2) => http(postUrls.runSimulation, 'POST', {team1, team2}),
   createCombatant: (name, hp, ac, proficiency, strength, constitution, dexterity, wisdom, intelligence, charisma, actions) =>
     http(postUrls.createCombatant, 'POST', {name, hp, ac, proficiency, strength, constitution, dexterity, wisdom, intelligence, charisma, actions}),
+  dndbeyondimport: (url) => http(postUrls.ddbImport, 'POST', {url}),
   loadCombatant: (combatant_name) => http(`${postUrls.loadCombatant}${combatant_name}/`, 'GET'),
   saveBattle: (team1, team2) => http(postUrls.saveBattle, 'POST', {team1, team2}),
   loadBattle: (battle_key) => http(postUrls.loadBattle, 'POST', {battle_key}),
