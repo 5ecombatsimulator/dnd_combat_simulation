@@ -2,6 +2,7 @@ from django.http import JsonResponse
 
 from actors.models import Combatant
 from utils.views import error_response
+from actors.utils import import_ddb_character
 
 
 def get_combatants(request):
@@ -37,3 +38,12 @@ def load_combatant(request, combatant_name):
     combatant = Combatant.objects.get(name=combatant_name)
     return JsonResponse({"combatant": combatant.jsonify(jsonify_actions=True)},
                         safe=False)
+
+
+def import_combatant_from_ddb(request):
+    character_url = request.get('ddb_url', None)
+    return JsonResponse({"combatant": import_ddb_character(
+        character_url).jsonify(
+        jsonify_actions=True)},
+        safe=False)
+

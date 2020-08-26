@@ -19,15 +19,24 @@ from effects.models import Effect, STUN_EFFECT_TYPE, PARALYZE_EFFECT_TYPE, \
     INVISIBLE_EFFECT_TYPE, POISONED_EFFECT_TYPE
 
 
-def create_dice_from_info(dice, action):
+def create_dice_from_info(dice, action_kwarg, dice_type):
+    """ Creates dice for the given action
+
+    Args:
+        dice (dict): a dice dict
+        action_kwarg (dict): maps the kwarg for the action to the action.
+            For example, "attack": Odo's sword attack
+        dice_type: some object that inherits from Action
+
+    """
     dice_map = dict(Dice.objects.values_list('num_sides', 'id'))
 
     created_dice = []
     for num_sides, num_dice in dice.items():
         created_dice.append(
-            SingleAttackDice(attack=action,
-                             num_dice=num_dice,
-                             dice_id=dice_map[num_sides]))
+            dice_type(num_dice=num_dice,
+                      dice_id=dice_map[num_sides],
+                      **action_kwarg))
     return created_dice
 
 
@@ -227,7 +236,8 @@ class PhysicalSingleAttack(SingleAttack):
         if ('save_stat' in kwargs) ^ ('save_dc' in kwargs):
             return "Cannot provide only one of save_stat and save_dc", None
         if not ('dice' in kwargs and type(kwargs['dice']) == dict):
-            return "dice argument must be provided and formatted correctly", None
+            return f"dice argument must be provided and formatted correctly, " \
+                   f"it was: {type(kwargs['dice'])}", None
 
         dice_dict = kwargs['dice']
         del kwargs['dice']
@@ -244,7 +254,10 @@ class PhysicalSingleAttack(SingleAttack):
         dice_objs = []
         with transaction.atomic():
             created_action.save()
-            dice_objs.extend(create_dice_from_info(dice_dict, created_action))
+            dice_objs.extend(create_dice_from_info(
+                dice_dict,
+                {'attack': created_action},
+                SingleAttackDice))
             SingleAttackDice.objects.bulk_create(dice_objs)
             for e_name in effect_names:
                 effect = Effect.objects.get(name=e_name)
@@ -292,7 +305,8 @@ class SpellSingleAttack(SingleAttack):
         if 'save_stat' in kwargs and 'stat_bonus' in kwargs:
             return "Cannot have a stat bonus and a save stat", None
         if not ('dice' in kwargs and type(kwargs['dice']) == dict):
-            return "dice argument must be provided and formatted correctly", None
+            return f"dice argument must be provided and formatted correctly, " \
+                   f"it was: {type(kwargs['dice'])}", None
 
         dice_dict = kwargs['dice']
         del kwargs['dice']
@@ -309,7 +323,10 @@ class SpellSingleAttack(SingleAttack):
         dice_objs = []
         with transaction.atomic():
             created_action.save()
-            dice_objs.extend(create_dice_from_info(dice_dict, created_action))
+            dice_objs.extend(create_dice_from_info(
+                dice_dict,
+                {'attack': created_action},
+                SingleAttackDice))
             SingleAttackDice.objects.bulk_create(dice_objs)
             for e_name in effect_names:
                 effect = Effect.objects.get(name=e_name)
@@ -361,7 +378,8 @@ class SpellSave(SingleAttack):
         if not ('save_stat' in kwargs and 'save_dc' in kwargs):
             return "Must have save_stat and save_dc present", None
         if not ('dice' in kwargs and type(kwargs['dice']) == dict):
-            return "dice argument must be provided and formatted correctly", None
+            return f"dice argument must be provided and formatted correctly, " \
+                   f"it was: {type(kwargs['dice'])}", None
 
         dice_dict = kwargs['dice']
         del kwargs['dice']
@@ -378,7 +396,10 @@ class SpellSave(SingleAttack):
         dice_objs = []
         with transaction.atomic():
             created_action.save()
-            dice_objs.extend(create_dice_from_info(dice_dict, created_action))
+            dice_objs.extend(create_dice_from_info(
+                dice_dict,
+                {'attack': created_action},
+                SingleAttackDice))
             SingleAttackDice.objects.bulk_create(dice_objs)
             for e_name in effect_names:
                 effect = Effect.objects.get(name=e_name)
@@ -403,6 +424,30 @@ class Heal(Action):
     def save(self, *args, **kwargs):
         self.action_type = "Heal"
         super().save(*args, **kwargs)
+
+    @staticmethod
+    def create_action(action_type, **kwargs):
+        if action_type != "Heal":
+            return "Called Heal.create_action with invalid type", None
+        if not ('dice' in kwargs and type(kwargs['dice']) == dict):
+            return f"dice argument must be provided and formatted correctly, " \
+                   f"it was: {type(kwargs['dice'])}", None
+
+        dice_dict = kwargs['dice']
+        del kwargs['dice']
+
+        kwargs['is_legendary'] = convert_bool(kwargs['is_legendary'])
+
+        created_action = Heal(**kwargs)
+        dice_objs = []
+        with transaction.atomic():
+            created_action.save()
+            dice_objs.extend(create_dice_from_info(
+                dice_dict,
+                {"heal": created_action},
+                HealDice))
+            HealDice.objects.bulk_create(dice_objs)
+        return "Success", created_action
 
     def instantiate(self, num_available=-1):
         self.dice = dict(HealDice.objects.filter(
