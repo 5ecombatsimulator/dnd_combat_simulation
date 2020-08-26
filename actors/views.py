@@ -41,7 +41,15 @@ def load_combatant(request, combatant_name):
 
 
 def import_combatant_from_ddb(request):
-    character_url = request.get('ddb_url', None)
-    return JsonResponse({"combatant": parse_character(
-        character_url).jsonify(jsonify_actions=True)}, safe=False)
-
+    character_url = request.POST.get('url', None)
+    try:
+        msg = parse_character(character_url)
+    except Exception as e:
+        raise e
+        msg = f"Error: {e}"
+    if msg != "Success":
+        return JsonResponse({'msg': msg})
+    return JsonResponse({
+        'msg': "Combatant successfully imported!",
+        "combatants": [c.jsonify() for c in Combatant.objects.all()]
+    }, safe=False)

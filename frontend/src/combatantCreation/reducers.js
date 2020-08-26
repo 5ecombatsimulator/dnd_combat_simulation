@@ -16,6 +16,7 @@ const combatantWisdom = setterReducer(10, t.SET_COMBATANT_WISDOM);
 const combatantIntelligence = setterReducer(10, t.SET_COMBATANT_INTELLIGENCE);
 const combatantCharisma = setterReducer(10, t.SET_COMBATANT_CHARISMA);
 const combatantCreationMsg = setterReducer("", t.SET_COMBATANT_MSG)
+const dndbeyondURL = setterReducer("", t.SET_DNDBEYOND_URL)
 
 const reducer = combineReducers({
   allActions,
@@ -30,7 +31,8 @@ const reducer = combineReducers({
   combatantWisdom,
   combatantIntelligence,
   combatantCharisma,
-  combatantCreationMsg
+  combatantCreationMsg,
+  dndbeyondURL
 })
 
 export {reducer as default}
