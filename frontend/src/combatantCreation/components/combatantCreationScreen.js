@@ -9,7 +9,6 @@ import ActionTable from './ActionTable'
 import {DynamicSizeNumericInput, DynamicSizeTextInput} from "../../common/components/utils"
 
 import { Button, Grid } from 'semantic-ui-react'
-import {setDNDBeyondURL} from "../actions";
 
 const CombatantCreationScreen = () => {
   const cr = useSelector(state => state.combatantCreationReducer)
