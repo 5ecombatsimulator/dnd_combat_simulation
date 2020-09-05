@@ -22,6 +22,7 @@ export const setAoeType = simpleAction(t.SET_AOE_TYPE);
 export const setActionCreationErrorMsg = simpleAction(t.SET_ACTION_CREATION_ERROR_MSG);
 export const setAllEffects = simpleAction(t.SET_ALL_EFFECTS);
 export const setActionEffects = simpleAction(t.SET_ACTION_EFFECTS);
+export const setEffectsGotten = simpleAction(t.SET_EFFECTS_GOTTEN);
 
 export const setSpellOrAttack = simpleAction(t.SET_SPELL_OR_ATTACK);
 export const setDoesHalfDamageOnFailure = simpleAction(t.SET_DOES_HALF_DAMAGE_ON_FAILURE);

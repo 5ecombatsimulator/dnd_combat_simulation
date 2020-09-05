@@ -64,6 +64,7 @@ const EffectCreationScreen = () => {
                     onChange={setSaveStat}
                     options={statOptions}/>: <div/>}
           <Button onClick={createEffect} content='Create Effect' primary/>
+          <h5 style={{color:er.effectCreationMessage === "Success" ? "#007f00" : "#e50000"}}>{er.effectCreationMessage}</h5>
         </Grid.Column>
         <Grid.Column class="three wide"/>
       </Grid>

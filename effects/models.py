@@ -58,7 +58,7 @@ class Effect(models.Model):
     name = models.CharField(max_length=128, unique=True)
     effect_type = models.CharField(max_length=32)
     description = models.TextField(null=True)
-    # max_turns = models.SmallIntegerField(default=-1)
+    max_turns = models.SmallIntegerField(default=-1)
 
     def instantiate(self, turns_left=None):
         self.logger = Logger()
@@ -98,13 +98,15 @@ class Effect(models.Model):
     def create_effect(*args, **kwargs):
         effect_type = kwargs['effect_type']
         if effect_type == STUN_EFFECT_TYPE:
-            StunEffect.create_named_effect(
+            return StunEffect.create_named_effect(
                 kwargs['name'], kwargs['max_turns'],
                 kwargs['save_stat'], kwargs['save_dc'])
         elif effect_type == PARALYZE_EFFECT_TYPE:
-            ParalyzedEffect.create_named_effect(
+            return ParalyzedEffect.create_named_effect(
                 kwargs['name'], kwargs['max_turns'],
                 kwargs['save_stat'], kwargs['save_dc'])
+        else:
+            return None, f"Unaccounted for effect type: {effect_type}"
 
     def jsonify(self):
         return {

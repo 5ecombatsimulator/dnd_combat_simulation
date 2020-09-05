@@ -41,10 +41,13 @@ const columns = [
 
 const EffectTable = ({addEffectFunction}) => {
   const allEffects = useSelector(state => state.actionCreationReducer.allEffects)
+  const effectsGotten = useSelector(state => state.actionCreationReducer.effectsGotten)
 
   const dispatch = useDispatch()
-  if (allEffects.length < 1)
+  if (!effectsGotten) {
     dispatch(arActions.getAllEffects())
+    dispatch(arActions.setEffectsGotten(true))
+  }
 
   return (
     <div>
