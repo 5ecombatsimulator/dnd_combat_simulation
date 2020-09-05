@@ -19,6 +19,7 @@ def create_effect(request):
         max_turns=request.POST.get("num_turns"),
         save_stat=request.POST.get("save_stat"),
         save_dc=request.POST.get("save_dc"),
-        damage_dice=request.POST.get("damage_dice")
+        damage_dice=request.POST.get("damage_dice"),
+        effect_type=request.POST.get("effect_type"),
     )
     return JsonResponse({'msg': msg})

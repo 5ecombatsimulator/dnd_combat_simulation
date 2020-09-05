@@ -28,6 +28,7 @@ const actionCreationErrorMsg = setterReducer("", t.SET_ACTION_CREATION_ERROR_MSG
 
 const actionEffects = setterReducer([], t.SET_ACTION_EFFECTS);
 const allEffects = setterReducer([], t.SET_ALL_EFFECTS);
+const effectsGotten = setterReducer(false, t.SET_EFFECTS_GOTTEN);
 
 
 const reducer = combineReducers({
@@ -52,6 +53,7 @@ const reducer = combineReducers({
   doesHalfDamageOnFailure,
   allEffects,
   actionEffects,
+  effectsGotten,
 });
 
 export {reducer as default}
