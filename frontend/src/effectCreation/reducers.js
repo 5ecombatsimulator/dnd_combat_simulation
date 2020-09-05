@@ -8,6 +8,7 @@ const damageDice = setterReducer("", t.SET_EFFECT_DAMAGE_DICE);
 const saveDC = setterReducer(8, t.SET_EFFECT_SAVE_DC);
 const saveStat = setterReducer(8, t.SET_EFFECT_SAVE_STAT);
 const numTurns = setterReducer(3, t.SET_EFFECT_NUM_TURNS);
+const effectCreationMessage = setterReducer("", t.SET_EFFECT_CREATION_MESSAGE);
 
 const allEffectTypes = setterReducer([], t.SET_ALL_EFFECT_TYPES);
 
@@ -19,6 +20,7 @@ const reducer = combineReducers({
   saveStat,
   numTurns,
   allEffectTypes,
+  effectCreationMessage,
 })
 
 export {reducer as default}

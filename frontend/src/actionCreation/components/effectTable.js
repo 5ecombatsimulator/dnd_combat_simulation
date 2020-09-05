@@ -44,7 +44,7 @@ const EffectTable = ({addEffectFunction}) => {
   const effectsGotten = useSelector(state => state.actionCreationReducer.effectsGotten)
 
   const dispatch = useDispatch()
-  if ((allEffects.length < 1) && (!effectsGotten)) {
+  if (!effectsGotten) {
     dispatch(arActions.getAllEffects())
     dispatch(arActions.setEffectsGotten(true))
   }
