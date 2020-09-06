@@ -1,9 +1,6 @@
 import {simpleAction} from '../common/utils'
 import SimulatorSource from '../common/sources/simulatorSource'
 import * as t from './actionTypes'
-import {setAllActions} from "../simulation/actions";
-import {setActionCreationErrorMsg} from "../actionCreation/actions";
-import {useSelector} from "react-redux";
 import * as arActions from "../actionCreation/actions";
 
 /* Actions */
